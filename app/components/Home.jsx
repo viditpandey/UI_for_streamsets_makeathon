@@ -1,5 +1,10 @@
 import React from 'react'
+import BottomNavi from './BottomNavi'
+// import AppBody from './AppBody'
 
-const Home = (props) => <div>Hello React 16 via webpack 4 and @babel 7 and babel-loader 8.</div>
+const Home = (props) => <div>
+    {/* <AppBody /> */}
+    <BottomNavi />
+</div>
 
 export default Home
