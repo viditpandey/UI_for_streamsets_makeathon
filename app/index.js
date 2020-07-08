@@ -3,7 +3,7 @@ import Home from './components/Home'
 var ReactDOM = require('react-dom')
 require('./index.css')
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import routes from './components/routes'
+import routes from './configs/routes'
 
 class App extends React.Component {
   render () {
