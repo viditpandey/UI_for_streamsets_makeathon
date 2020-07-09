@@ -36,9 +36,9 @@ export default function SimpleBottomNavigation () {
       {/* <Link to='/pipelines'><BottomNavigationAction label="All Pipelines" icon={<AllInclusiveIcon />} /></Link>
       <Link to='/pipelines/123'><BottomNavigationAction label="Single Pipeline" icon={<FavoriteIcon />} /></Link>
       <Link to='/topologies'><BottomNavigationAction label="Topologies" icon={<BarChartIcon />} /></Link> */}
-      <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon />} />
-      <BottomNavigationAction label='Single Pipeline' icon={<FavoriteIcon />} />
-      <BottomNavigationAction label='Topologies' icon={<BarChartIcon />} />
+      <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon/>} href="/piplines"  />
+      <BottomNavigationAction label='Single Pipeline' icon={<FavoriteIcon/>}  href="/pipelines/id" />
+      <BottomNavigationAction label='Topologies' icon={<BarChartIcon />} href="/topologies"/>
     </BottomNavigation>
   )
 }
