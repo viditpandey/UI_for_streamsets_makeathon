@@ -2,12 +2,10 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-// import ExposureNeg1Icon from '@material-ui/icons/ExposureNeg1'
-// import ExposureZeroIcon from '@material-ui/icons/ExposureZero'
-// import ExposurePlus1Icon from '@material-ui/icons/ExposurePlus1'
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import BarChartIcon from '@material-ui/icons/BarChart'
+import { useLocation, useHistory } from 'react-router-dom'
 // import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
@@ -19,7 +17,13 @@ const useStyles = makeStyles({
   }
 })
 
+const naviRoutes = ['/pipelines', '/pipelines/id', '/topologies']
+
 export default function SimpleBottomNavigation () {
+  const location = useLocation()
+  console.log('SimpleBottomNavigation -> location', location)
+  const history = useHistory()
+
   const classes = useStyles()
   const [value, setValue] = useState(0)
 
@@ -27,18 +31,15 @@ export default function SimpleBottomNavigation () {
     <BottomNavigation
       value={value}
       onChange={(event, newValue) => {
-        console.log('SimpleBottomNavigation -> newValue', newValue)
+        history.push(naviRoutes[newValue])
         setValue(newValue)
       }}
       showLabels
       className={classes.root}
     >
-      {/* <Link to='/pipelines'><BottomNavigationAction label="All Pipelines" icon={<AllInclusiveIcon />} /></Link>
-      <Link to='/pipelines/123'><BottomNavigationAction label="Single Pipeline" icon={<FavoriteIcon />} /></Link>
-      <Link to='/topologies'><BottomNavigationAction label="Topologies" icon={<BarChartIcon />} /></Link> */}
-      <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon />} href='/pipelines' />
-      <BottomNavigationAction label='Single Pipeline' icon={<FavoriteIcon />} href='/pipelines/id' />
-      <BottomNavigationAction label='Topologies' icon={<BarChartIcon />} href='/topologies' />
+      <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon />} />
+      <BottomNavigationAction label='Single Pipeline' icon={<FavoriteIcon />} />
+      <BottomNavigationAction label='Topologies' icon={<BarChartIcon />} />
     </BottomNavigation>
   )
 }
