@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
@@ -8,7 +8,7 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import BarChartIcon from '@material-ui/icons/BarChart'
-import { Link } from "react-router-dom";
+// import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
   root: {
@@ -16,19 +16,19 @@ const useStyles = makeStyles({
     position: 'fixed',
     bottom: 0
 
-  },
-});
+  }
+})
 
-export default function SimpleBottomNavigation() {
-  const classes = useStyles();
-  const [value, setValue] = useState(0);
+export default function SimpleBottomNavigation () {
+  const classes = useStyles()
+  const [value, setValue] = useState(0)
 
   return (
     <BottomNavigation
       value={value}
       onChange={(event, newValue) => {
-        console.log(`SimpleBottomNavigation -> newValue`, newValue)
-        setValue(newValue);
+        console.log('SimpleBottomNavigation -> newValue', newValue)
+        setValue(newValue)
       }}
       showLabels
       className={classes.root}
@@ -36,9 +36,9 @@ export default function SimpleBottomNavigation() {
       {/* <Link to='/pipelines'><BottomNavigationAction label="All Pipelines" icon={<AllInclusiveIcon />} /></Link>
       <Link to='/pipelines/123'><BottomNavigationAction label="Single Pipeline" icon={<FavoriteIcon />} /></Link>
       <Link to='/topologies'><BottomNavigationAction label="Topologies" icon={<BarChartIcon />} /></Link> */}
-      <BottomNavigationAction label="All Pipelines" icon={<AllInclusiveIcon />} />
-      <BottomNavigationAction label="Single Pipeline" icon={<FavoriteIcon />} />
-      <BottomNavigationAction label="Topologies" icon={<BarChartIcon />} />
+      <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon />} />
+      <BottomNavigationAction label='Single Pipeline' icon={<FavoriteIcon />} />
+      <BottomNavigationAction label='Topologies' icon={<BarChartIcon />} />
     </BottomNavigation>
-  );
+  )
 }
