@@ -5,10 +5,10 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
-import ListSubheader from '@material-ui/core/ListSubheader'
 import Switch from '@material-ui/core/Switch'
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../actions/PipelineActions'
 import { useInterval } from '../helper/useInterval'
+import Chip from '@material-ui/core/Chip'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,18 +68,21 @@ export default function PipelinesLayout () {
   }
 
   return (
-    <List subheader={<ListSubheader>Pipelines</ListSubheader>} className={classes.root}>
-      {pipelines.map(pipelineItem => {
-        return (
-          <Pipeline
-            key={pipelineItem.pipelineId}
-            pipeline={pipelineItem}
-            handleToggle={handleToggle}
-            isChecked={checked.indexOf(pipelineItem.pipelineId) !== -1}
-          />
-        )
-      })}
-    </List>
+    <div>
+      <Chip variant='outlined' size='medium' label='PIPELINES' className='margin-bottom-15' />
+      <List className={classes.root}>
+        {pipelines.map(pipelineItem => {
+          return (
+            <Pipeline
+              key={pipelineItem.pipelineId}
+              pipeline={pipelineItem}
+              handleToggle={handleToggle}
+              isChecked={checked.indexOf(pipelineItem.pipelineId) !== -1}
+            />
+          )
+        })}
+      </List>
+    </div>
   )
 }
 

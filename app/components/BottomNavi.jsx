@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   }
 })
 
-const naviRoutes = ['/pipelines', '/pipelines/id', '/topologies']
+const naviRoutes = ['/pipelines', '/pipelines/Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b', '/topologies']
 
 export default function SimpleBottomNavigation () {
   const location = useLocation()

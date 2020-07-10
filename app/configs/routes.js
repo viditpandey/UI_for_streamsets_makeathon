@@ -1,6 +1,10 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import PipelinesLayout from '../components/PipelinesLayout'
+import PipelineLayout from '../components/PipelineLayout'
+import TopologiesLayout from '../components/TopologiesLayout'
+import TopolgyRegisterationLayout from '../components/TopolgyRegisterationLayout'
+import TopologyLayout from '../components/TopologyLayout'
 
 const routes = [
   {
@@ -21,7 +25,7 @@ const routes = [
   {
     path: '/topologies',
     exact: true,
-    component: () => <Topologies />
+    component: () => <TopologiesLayout />
   },
   {
     path: '/topologies/:id',
@@ -30,14 +34,14 @@ const routes = [
   }
 ]
 
-const Pipeline = (props) => {
+const Pipeline = () => {
   const { id } = useParams()
-  return <h3>Pipeline with ID:{id}</h3>
+  return <PipelineLayout id={id} />
 }
-const Topologies = () => <h3>Topologies</h3>
-const Topolgy = (props) => {
+const Topolgy = () => {
   const { id } = useParams()
-  return <h3>Topolgy with ID:{id}</h3>
+  if (id && id.toLowerCase() === 'new') return <TopolgyRegisterationLayout />
+  return <TopologyLayout id={id} />
 }
 
 export default routes
