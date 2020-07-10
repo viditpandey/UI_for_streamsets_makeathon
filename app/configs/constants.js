@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.0.234:18630'
+export const BASE_URL = 'http://localhost:9000'
 export const mockedPipelines = [{
   pipelineId: 'Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b',
   title: 'Demo',
