@@ -1,5 +1,14 @@
 body {
     background: beige;
+    /* color: white; */
     padding: 0;
     margin: 0;
+}
+
+body > div {
+    margin: 15px;
+}
+
+.margin-bottom-15 {
+    margin-bottom: 15px;
 }
