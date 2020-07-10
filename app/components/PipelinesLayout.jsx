@@ -91,11 +91,11 @@ export default function PipelinesLayout () {
 const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
   const { pipelineId, title, status, description, created } = pipeline
   const secondaryText = (
-    <div>
-      <div>{`created: ${new Date(created)}\n`}</div>
-      <div>{`description: ${description}`}</div>
-      <div>{status ? `status: ${status}` : null}</div>
-    </div>
+    <>
+      {`created: ${new Date(created)}`} <br />
+      {`description: ${description}`} <br />
+      {status ? `status: ${status}` : null}
+    </>
   )
   return (
     <ListItem>
