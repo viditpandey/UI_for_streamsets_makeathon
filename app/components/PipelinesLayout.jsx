@@ -52,16 +52,18 @@ export default function PipelinesLayout () {
     return updatedPipeline
   }
 
-  const handleToggle = (pipelineId) => () => {
+  const handleToggle = (pipelineId) => async () => {
     const currentIndex = checked.indexOf(pipelineId)
     const newChecked = [...checked]
 
     if (currentIndex === -1) {
       newChecked.push(pipelineId)
-      startPipeline({ pipelineId })
+      const t = await startPipeline({ pipelineId })
+      updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     } else {
       newChecked.splice(currentIndex, 1)
-      stopPipeline({ pipelineId })
+      const t = await stopPipeline({ pipelineId })
+      updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     }
 
     setChecked(newChecked)
@@ -87,11 +89,12 @@ export default function PipelinesLayout () {
 }
 
 const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
-  const { pipelineId, title, status, description } = pipeline
+  const { pipelineId, title, status, description, created } = pipeline
   const secondaryText = (
     <div>
-      {`description: ${description}`}
-      {status ? `status: ${status}` : null}
+      <div>{`created: ${new Date(created)}\n`}</div>
+      <div>{`description: ${description}`}</div>
+      <div>{status ? `status: ${status}` : null}</div>
     </div>
   )
   return (

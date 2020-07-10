@@ -2,8 +2,7 @@ import axios from 'axios'
 import { BASE_URL, mockedPipelines } from '../configs/constants'
 
 const GET_ALL_PIPELINES = BASE_URL + '/rest/v1/pipelines?len=-1&orderBy=NAME&order=ASC'
-const START_PIPELINE = pipelineId => `${BASE_URL}/pipeline/${pipelineId}/start`
-const STOP_PIPELINE = pipelineId => `${BASE_URL}/pipeline/${pipelineId}/stop`
+const PIPELINE_ACTION = `${BASE_URL}/pipelineaction`
 const PIPELINES_STATUS = BASE_URL + '/pipelines/status'
 
 export const getPipelines = async () => {
@@ -19,9 +18,13 @@ export const getPipelines = async () => {
 }
 
 export const startPipeline = async ({ pipelineId }) => {
-  // const { pipelineId } = pipeline
+  const payload = {
+    pipelineId,
+    action: 'start',
+    rev: 0
+  }
   try {
-    const res = await axios.post(START_PIPELINE(pipelineId), { pipelineId }).catch(e => ({ data: {} }))
+    const res = await axios.post(PIPELINE_ACTION, { payload }).catch(e => ({ data: {} }))
     const pipelineStatus = res.data
     console.log(`start attempted for pipelineId ${pipelineId}, response received: ${JSON.stringify(pipelineStatus)}`)
     return pipelineStatus
@@ -32,9 +35,13 @@ export const startPipeline = async ({ pipelineId }) => {
 }
 
 export const stopPipeline = async ({ pipelineId }) => {
-  // const { pipelineId } = pipeline
+  const payload = {
+    pipelineId,
+    action: 'stop',
+    rev: 0
+  }
   try {
-    const res = await axios.post(STOP_PIPELINE(pipelineId), { pipelineId }).catch(e => ({ data: {} }))
+    const res = await axios.post(PIPELINE_ACTION, { payload }).catch(e => ({ data: {} }))
     const pipelineStatus = res.data
     console.log(`stop attempted for pipelineId ${pipelineId}, response received: ${JSON.stringify(pipelineStatus)}`)
     return pipelineStatus
