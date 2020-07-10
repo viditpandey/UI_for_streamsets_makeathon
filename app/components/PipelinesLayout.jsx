@@ -34,11 +34,11 @@ export default function PipelinesLayout () {
   useInterval(async () => {
     const latestStatus = await getPipelinesStatus()
     const updatedPipelines = []
-    latestStatus.forEach(p => {
+    latestStatus.length && latestStatus.forEach(p => {
       const { status, pipelineId } = p
       updatedPipelines.push(updatePipeline({ pipelineId, property: 'status', newVal: status }))
     })
-    setPipelines(updatedPipelines)
+    latestStatus.length && setPipelines(updatedPipelines)
   }, pipelines.length ? 5000 : null)
 
   const updatePipeline = ({ pipelineId, property, newVal }) => {
@@ -88,12 +88,18 @@ export default function PipelinesLayout () {
 
 const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
   const { pipelineId, title, status, description } = pipeline
+  const secondaryText = (
+    <div>
+      {`description: ${description}`}
+      {status ? `status: ${status}` : null}
+    </div>
+  )
   return (
     <ListItem>
       <ListItemText
         id={pipelineId}
         primary={`${title} (${pipelineId})`}
-        secondary={`description: ${description}, status: ${status}`}
+        secondary={secondaryText}
       />
       <ListItemSecondaryAction>
         <Switch
