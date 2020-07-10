@@ -2,8 +2,7 @@ import axios from 'axios'
 import { BASE_URL, mockedPipelines } from '../configs/constants'
 
 const GET_ALL_PIPELINES = BASE_URL + '/getpipelines'
-const START_PIPELINE = BASE_URL + '/start'
-const STOP_PIPELINE = BASE_URL + '/stop'
+const PIPELINE_ACTION = `${BASE_URL}/pipelineaction`
 const PIPELINES_STATUS = BASE_URL + '/getpipelinestatus'
 
 export const getPipelines = async () => {
@@ -19,9 +18,13 @@ export const getPipelines = async () => {
 }
 
 export const startPipeline = async ({ pipelineId }) => {
-  // const { pipelineId } = pipeline
+  const payload = {
+    pipelineId,
+    action: 'start',
+    rev: 0
+  }
   try {
-    const res = await axios.post(START_PIPELINE, { pipelineId }).catch(e => ({ data: {} }))
+    const res = await axios.post(PIPELINE_ACTION, { payload }).catch(e => ({ data: {} }))
     const pipelineStatus = res.data
     console.log(`start attempted for pipelineId ${pipelineId}, response received: ${JSON.stringify(pipelineStatus)}`)
     return pipelineStatus
@@ -32,9 +35,13 @@ export const startPipeline = async ({ pipelineId }) => {
 }
 
 export const stopPipeline = async ({ pipelineId }) => {
-  // const { pipelineId } = pipeline
+  const payload = {
+    pipelineId,
+    action: 'stop',
+    rev: 0
+  }
   try {
-    const res = await axios.post(STOP_PIPELINE, { pipelineId }).catch(e => ({ data: {} }))
+    const res = await axios.post(PIPELINE_ACTION, { payload }).catch(e => ({ data: {} }))
     const pipelineStatus = res.data
     console.log(`stop attempted for pipelineId ${pipelineId}, response received: ${JSON.stringify(pipelineStatus)}`)
     return pipelineStatus
@@ -46,7 +53,8 @@ export const stopPipeline = async ({ pipelineId }) => {
 
 export const getPipelinesStatus = async () => {
   try {
-    const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: mockedPipelines.map(i => ({ ...i, status: 'STARTED' })) }))
+    // const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: mockedPipelines.map(i => ({ ...i, status: 'STARTED' })) }))
+    const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: [] }))
     const pipelinesStatus = Object.values(res.data)
     console.log(`fetched latest status for ${pipelinesStatus.length} pipelines`)
     return pipelinesStatus
