@@ -2,7 +2,7 @@ export const BASE_URL = 'http://192.168.0.234:18630'
 export const mockedPipelines = [{
   pipelineId: 'Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b',
   title: 'Demo',
-  description: '',
+  description: 'This is a demo pipeline.',
   created: 1594131949158,
   lastModified: 1594132731019,
   creator: 'admin',
@@ -19,7 +19,7 @@ export const mockedPipelines = [{
 }, {
   pipelineId: 'Pipeline13510382c-e61d-4fc2-9c89-871eeef82d2a',
   title: 'Pipeline 1',
-  description: '',
+  description: 'This is the first pipeline which reads from API and dumps in JSON file',
   created: 1594122021469,
   lastModified: 1594126769974,
   creator: 'admin',
@@ -36,7 +36,7 @@ export const mockedPipelines = [{
 }, {
   pipelineId: 'Pipeline33a295e3e-a010-4804-b4ff-f11b1c7be433',
   title: 'Pipeline 3',
-  description: '',
+  description: 'reads from a file and dumps in csv',
   created: 1594128056693,
   lastModified: 1594131920517,
   creator: 'admin',
