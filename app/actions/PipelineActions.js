@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { BASE_URL, mockedPipelines } from '../configs/constants'
 
-const GET_ALL_PIPELINES = BASE_URL + '/rest/v1/pipelines?len=-1&orderBy=NAME&order=ASC'
+const GET_ALL_PIPELINES = BASE_URL + '/getpipelines'
 const PIPELINE_ACTION = `${BASE_URL}/pipelineaction`
-const PIPELINES_STATUS = BASE_URL + '/pipelines/status'
+const PIPELINES_STATUS = BASE_URL + '/getpipelinestatus'
 
 export const getPipelines = async () => {
   try {
@@ -55,7 +55,7 @@ export const getPipelinesStatus = async () => {
   try {
     // const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: mockedPipelines.map(i => ({ ...i, status: 'STARTED' })) }))
     const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: [] }))
-    const pipelinesStatus = res.data
+    const pipelinesStatus = Object.values(res.data)
     console.log(`fetched latest status for ${pipelinesStatus.length} pipelines`)
     return pipelinesStatus
   } catch (error) {
