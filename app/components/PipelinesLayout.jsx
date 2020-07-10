@@ -7,7 +7,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Switch from '@material-ui/core/Switch'
-import { getPipelines, startPipeline, stopPipeline } from '../actions/PipelineActions'
+import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../actions/PipelineActions'
+import { useInterval } from '../helper/useInterval'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,29 +29,28 @@ export default function PipelinesLayout () {
       setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
     }
     fetchPipelines()
-    // startPolling()
   }, [])
 
-  // const startPolling = () => {
-  // useInterval(async () => {
-  //   const latestStatus = await getPipelinesStatus()
-  //   const updatedPipelines = []
-  //   latestStatus.forEach(pipeline => {
-  //     const { status, pipelineId } = pipeline
-  //     updatedPipelines.push(updatePipeline({ pipelineId, property: 'status', newVal: status }))
-  //   })
-  //   setPipelines(updatedPipelines)
-  // }, pipelines.length)
-  // // }
+  useInterval(async () => {
+    const latestStatus = await getPipelinesStatus()
+    const updatedPipelines = []
+    latestStatus.forEach(p => {
+      const { status, pipelineId } = p
+      updatedPipelines.push(updatePipeline({ pipelineId, property: 'status', newVal: status }))
+    })
+    setPipelines(updatedPipelines)
+  }, pipelines.length ? 5000 : null)
 
-  // const updatePipeline = ({ pipelineId, property, newVal }) => {
-  //   let updatedPipeline = []
-  //   pipelines.forEach(prevPipeline => {
-  //     if (prevPipeline.pipelineId === pipelineId) prevPipeline[property] = newVal
-  //     updatedPipeline = prevPipeline
-  //   })
-  //   return updatedPipeline
-  // }
+  const updatePipeline = ({ pipelineId, property, newVal }) => {
+    let updatedPipeline = []
+    pipelines.forEach(prevPipeline => {
+      if (prevPipeline.pipelineId === pipelineId) {
+        prevPipeline[property] = newVal
+        updatedPipeline = prevPipeline
+      }
+    })
+    return updatedPipeline
+  }
 
   const handleToggle = (pipelineId) => () => {
     const currentIndex = checked.indexOf(pipelineId)

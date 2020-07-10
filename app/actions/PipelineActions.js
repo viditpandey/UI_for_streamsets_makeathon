@@ -46,12 +46,12 @@ export const stopPipeline = async ({ pipelineId }) => {
 
 export const getPipelinesStatus = async () => {
   try {
-    const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: [] }))
+    const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: mockedPipelines.map(i => ({ ...i, status: 'STARTED' })) }))
     const pipelinesStatus = res.data
-    console.log(`fetched latest status for pipelines ${pipelinesStatus.length}`)
+    console.log(`fetched latest status for ${pipelinesStatus.length} pipelines`)
     return pipelinesStatus
   } catch (error) {
-    console.error('[PipelineActions.getPipelinesStatus] error:', e)
+    console.error('[PipelineActions.getPipelinesStatus] error:', error)
     return []
   }
 }
