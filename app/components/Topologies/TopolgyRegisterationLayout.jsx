@@ -14,7 +14,7 @@ import SaveIcon from '@material-ui/icons/Save'
 import SortableTree, { walk } from 'react-sortable-tree'
 import TextField from '@material-ui/core/TextField'
 
-import { createTopology } from '../actions/TopologyActions'
+import { createTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { useHistory } from 'react-router-dom'
 // import { walk } from '../helper/tree_util_functions'
