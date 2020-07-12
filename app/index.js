@@ -1,7 +1,9 @@
-import React from 'react'
 import Home from './components/Base/Home'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import React from 'react'
 import routes from './configs/routes'
+
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
 var ReactDOM = require('react-dom')
 require('./index.css')
 
