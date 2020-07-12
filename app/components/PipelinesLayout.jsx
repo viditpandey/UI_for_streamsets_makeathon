@@ -1,14 +1,16 @@
-import 'regenerator-runtime/runtime.js'
-import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import Chip from '@material-ui/core/Chip'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
+import React, { useState, useEffect } from 'react'
 import Switch from '@material-ui/core/Switch'
+
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../actions/PipelineActions'
+import { makeStyles } from '@material-ui/core/styles'
 import { useInterval } from '../helper/useInterval'
-import Chip from '@material-ui/core/Chip'
+
+import 'regenerator-runtime/runtime.js'
 
 const useStyles = makeStyles((theme) => ({
   root: {
