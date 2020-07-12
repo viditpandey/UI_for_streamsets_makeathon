@@ -2,9 +2,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import React from 'react'
-
 import { useHistory } from 'react-router-dom'
-
 import 'regenerator-runtime/runtime.js'
 
 export default function TopologiesLayout () {

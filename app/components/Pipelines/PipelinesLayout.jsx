@@ -6,9 +6,9 @@ import ListItemText from '@material-ui/core/ListItemText'
 import React, { useState, useEffect } from 'react'
 import Switch from '@material-ui/core/Switch'
 
-import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../actions/PipelineActions'
+import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
 import { makeStyles } from '@material-ui/core/styles'
-import { useInterval } from '../helper/useInterval'
+import { useInterval } from '../../helper/useInterval'
 
 import 'regenerator-runtime/runtime.js'
 
