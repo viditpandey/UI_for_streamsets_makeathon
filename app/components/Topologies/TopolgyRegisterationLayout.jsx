@@ -142,35 +142,11 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
     <div>
       <Grid container spacing={3}>
         {!viewMode && <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />}
-        <Grid item xs={3}>
-          <Button
-            variant='contained'
-            color='primary'
-            disabled={viewMode}
-            size='small'
-            onClick={(e) => {
-              console.log('name', name)
-              startTopology(name)
-            }}
-            startIcon={<PlayCircleFilledIcon />}
-          >
-        START TOPOLOGY
-          </Button>
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant='contained'
-            color='primary'
-            disabled={viewMode}
-            size='small'
-            onClick={(e) => {
-              stopTopology(name)
-            }}
-            startIcon={<StopIcon />}
-          >
-        STOP TOPOLOGY
-          </Button>
-        </Grid>
+        {viewMode &&
+          <StartStopTopology
+            name={name}
+            viewMode={viewMode}
+          />}
 
         <Grid item xs={12}>
           <form noValidate autoComplete='off'>
@@ -255,5 +231,41 @@ const ButtonSubmit = ({ handleSubmit, disabled }) => {
     >
         CREATE TOPOLOGY
     </Button>
+  )
+}
+
+const StartStopTopology = ({ name, viewMode }) => {
+  return (
+    <>
+      <Grid item xs={4}>
+        <Button
+          variant='contained'
+          color='primary'
+          disabled={viewMode}
+          size='small'
+          onClick={(e) => {
+            console.log('name', name)
+            startTopology(name)
+          }}
+          startIcon={<PlayCircleFilledIcon />}
+        >
+        START TOPOLOGY
+        </Button>
+      </Grid>
+      <Grid item xs={4}>
+        <Button
+          variant='contained'
+          color='primary'
+          disabled={viewMode}
+          size='small'
+          onClick={(e) => {
+            stopTopology(name)
+          }}
+          startIcon={<StopIcon />}
+        >
+        STOP TOPOLOGY
+        </Button>
+      </Grid>
+    </>
   )
 }
