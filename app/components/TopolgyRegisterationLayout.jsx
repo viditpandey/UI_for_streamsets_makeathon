@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import SortableTree, { walk } from 'react-sortable-tree'
-import TextField from '@material-ui/core/TextField'
-import 'react-sortable-tree/style.css'
-import Chip from '@material-ui/core/Chip'
+import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
-import SaveIcon from '@material-ui/icons/Save'
-import Dialog from '@material-ui/core/Dialog'
+import Chip from '@material-ui/core/Chip'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
+import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import AddCircleIcon from '@material-ui/icons/AddCircle'
-import PipelinesForTopology from './PipelinesForTopology'
-import { getPipelines } from '../actions/PipelineActions'
 import DoneIcon from '@material-ui/icons/Done'
-// import { walk } from '../helper/tree_util_functions'
+import PipelinesForTopology from './PipelinesForTopology'
+import React, { useState, useEffect } from 'react'
+import SaveIcon from '@material-ui/icons/Save'
+import SortableTree, { walk } from 'react-sortable-tree'
+import TextField from '@material-ui/core/TextField'
+
+import { getPipelines } from '../actions/PipelineActions'
 import { useHistory } from 'react-router-dom'
+// import { walk } from '../helper/tree_util_functions'
+
+import 'react-sortable-tree/style.css'
 
 const renderNode = ({ p, handlePipelineClick }) => {
   return (
