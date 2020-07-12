@@ -141,9 +141,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   return (
     <div>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />
-        </Grid>
+        {!viewMode && <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />}
         <Grid item xs={3}>
           <Button
             variant='contained'
@@ -156,7 +154,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
             }}
             startIcon={<PlayCircleFilledIcon />}
           >
-        START
+        START TOPOLOGY
           </Button>
         </Grid>
         <Grid item xs={3}>
@@ -170,7 +168,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
             }}
             startIcon={<StopIcon />}
           >
-        STOP
+        STOP TOPOLOGY
           </Button>
         </Grid>
 
