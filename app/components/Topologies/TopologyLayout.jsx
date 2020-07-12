@@ -28,7 +28,6 @@ export default function TopologyLayout ({ id }) {
 
       <TopolgyRegisterationLayout
         propsName={topologyData.topologyId}
-        propsTreeData={[]}
         propsSelectedPipelines={topologyData.topologyItems}
       />
     </div>

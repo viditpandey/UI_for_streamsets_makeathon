@@ -40,7 +40,7 @@ const Pipeline = () => {
 }
 const Topolgy = () => {
   const { id } = useParams()
-  if (id && id.toLowerCase() === 'new') return <TopolgyRegisterationLayout />
+  if (id && id.toLowerCase() === 'new') return <TopolgyRegisterationLayout propsSelectedPipelines={[]} />
   return <TopologyLayout id={id} />
 }
 

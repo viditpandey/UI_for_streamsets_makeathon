@@ -9,7 +9,9 @@ import SortableTree, { walk } from 'react-sortable-tree'
 import TopologyName from './TopologyName'
 
 import { createTopology } from '../../actions/TopologyActions'
+import { cloneDeep } from 'lodash'
 import { getPipelines } from '../../actions/PipelineActions'
+import { listToTree } from '../../helper/tree_util_functions'
 import { useHistory } from 'react-router-dom'
 
 import 'react-sortable-tree/style.css'
@@ -29,11 +31,11 @@ const renderNode = ({ p, handlePipelineClick }) => {
   )
 }
 
-export default function TopolgyRegisterationLayout ({ propsName = '', propsTreeData = [], propsSelectedPipelines = [] }) {
+export default function TopolgyRegisterationLayout ({ propsName = '', propsSelectedPipelines = [] }) {
   const history = useHistory()
   const [viewMode, setPageViewOrEditMode] = useState(!!propsName)
   const [name, setName] = useState(propsName) // name in input for topology name
-  const [treeData, setTreeData] = useState(propsTreeData) // tree data (each pipeline is a node, rendered in <chip />)
+  const [treeData, setTreeData] = useState([]) // tree data (each pipeline is a node, rendered in <chip />)
   const [selectedPipelines, addPipelinesToTopology] = useState(propsSelectedPipelines) // pipelines which are selected to be added to this topology
   const [allPipelines, availablePipelines] = useState([]) // all pipelines in env, to be shown as available while adding pipelines to topology
   const [openDialog, setOpenDialog] = useState(false) // open Add Pipelines To Topology Dialog
@@ -72,7 +74,6 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsTreeD
 
   useEffect(() => {
     setName(propsName)
-    setTreeData([...propsTreeData])
     propsSelectedPipelines.forEach(p => {
       const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
       p.title = matchingPipeline.title
@@ -82,7 +83,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsTreeD
   }, [propsName])
 
   useEffect(() => {
-    const filteredPipelinesNotInTopology = allPipelines
+    const filteredPipelinesNotInTopology = cloneDeep(allPipelines)
     selectedPipelines.forEach(p => {
       const matchingPipeline = allPipelines.findIndex(item => item.pipelineId === p.pipelineId)
       if (matchingPipeline !== -1) {
@@ -91,6 +92,16 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsTreeD
     })
     availablePipelines(filteredPipelinesNotInTopology)
   }, [selectedPipelines])
+
+  useEffect(() => {
+    const test = propsSelectedPipelines.map(p => {
+      const temp = cloneDeep(p)
+      temp.title = renderNode({ p, handlePipelineClick })
+      temp.expanded = true
+      return temp
+    })
+    setTreeData(listToTree(test))
+  }, [propsSelectedPipelines])
 
   const updatePipelinesConfigInTree = () => {
     selectedPipelines.forEach(itemNode => {
