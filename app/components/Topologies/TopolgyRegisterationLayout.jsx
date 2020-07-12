@@ -48,7 +48,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsTreeD
       const res = await getPipelines()
       selectedPipelines.forEach(p => {
         const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
-        p.title = matchingPipeline.title
+        p.title = matchingPipeline && matchingPipeline.title
       })
       availablePipelines(res)
     }
@@ -75,7 +75,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsTreeD
     setTreeData([...propsTreeData])
     propsSelectedPipelines.forEach(p => {
       const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
-      p.title = matchingPipeline.title
+      p.title = matchingPipeline && matchingPipeline.title
     })
     addPipelinesToTopology(propsSelectedPipelines)
     setPageViewOrEditMode(!!propsName)
