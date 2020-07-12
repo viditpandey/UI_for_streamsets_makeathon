@@ -1,16 +1,19 @@
+import 'regenerator-runtime/runtime.js'
+
 import Chip from '@material-ui/core/Chip'
+import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
+import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import React, { useState, useEffect } from 'react'
-import Switch from '@material-ui/core/Switch'
+// import Switch from '@material-ui/core/Switch'
+import StopIcon from '@material-ui/icons/Stop'
 
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
 import { makeStyles } from '@material-ui/core/styles'
 import { useInterval } from '../../helper/useInterval'
-
-import 'regenerator-runtime/runtime.js'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,7 +70,7 @@ export default function PipelinesLayout () {
       const t = await stopPipeline({ pipelineId })
       updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     }
-
+    console.log('handle toggle called')
     setChecked(newChecked)
   }
 
@@ -107,12 +110,22 @@ const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
         secondary={secondaryText}
       />
       <ListItemSecondaryAction>
-        <Switch
+        <IconButton
+          color={!isChecked ? 'primary' : 'secondary'}
+          aria-label='upload picture'
+          onClick={handleToggle(pipelineId)}
+          component='span'
+        >
+          {!isChecked
+            ? <PlayArrowIcon />
+            : <StopIcon />}
+        </IconButton>
+        {/* <Switch
           edge='end'
           onChange={handleToggle(pipelineId)}
           checked={isChecked}
           inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
-        />
+        /> */}
       </ListItemSecondaryAction>
     </ListItem>
   )
