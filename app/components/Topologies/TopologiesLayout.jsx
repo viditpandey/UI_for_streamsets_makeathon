@@ -62,10 +62,10 @@ export default function TopologiesLayout () {
 }
 
 const Topology = ({ topology, history }) => {
-  const { topologyId, topologyDetails } = topology
+  const { topologyId, topologyItems } = topology
   const secondaryText = (
     <>
-      {`topologyId: ${topologyId}`}
+      {`pipelines: ${topologyItems.map(y => ' ' + y.pipelineId)}`}
     </>
   )
   return (
@@ -73,7 +73,7 @@ const Topology = ({ topology, history }) => {
       <ListItemText
         id={topologyId}
         onClick={() => history.push(`/topologies/${topologyId}`)}
-        primary={`(${topologyId})`}
+        primary={`${topologyId}`}
         secondary={secondaryText}
       />
     </ListItem>

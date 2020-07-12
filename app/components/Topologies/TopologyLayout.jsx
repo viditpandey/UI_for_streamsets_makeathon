@@ -22,7 +22,7 @@ export default function TopologyLayout ({ id }) {
       <Chip
         variant='outlined'
         size='medium'
-        label={`TOPOLOGY: ${topologyData.topologyId} (${id})`}
+        label={`TOPOLOGY: ${topologyData.topologyId} ${id}`}
         className='margin-bottom-15'
       />
 

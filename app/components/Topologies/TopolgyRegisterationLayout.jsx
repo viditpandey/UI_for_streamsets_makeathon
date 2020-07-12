@@ -2,14 +2,17 @@ import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import DoneIcon from '@material-ui/icons/Done'
+import Grid from '@material-ui/core/Grid'
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
 import React, { useState, useEffect } from 'react'
 import RenderPipelineConfigs from './RenderPipelineConfigs'
 import SaveIcon from '@material-ui/icons/Save'
 import SortableTree, { walk } from 'react-sortable-tree'
+import StopIcon from '@material-ui/icons/Stop'
 import TopologyName from './TopologyName'
 
-import { createTopology } from '../../actions/TopologyActions'
 import { cloneDeep } from 'lodash'
+import { createTopology, startTopology, stopTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
 import { useHistory } from 'react-router-dom'
@@ -50,7 +53,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
       const res = await getPipelines()
       selectedPipelines.forEach(p => {
         const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
-        p.title = matchingPipeline.title
+        p.title = matchingPipeline && matchingPipeline.title
       })
       availablePipelines(res)
     }
@@ -76,7 +79,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
     setName(propsName)
     propsSelectedPipelines.forEach(p => {
       const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
-      p.title = matchingPipeline.title
+      p.title = matchingPipeline && matchingPipeline.title
     })
     addPipelinesToTopology(propsSelectedPipelines)
     setPageViewOrEditMode(!!propsName)
@@ -137,60 +140,94 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
 
   return (
     <div>
-      <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+            variant='contained'
+            color='primary'
+            disabled={viewMode}
+            size='small'
+            onClick={(e) => {
+              console.log('name', name)
+              startTopology(name)
+            }}
+            startIcon={<PlayCircleFilledIcon />}
+          >
+        START
+          </Button>
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+            variant='contained'
+            color='primary'
+            disabled={viewMode}
+            size='small'
+            onClick={(e) => {
+              stopTopology(name)
+            }}
+            startIcon={<StopIcon />}
+          >
+        STOP
+          </Button>
+        </Grid>
 
-      <form noValidate autoComplete='off'>
+        <Grid item xs={12}>
+          <form noValidate autoComplete='off'>
 
-        <TopologyName disabled={viewMode} name={name} setName={setName} />
-        <br />
+            <TopologyName disabled={viewMode} name={name} setName={setName} />
+            <br />
 
-        <AddPipelines
-          disabled={viewMode}
-          open={openDialog}
-          setOpen={setOpenDialog}
-          left={allPipelines}
-          setLeft={availablePipelines}
-          right={selectedPipelines}
-          setRight={addPipelinesToTopology}
-        />
-        <br />
+            <AddPipelines
+              disabled={viewMode}
+              open={openDialog}
+              setOpen={setOpenDialog}
+              left={allPipelines}
+              setLeft={availablePipelines}
+              right={selectedPipelines}
+              setRight={addPipelinesToTopology}
+            />
+            <br />
 
-        <CreateTree
-          treeData={treeData}
-          setTreeData={setTreeData}
-          setFinalTreeData={setFinalTreeData}
-          setOpen={setOpenConfigDialog}
-        />
-        <br />
+            <CreateTree
+              treeData={treeData}
+              setTreeData={setTreeData}
+              setFinalTreeData={setFinalTreeData}
+              setOpen={setOpenConfigDialog}
+            />
+            <br />
 
-        <RenderPipelineConfigs
-          pipeline={selectedPipeline}
-          setSelectedPipeline={setSelectedPipeline}
-          open={openConfigDialog}
-          setOpen={setOpenConfigDialog}
-          setThreshold={setThreshold}
-          threshold={threshold}
-          setWaitTime={setWaitTime}
-          waitTime={waitTime}
-        />
+            <RenderPipelineConfigs
+              pipeline={selectedPipeline}
+              setSelectedPipeline={setSelectedPipeline}
+              open={openConfigDialog}
+              setOpen={setOpenConfigDialog}
+              setThreshold={setThreshold}
+              threshold={threshold}
+              setWaitTime={setWaitTime}
+              waitTime={waitTime}
+            />
 
-        <ButtonSubmit
-          disabled={viewMode}
-          handleSubmit={() => {
-            walk({
-              treeData,
-              getNodeKey: (node) => node.pipelineId,
-              ignoreCollapsed: false,
-              callback: (nodeInfo) => formTreeData(nodeInfo)
-            })
-            console.log('This is sent to backend: ', finalTreeData)
+            <ButtonSubmit
+              disabled={viewMode}
+              handleSubmit={() => {
+                walk({
+                  treeData,
+                  getNodeKey: (node) => node.pipelineId,
+                  ignoreCollapsed: false,
+                  callback: (nodeInfo) => formTreeData(nodeInfo)
+                })
+                console.log('This is sent to backend: ', finalTreeData)
 
-            createTopology({ finalTreeData })
-            history.push('/topologies')
-          }}
-        />
-      </form>
-
+                createTopology({ finalTreeData })
+                history.push('/topologies')
+              }}
+            />
+          </form>
+        </Grid>
+      </Grid>
     </div>
   )
 }

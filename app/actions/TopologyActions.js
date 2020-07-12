@@ -4,6 +4,8 @@ import { BASE_URL, mockedTopology } from '../configs/constants'
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
 const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
 const GET_TOPOLOGY_BY_ID = topologyId => `${BASE_URL}/getTopology/${topologyId}`
+const START_TOPOLOGY = topologyId => `${BASE_URL}/startTopology/${topologyId}`
+const STOP_TOPOLOGY = topologyId => `${BASE_URL}/stopTopology/${topologyId}`
 
 export const createTopology = async (formData) => {
   console.log('formData:', formData)
@@ -22,6 +24,38 @@ export const createTopology = async (formData) => {
     return response
   } catch (e) {
     console.error('[TopologyActions.createTopology] error:', e)
+    return {}
+  }
+}
+
+export const startTopology = async ({ topologyId }) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: START_TOPOLOGY(topologyId)
+    }
+    ).catch(e => ({ data: {} }))
+    const response = res.data
+    console.log(`start topology attempted for topologyId ${topologyId}, response received: ${JSON.stringify(response)}`)
+    return response
+  } catch (e) {
+    console.error('[TopologyActions.startTopology] error:', e)
+    return {}
+  }
+}
+
+export const stopTopology = async ({ topologyId }) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: STOP_TOPOLOGY(topologyId)
+    }
+    ).catch(e => ({ data: {} }))
+    const response = res.data
+    console.log(`start topology attempted for topologyId ${topologyId}, response received: ${JSON.stringify(response)}`)
+    return response
+  } catch (e) {
+    console.error('[TopologyActions.startTopology] error:', e)
     return {}
   }
 }
