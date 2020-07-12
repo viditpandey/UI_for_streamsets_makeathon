@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { BASE_URL } from '../configs/constants'
+import { BASE_URL, mockedTopology } from '../configs/constants'
 
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
+const GET_TOPOLOGY_BY_ID = topologyId => `${BASE_URL}/getTopology/${topologyId}`
 
 export const createTopology = async (formData) => {
   console.log('formData:', formData)
@@ -20,6 +21,20 @@ export const createTopology = async (formData) => {
     return response
   } catch (e) {
     console.error('[TopologyActions.createTopology] error:', e)
+    return {}
+  }
+}
+
+export const getTopologyById = async ({ topologyId }) => {
+  console.log('fetching topology details for topology id: ', topologyId)
+  try {
+    const res = await axios.get(GET_TOPOLOGY_BY_ID(topologyId)).catch(e => ({ data: mockedTopology }))
+    // const res = await axios.get(GET_TOPOLOGY_BY_ID(topologyId)).catch(e => ({ data: {} }))
+    const response = res.data
+    console.log(`Fetched topology data for id: ${topologyId}, data received: ${response}`)
+    return response
+  } catch (error) {
+    console.log('fetching topology data by topoligy ID failed -> error', error)
     return {}
   }
 }

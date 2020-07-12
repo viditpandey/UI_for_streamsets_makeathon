@@ -6,7 +6,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import React, { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 // import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
@@ -21,8 +21,8 @@ const useStyles = makeStyles({
 const naviRoutes = ['/pipelines', '/pipelines/Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b', '/topologies']
 
 export default function SimpleBottomNavigation () {
-  const location = useLocation()
-  console.log('SimpleBottomNavigation -> location', location)
+  // const location = useLocation()
+  // console.log('SimpleBottomNavigation -> location', location)
   const history = useHistory()
 
   const classes = useStyles()
