@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import PipelinesForTopology from './PipelinesForTopology'
+import { createTopology } from '../actions/TopologyActions'
 import { getPipelines } from '../actions/PipelineActions'
 import DoneIcon from '@material-ui/icons/Done'
 // import { walk } from '../helper/tree_util_functions'
@@ -89,9 +90,11 @@ export default function TopolgyRegisterationLayout () {
     const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
     const { pipelineId, timeLimit, threshold } = pipelineInfo
     finalTreeData.push({
+      topologyId: name,
       pipelineId: pipelineId,
-      waitTime: timeLimit,
-      threshold: threshold,
+      waitTime: Number(timeLimit || 0),
+      threshold: Number(threshold || 0),
+      createdBy: 'From UI',
       dependsOn
     })
     setFinalTreeData(finalTreeData)
@@ -143,6 +146,13 @@ export default function TopolgyRegisterationLayout () {
             callback: (nodeInfo) => formTreeData(nodeInfo)
           })
           console.log('This is sent to backend: ', finalTreeData)
+
+          createTopology({ finalTreeData })
+          // async function addTopology ({ finalTreeData }) {
+          //   const res = await createTopology({ finalTreeData })
+          //   console.log('res from API:', res)
+          // }
+          // addTopology({ finalTreeData })
           history.push('/topologies')
         }}
         />
@@ -179,7 +189,6 @@ const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen }) => {
       </Button>
       <Dialog
         open={open}
-        // onClose={() => setOpen(false)}
         scroll='body'
         aria-labelledby='scroll-dialog-title'
         aria-describedby='scroll-dialog-description'
