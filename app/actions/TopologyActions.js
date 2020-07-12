@@ -2,6 +2,7 @@ import axios from 'axios'
 import { BASE_URL, mockedTopology } from '../configs/constants'
 
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
+const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
 const GET_TOPOLOGY_BY_ID = topologyId => `${BASE_URL}/getTopology/${topologyId}`
 
 export const createTopology = async (formData) => {
@@ -22,6 +23,21 @@ export const createTopology = async (formData) => {
   } catch (e) {
     console.error('[TopologyActions.createTopology] error:', e)
     return {}
+  }
+}
+
+export const getTopologies = async () => {
+  try {
+    const res = await axios({
+      method: 'get',
+      url: GET_ALL_TOPOLOGIES
+    }
+    ).catch(e => ({ data: {} }))
+    const response = res.data
+    console.log(`get all topologies attempted , response received: ${JSON.stringify(response)}`)
+    return response
+  } catch (e) {
+    console.error('[TopologyActions.getTopologies] error:', e)
   }
 }
 
