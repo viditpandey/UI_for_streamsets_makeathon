@@ -1,10 +1,10 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import PipelinesLayout from '../components/PipelinesLayout'
-import PipelineLayout from '../components/PipelineLayout'
-import TopologiesLayout from '../components/TopologiesLayout'
-import TopolgyRegisterationLayout from '../components/TopolgyRegisterationLayout'
-import TopologyLayout from '../components/TopologyLayout'
+import PipelinesLayout from '../components/Pipelines/PipelinesLayout'
+import PipelineLayout from '../components/Pipelines/PipelineLayout'
+import TopologiesLayout from '../components/Topologies/TopologiesLayout'
+import TopolgyRegisterationLayout from '../components/Topologies/TopolgyRegisterationLayout'
+import TopologyLayout from '../components/Topologies/TopologyLayout'
 
 const routes = [
   {

@@ -1,14 +1,21 @@
 import 'regenerator-runtime/runtime.js'
-import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+
+// import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
+import Chip from '@material-ui/core/Chip'
+import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
-import Switch from '@material-ui/core/Switch'
-import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../actions/PipelineActions'
-import { useInterval } from '../helper/useInterval'
-import Chip from '@material-ui/core/Chip'
+import PlayArrowIcon from '@material-ui/icons/PlayArrow'
+import React, { useState, useEffect } from 'react'
+// import Switch from '@material-ui/core/Switch'
+import StopIcon from '@material-ui/icons/Stop'
+
+import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
+import { makeStyles } from '@material-ui/core/styles'
+import { useInterval } from '../../helper/useInterval'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +26,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PipelinesLayout () {
+  const history = useHistory()
   const classes = useStyles()
+
   const [checked, setChecked] = useState([])
   const [pipelines, setPipelines] = useState([])
 
@@ -65,7 +74,7 @@ export default function PipelinesLayout () {
       const t = await stopPipeline({ pipelineId })
       updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     }
-
+    console.log('handle toggle called')
     setChecked(newChecked)
   }
 
@@ -78,6 +87,7 @@ export default function PipelinesLayout () {
             <Pipeline
               key={pipelineItem.pipelineId}
               pipeline={pipelineItem}
+              history={history}
               handleToggle={handleToggle}
               isChecked={checked.indexOf(pipelineItem.pipelineId) !== -1}
             />
@@ -88,7 +98,7 @@ export default function PipelinesLayout () {
   )
 }
 
-const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
+const Pipeline = ({ pipeline, handleToggle, isChecked, history }) => {
   const { pipelineId, title, status, description, created } = pipeline
   const secondaryText = (
     <>
@@ -101,16 +111,27 @@ const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
     <ListItem>
       <ListItemText
         id={pipelineId}
+        onClick={() => history.push(`/pipelines/${pipelineId}`)}
         primary={`${title} (${pipelineId})`}
         secondary={secondaryText}
       />
       <ListItemSecondaryAction>
-        <Switch
+        <IconButton
+          color={!isChecked ? 'primary' : 'secondary'}
+          aria-label='upload picture'
+          onClick={handleToggle(pipelineId)}
+          component='span'
+        >
+          {!isChecked
+            ? <PlayArrowIcon />
+            : <StopIcon />}
+        </IconButton>
+        {/* <Switch
           edge='end'
           onChange={handleToggle(pipelineId)}
           checked={isChecked}
           inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
-        />
+        /> */}
       </ListItemSecondaryAction>
     </ListItem>
   )

@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import SortableTree, { walk } from 'react-sortable-tree'
-import TextField from '@material-ui/core/TextField'
-import 'react-sortable-tree/style.css'
-import Chip from '@material-ui/core/Chip'
+import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
-import SaveIcon from '@material-ui/icons/Save'
-import Dialog from '@material-ui/core/Dialog'
+import Chip from '@material-ui/core/Chip'
+// import CircularProgress from '@material-ui/core/CircularProgress'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
+import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import AddCircleIcon from '@material-ui/icons/AddCircle'
-import PipelinesForTopology from './PipelinesForTopology'
-import { createTopology } from '../actions/TopologyActions'
-import { getPipelines } from '../actions/PipelineActions'
 import DoneIcon from '@material-ui/icons/Done'
-// import { walk } from '../helper/tree_util_functions'
+// import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
+import PipelinesForTopology from './PipelinesForTopology'
+import React, { useState, useEffect } from 'react'
+import SaveIcon from '@material-ui/icons/Save'
+import SortableTree, { walk } from 'react-sortable-tree'
+import TextField from '@material-ui/core/TextField'
+
+import { createTopology } from '../actions/TopologyActions'
+import { getPipelines } from '../../actions/PipelineActions'
 import { useHistory } from 'react-router-dom'
+// import { walk } from '../helper/tree_util_functions'
+
+import 'react-sortable-tree/style.css'
 
 const renderNode = ({ p, handlePipelineClick }) => {
   return (
@@ -27,6 +31,7 @@ const renderNode = ({ p, handlePipelineClick }) => {
       size='small'
       label={p.title}
       onDelete={() => {}}
+      // deleteIcon={<HourglassEmptyIcon />}
       onClick={(e) => handlePipelineClick(true, p)}
     />
   )
@@ -42,7 +47,7 @@ export default function TopolgyRegisterationLayout () {
   const [openConfigDialog, setOpenConfigDialog] = useState(false) // Open Dialog to manage time dependency & threshold for each pipeline in treeData
   const [selectedPipeline, setSelectedPipeline] = useState(null) // to save in state, which pipeline chip was clicked
   const [threshold, setThreshold] = useState(0)
-  const [timeLimit, setTimeLimit] = useState(0)
+  const [waitTime, setWaitTime] = useState(0)
   const [finalTreeData, setFinalTreeData] = useState([])
 
   useEffect(() => {
@@ -55,7 +60,7 @@ export default function TopolgyRegisterationLayout () {
 
   useEffect(() => {
     updatePipelinesConfigInTree()
-  }, [timeLimit, threshold])
+  }, [waitTime, threshold])
 
   useEffect(() => {
     setTreeData(selectedPipelines.map(p => {
@@ -71,7 +76,7 @@ export default function TopolgyRegisterationLayout () {
   const updatePipelinesConfigInTree = () => {
     selectedPipelines.forEach(itemNode => {
       if (itemNode.pipelineId === selectedPipeline.pipelineId) {
-        itemNode.timeLimit = timeLimit
+        itemNode.waitTime = waitTime
         itemNode.threshold = threshold
       }
     })
@@ -79,7 +84,7 @@ export default function TopolgyRegisterationLayout () {
 
   const handlePipelineClick = (val, pipeline) => {
     setThreshold((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).threshold) || 0)
-    setTimeLimit((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).timeLimit) || 0)
+    setWaitTime((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).waitTime) || 0)
     setOpenConfigDialog(val)
     setSelectedPipeline(pipeline)
   }
@@ -88,11 +93,11 @@ export default function TopolgyRegisterationLayout () {
     let dependsOn = 'root'
     if (nodeInfo.parentNode && nodeInfo.parentNode.pipelineId) dependsOn = nodeInfo.parentNode.pipelineId
     const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
-    const { pipelineId, timeLimit, threshold } = pipelineInfo
+    const { pipelineId, waitTime, threshold } = pipelineInfo
     finalTreeData.push({
       topologyId: name,
       pipelineId: pipelineId,
-      waitTime: Number(timeLimit || 0),
+      waitTime: Number(waitTime || 0),
       threshold: Number(threshold || 0),
       createdBy: 'From UI',
       dependsOn
@@ -134,8 +139,8 @@ export default function TopolgyRegisterationLayout () {
           setOpen={setOpenConfigDialog}
           setThreshold={setThreshold}
           threshold={threshold}
-          setTimeLimit={setTimeLimit}
-          timeLimit={timeLimit}
+          setWaitTime={setWaitTime}
+          waitTime={waitTime}
         />
 
         <ButtonSubmit handleSubmit={() => {
@@ -242,7 +247,7 @@ const Name = ({ name, setName }) => {
   )
 }
 
-const RenderPipelineConfigs = ({ open, setOpen, pipeline, setSelectedPipeline, threshold, setThreshold, timeLimit, setTimeLimit }) => {
+const RenderPipelineConfigs = ({ open, setOpen, pipeline, setSelectedPipeline, threshold, setThreshold, waitTime, setWaitTime }) => {
   let titleDialog = 'No pipeline Selected'
   if (pipeline) titleDialog = `Pipeline: ${pipeline.title}`
   return (
@@ -263,16 +268,16 @@ const RenderPipelineConfigs = ({ open, setOpen, pipeline, setSelectedPipeline, t
             onChange={e => setThreshold(e.target.value)}
             variant='outlined'
             style={{ marginBottom: '15px' }}
-            label='Retry threshold limit.'
+            label='Retry threshold limit (# times).'
           />
           <TextField
             id='pipeline_time_dependency'
-            value={timeLimit}
+            value={waitTime}
             type='number'
-            onChange={e => setTimeLimit(e.target.value)}
+            onChange={e => setWaitTime(e.target.value)}
             variant='outlined'
             style={{ marginBottom: '15px' }}
-            label='Time dependency.'
+            label='Time dependency (seconds).'
           />
         </DialogContent>
         <DialogActions>

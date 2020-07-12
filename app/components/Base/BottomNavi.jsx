@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import BottomNavigation from '@material-ui/core/BottomNavigation'
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
-import FavoriteIcon from '@material-ui/icons/Favorite'
 import BarChartIcon from '@material-ui/icons/BarChart'
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
+import BottomNavigation from '@material-ui/core/BottomNavigation'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import React, { useState } from 'react'
+
+import { makeStyles } from '@material-ui/core/styles'
 import { useLocation, useHistory } from 'react-router-dom'
 // import { Link } from 'react-router-dom'
 
