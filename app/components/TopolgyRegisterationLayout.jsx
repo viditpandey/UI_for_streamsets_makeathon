@@ -9,10 +9,12 @@ import DoneIcon from '@material-ui/icons/Done'
 import PipelinesForTopology from './PipelinesForTopology'
 import React, { useState, useEffect } from 'react'
 import SaveIcon from '@material-ui/icons/Save'
-import SortableTree from 'react-sortable-tree'
+import SortableTree, { walk } from 'react-sortable-tree'
 import TextField from '@material-ui/core/TextField'
 
 import { getPipelines } from '../actions/PipelineActions'
+import { useHistory } from 'react-router-dom'
+// import { walk } from '../helper/tree_util_functions'
 
 import 'react-sortable-tree/style.css'
 
@@ -32,6 +34,7 @@ const renderNode = ({ p, handlePipelineClick }) => {
 }
 
 export default function TopolgyRegisterationLayout () {
+  const history = useHistory()
   const [name, setName] = useState('') // name in input for topology name
   const [treeData, setTreeData] = useState([]) // tree data (each pipeline is a node, rendered in <chip />)
   const [allPipelines, availablePipelines] = useState([]) // all pipelines in env, to be shown as available while adding pipelines to topology
@@ -41,6 +44,7 @@ export default function TopolgyRegisterationLayout () {
   const [selectedPipeline, setSelectedPipeline] = useState(null) // to save in state, which pipeline chip was clicked
   const [threshold, setThreshold] = useState(0)
   const [timeLimit, setTimeLimit] = useState(0)
+  const [finalTreeData, setFinalTreeData] = useState([])
 
   useEffect(() => {
     async function fetchPipelines () {
@@ -53,6 +57,17 @@ export default function TopolgyRegisterationLayout () {
   useEffect(() => {
     updatePipelinesConfigInTree()
   }, [timeLimit, threshold])
+
+  useEffect(() => {
+    setTreeData(selectedPipelines.map(p => {
+      return {
+        title: renderNode({ p, handlePipelineClick }),
+        pipelineId: p.pipelineId,
+        expanded: true,
+        children: []
+      }
+    }))
+  }, [openDialog])
 
   const updatePipelinesConfigInTree = () => {
     selectedPipelines.forEach(itemNode => {
@@ -70,22 +85,25 @@ export default function TopolgyRegisterationLayout () {
     setSelectedPipeline(pipeline)
   }
 
-  useEffect(() => {
-    setTreeData(selectedPipelines.map(p => {
-      return {
-        title: renderNode({ p, handlePipelineClick }),
-        pipelineId: p.pipelineId,
-        expanded: true,
-        children: []
-      }
-    }))
-  }, [openDialog])
+  const formTreeData = nodeInfo => {
+    let dependsOn = 'root'
+    if (nodeInfo.parentNode && nodeInfo.parentNode.pipelineId) dependsOn = nodeInfo.parentNode.pipelineId
+    const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
+    const { pipelineId, timeLimit, threshold } = pipelineInfo
+    finalTreeData.push({
+      pipelineId: pipelineId,
+      waitTime: timeLimit,
+      threshold: threshold,
+      dependsOn
+    })
+    setFinalTreeData(finalTreeData)
+  }
 
   return (
     <div>
       <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />
 
-      <form noValidate autoComplete='off' onSubmit={val => console.log(val)}>
+      <form noValidate autoComplete='off'>
 
         <Name name={name} setName={setName} />
         <br />
@@ -103,6 +121,7 @@ export default function TopolgyRegisterationLayout () {
         <CreateTree
           treeData={treeData}
           setTreeData={setTreeData}
+          setFinalTreeData={setFinalTreeData}
           setOpen={setOpenConfigDialog}
         />
         <br />
@@ -118,21 +137,31 @@ export default function TopolgyRegisterationLayout () {
           timeLimit={timeLimit}
         />
 
-        <ButtonSubmit handleSubmit={() => console.log(name)} />
+        <ButtonSubmit handleSubmit={() => {
+          walk({
+            treeData,
+            getNodeKey: (node) => node.pipelineId,
+            ignoreCollapsed: false,
+            callback: (nodeInfo) => formTreeData(nodeInfo)
+          })
+          console.log('This is sent to backend: ', finalTreeData)
+          history.push('/topologies')
+        }}
+        />
       </form>
 
     </div>
   )
 }
 
-const CreateTree = ({ treeData, setTreeData }) => {
+const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
   return (
     <div style={{ height: 500 }}>
       <SortableTree
         treeData={treeData}
         getNodeKey={({ node }) => { return node.pipelineId }}
-        onChange={treeData => { console.log(treeData); setTreeData(treeData) }}
+        onChange={treeData => { setTreeData(treeData); setFinalTreeData([]) }}
       />
     </div>
   )
