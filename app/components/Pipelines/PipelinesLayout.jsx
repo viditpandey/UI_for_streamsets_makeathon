@@ -1,5 +1,6 @@
 import 'regenerator-runtime/runtime.js'
 
+// import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import Chip from '@material-ui/core/Chip'
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
@@ -14,6 +15,7 @@ import StopIcon from '@material-ui/icons/Stop'
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
 import { makeStyles } from '@material-ui/core/styles'
 import { useInterval } from '../../helper/useInterval'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +26,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PipelinesLayout () {
+  const history = useHistory()
   const classes = useStyles()
+
   const [checked, setChecked] = useState([])
   const [pipelines, setPipelines] = useState([])
 
@@ -83,6 +87,7 @@ export default function PipelinesLayout () {
             <Pipeline
               key={pipelineItem.pipelineId}
               pipeline={pipelineItem}
+              history={history}
               handleToggle={handleToggle}
               isChecked={checked.indexOf(pipelineItem.pipelineId) !== -1}
             />
@@ -93,7 +98,7 @@ export default function PipelinesLayout () {
   )
 }
 
-const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
+const Pipeline = ({ pipeline, handleToggle, isChecked, history }) => {
   const { pipelineId, title, status, description, created } = pipeline
   const secondaryText = (
     <>
@@ -106,6 +111,7 @@ const Pipeline = ({ pipeline, handleToggle, isChecked }) => {
     <ListItem>
       <ListItemText
         id={pipelineId}
+        onClick={() => history.push(`/pipelines/${pipelineId}`)}
         primary={`${title} (${pipelineId})`}
         secondary={secondaryText}
       />
