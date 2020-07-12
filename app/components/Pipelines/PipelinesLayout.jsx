@@ -125,6 +125,7 @@ const Pipeline = ({ pipeline, handleToggle, isChecked, history }) => {
           {!isChecked
             ? <PlayArrowIcon />
             : <StopIcon />}
+          {/* {<CheckCircleOutlineIcon />} */}
         </IconButton>
         {/* <Switch
           edge='end'

@@ -1,7 +1,56 @@
 export const BASE_URL = 'http://localhost:8081'
+
+export const mockedTopology = {
+  topologyId: 'test2',
+  topologyItems: [
+    {
+      createTimestamp: '12-07-2020 12:29:59',
+      createdBy: 'From UI',
+      dependsOn: 'root',
+      endTime: '',
+      errorCount: 0,
+      pipelineId: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
+      startTime: '',
+      threshold: 0,
+      triggeredBy: '',
+      updateTimestamp: '',
+      updatedBy: '',
+      waitTime: 0
+    },
+    {
+      createTimestamp: '12-07-2020 12:29:59',
+      createdBy: 'From UI',
+      dependsOn: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
+      endTime: '',
+      errorCount: 0,
+      pipelineId: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
+      startTime: '',
+      threshold: 0,
+      triggeredBy: '',
+      updateTimestamp: '',
+      updatedBy: '',
+      waitTime: 0
+    },
+    {
+      createTimestamp: '12-07-2020 12:29:59',
+      createdBy: 'From UI',
+      dependsOn: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
+      endTime: '',
+      errorCount: 0,
+      pipelineId: 'givenf820b18b-effa-4907-8fe6-569477041d14',
+      startTime: '',
+      threshold: 0,
+      triggeredBy: '',
+      updateTimestamp: '',
+      updatedBy: '',
+      waitTime: 0
+    }
+  ]
+}
+
 export const mockedPipelines = [{
-  pipelineId: 'Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b',
-  title: 'Demo',
+  pipelineId: 'givenf820b18b-effa-4907-8fe6-569477041d14',
+  title: 'Demo given pipeline',
   description: 'This is a demo pipeline.',
   created: 1594131949158,
   lastModified: 1594132731019,
@@ -13,11 +62,11 @@ export const mockedPipelines = [{
   metadata: {
     labels: []
   },
-  name: 'Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b',
+  name: 'givenf820b18b-effa-4907-8fe6-569477041d14',
   sdcVersion: '3.16.1',
   sdcId: 'ce64a628-c03a-11ea-a1ee-7101ba3522df'
 }, {
-  pipelineId: 'Pipeline13510382c-e61d-4fc2-9c89-871eeef82d2a',
+  pipelineId: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
   title: 'Pipeline 1',
   description: 'This is the first pipeline which reads from API and dumps in JSON file',
   created: 1594122021469,
@@ -30,11 +79,11 @@ export const mockedPipelines = [{
   metadata: {
     labels: []
   },
-  name: 'Pipeline13510382c-e61d-4fc2-9c89-871eeef82d2a',
+  name: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
   sdcVersion: '3.16.1',
   sdcId: 'ce64a628-c03a-11ea-a1ee-7101ba3522df'
 }, {
-  pipelineId: 'Pipeline33a295e3e-a010-4804-b4ff-f11b1c7be433',
+  pipelineId: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
   title: 'Pipeline 3',
   description: 'reads from a file and dumps in csv',
   created: 1594128056693,
@@ -47,7 +96,7 @@ export const mockedPipelines = [{
   metadata: {
     labels: []
   },
-  name: 'Pipeline33a295e3e-a010-4804-b4ff-f11b1c7be433',
+  name: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
   sdcVersion: '3.16.1',
   sdcId: 'ce64a628-c03a-11ea-a1ee-7101ba3522df'
 }]
