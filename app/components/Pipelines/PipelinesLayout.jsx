@@ -1,7 +1,8 @@
 import 'regenerator-runtime/runtime.js'
 
 // import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
-import Chip from '@material-ui/core/Chip'
+import AppTitleBar from '../Base/AppTitleBar'
+// import Chip from '@material-ui/core/Chip'
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function PipelinesLayout () {
+export default function PipelinesLayout ({ renderTitle }) {
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const classes = useStyles()
@@ -85,7 +86,9 @@ export default function PipelinesLayout () {
 
   return (
     <div>
-      <Chip variant='outlined' size='medium' label='PIPELINES' className='margin-bottom-15' />
+      <AppTitleBar appTitle='PIPELINES' />
+      {/* <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='PIPELINES' />} /> */}
+      {/* <Chip variant='outlined' size='medium' label='PIPELINES' className='margin-bottom-15' /> */}
       <List className={classes.root}>
         {pipelines.map(pipelineItem => {
           return (

@@ -1,3 +1,4 @@
+import AppTitleBar from '../Base/AppTitleBar'
 import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
@@ -144,7 +145,8 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   return (
     <div>
       <Grid container spacing={3}>
-        {!viewMode && <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />}
+        {!viewMode && <AppTitleBar appTitle='NEW TOPOLOGY' />}
+        {/* {!viewMode && <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='NEW TOPOLOGY' />} />} */}
         {viewMode &&
           <StartStopTopology
             name={name}

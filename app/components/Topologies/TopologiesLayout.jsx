@@ -1,8 +1,9 @@
 import 'regenerator-runtime/runtime.js'
 
+import AppTitleBar from '../Base/AppTitleBar'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
-import Chip from '@material-ui/core/Chip'
+// import Chip from '@material-ui/core/Chip'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -35,7 +36,9 @@ export default function TopologiesLayout () {
 
   return (
     <div>
-      <Chip variant='outlined' size='medium' label='TOPOLOGIES' className='margin-bottom-15' />
+      <AppTitleBar appTitle='TOPOLOGIES' />
+      {/* <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='TOPOLOGIES' />} /> */}
+      {/* <Chip variant='outlined' size='medium' label='TOPOLOGIES' className='margin-bottom-15' /> */}
       <br />
       <Button
         onClick={() => history.push('/topologies/new')}
