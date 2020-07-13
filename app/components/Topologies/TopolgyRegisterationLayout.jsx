@@ -147,14 +147,14 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
       <Grid container spacing={3}>
         {!viewMode && <Grid item xs={12}><AppTitleBar appTitle='NEW TOPOLOGY' /></Grid>}
         {/* {!viewMode && <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='NEW TOPOLOGY' />} />} */}
-        {viewMode &&
-          <StartStopTopology
-            name={name}
-            viewMode={viewMode}
-          />}
 
         <Grid item xs={4} />
         <Grid item xs={4}>
+          {viewMode &&
+            <StartStopTopology
+              name={name}
+              viewMode={viewMode}
+            />}
           <form noValidate autoComplete='off'>
 
             <TopologyName disabled={viewMode} name={name} setName={setName} />
@@ -243,36 +243,39 @@ const ButtonSubmit = ({ handleSubmit, disabled }) => {
 
 const StartStopTopology = ({ name, viewMode }) => {
   return (
-    <>
-      <Grid item xs={4}>
-        <Button
-          variant='contained'
-          color='primary'
-          disabled={viewMode}
-          size='small'
-          onClick={(e) => {
-            console.log('name', name)
-            startTopology(name)
-          }}
-          startIcon={<PlayCircleFilledIcon />}
-        >
+    <div>
+      {/* <Grid item xs={4}> */}
+      <Button
+        variant='contained'
+        color='primary'
+        disabled={viewMode}
+        size='small'
+        onClick={(e) => {
+          console.log('name', name)
+          startTopology(name)
+        }}
+        startIcon={<PlayCircleFilledIcon />}
+      >
         START TOPOLOGY
-        </Button>
-      </Grid>
-      <Grid item xs={4}>
-        <Button
-          variant='contained'
-          color='primary'
-          disabled={viewMode}
-          size='small'
-          onClick={(e) => {
-            stopTopology(name)
-          }}
-          startIcon={<StopIcon />}
-        >
+      </Button>
+      <div className='margin-bottom-15' />
+      {/* </Grid>
+      <Grid item xs={4}> */}
+      <Button
+        variant='contained'
+        color='primary'
+        disabled={viewMode}
+        size='small'
+        onClick={(e) => {
+          stopTopology(name)
+        }}
+        startIcon={<StopIcon />}
+      >
         STOP TOPOLOGY
-        </Button>
-      </Grid>
-    </>
+      </Button>
+      <div className='margin-bottom-15' />
+
+      {/* </Grid> */}
+    </div>
   )
 }

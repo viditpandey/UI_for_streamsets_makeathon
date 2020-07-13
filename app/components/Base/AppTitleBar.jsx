@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function AppTitleBar ({ appTitle }) {
+export default function AppTitleBar ({ appTitle, renderSecondaryButton }) {
   const classes = useStyles()
   return (
     <div className={`margin-bottom-15 ${classes.root}`}>
@@ -30,7 +30,7 @@ export default function AppTitleBar ({ appTitle }) {
           <Typography variant='h6' className={classes.title}>
             {appTitle}
           </Typography>
-          {/* <Button color='inherit'>Login</Button> */}
+          {renderSecondaryButton}
         </Toolbar>
       </AppBar>
     </div>
