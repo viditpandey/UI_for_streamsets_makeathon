@@ -8,7 +8,6 @@ const Name = ({ name, setName, disabled }) => {
       value={name}
       disabled={disabled}
       onChange={e => setName(e.target.value)}
-      //   autoFocus
       variant='outlined'
       style={{ marginBottom: '15px' }}
       label='Topology Name'

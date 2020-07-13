@@ -29,11 +29,23 @@ const renderNode = ({ p, handlePipelineClick }) => {
       color='primary'
       icon={<DoneIcon />}
       size='small'
-      label={p.title}
+      label={p.title || p.pipelineId}
       onDelete={() => {}}
       onClick={(e) => handlePipelineClick(true, p)}
     />
   )
+}
+
+const getTreeCompatibleData = ({ list, handlePipelineClick }) => {
+  return list.map(p => {
+    return {
+      ...cloneDeep(p),
+      title: renderNode({ p, handlePipelineClick }),
+      pipelineId: p.pipelineId,
+      expanded: true,
+      children: []
+    }
+  })
 }
 
 export default function TopolgyRegisterationLayout ({ propsName = '', propsSelectedPipelines = [] }) {
@@ -55,10 +67,6 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   useEffect(() => {
     async function fetchPipelines () {
       const res = await getPipelines()
-      selectedPipelines.forEach(p => {
-        const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
-        p.title = matchingPipeline && matchingPipeline.title
-      })
       availablePipelines(res)
     }
     fetchPipelines()
@@ -69,25 +77,20 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   }, [waitTime, threshold])
 
   useEffect(() => {
-    setTreeData(selectedPipelines.map(p => {
-      return {
-        title: renderNode({ p, handlePipelineClick }),
-        pipelineId: p.pipelineId,
-        expanded: true,
-        children: []
-      }
-    }))
+    const data = getTreeCompatibleData({ list: selectedPipelines, handlePipelineClick })
+    setTreeData(data)
   }, [openDialog])
 
   useEffect(() => {
     setName(propsName)
-    propsSelectedPipelines.forEach(p => {
-      const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
-      p.title = matchingPipeline && matchingPipeline.title
-    })
-    addPipelinesToTopology(propsSelectedPipelines)
+    const t = cloneDeep(propsSelectedPipelines)
+    // t.forEach(p => {
+    //   const matchingPipeline = allPipelines.find(item => item.pipelineId === p.pipelineId)
+    //   p.title = matchingPipeline && matchingPipeline.title
+    // })
+    addPipelinesToTopology(t)
     setPageViewOrEditMode(!!propsName)
-  }, [propsName])
+  }, [propsName, propsSelectedPipelines])
 
   useEffect(() => {
     const filteredPipelinesNotInTopology = cloneDeep(allPipelines)
@@ -101,14 +104,9 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   }, [selectedPipelines])
 
   useEffect(() => {
-    const test = propsSelectedPipelines.map(p => {
-      const temp = cloneDeep(p)
-      temp.title = renderNode({ p, handlePipelineClick })
-      temp.expanded = true
-      return temp
-    })
+    const test = getTreeCompatibleData({ list: selectedPipelines, handlePipelineClick })
     setTreeData(listToTree(test))
-  }, [propsSelectedPipelines])
+  }, [selectedPipelines])
 
   const updatePipelinesConfigInTree = () => {
     selectedPipelines.forEach(itemNode => {
@@ -146,10 +144,9 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
     <div>
       <Grid container spacing={3}>
         {!viewMode && <Grid item xs={12}><AppTitleBar appTitle='NEW TOPOLOGY' /></Grid>}
-        {/* {!viewMode && <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='NEW TOPOLOGY' />} />} */}
 
-        <Grid item xs={4} />
-        <Grid item xs={4}>
+        <Grid item xs={2} />
+        <Grid item xs={8}>
           {viewMode &&
             <StartStopTopology
               name={name}

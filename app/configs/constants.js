@@ -11,11 +11,11 @@ export const mockedTopology = {
       errorCount: 0,
       pipelineId: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
       startTime: '',
-      threshold: 0,
+      threshold: 1,
       triggeredBy: '',
       updateTimestamp: '',
       updatedBy: '',
-      waitTime: 0
+      waitTime: 1
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
@@ -25,11 +25,11 @@ export const mockedTopology = {
       errorCount: 0,
       pipelineId: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
       startTime: '',
-      threshold: 0,
+      threshold: 2,
       triggeredBy: '',
       updateTimestamp: '',
       updatedBy: '',
-      waitTime: 0
+      waitTime: 2
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
@@ -39,11 +39,11 @@ export const mockedTopology = {
       errorCount: 0,
       pipelineId: 'givenf820b18b-effa-4907-8fe6-569477041d14',
       startTime: '',
-      threshold: 0,
+      threshold: 3,
       triggeredBy: '',
       updateTimestamp: '',
       updatedBy: '',
-      waitTime: 0
+      waitTime: 3
     }
   ]
 }

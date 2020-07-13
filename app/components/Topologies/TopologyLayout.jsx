@@ -21,21 +21,6 @@ export default function TopologyLayout ({ id }) {
   return (
     <div>
       <AppTitleBar appTitle={`TOPOLOGY: ${topologyData.topologyId} ${id}`} />
-      {/* <AppTitleBar appTitle={
-        <Chip
-          variant='outlined'
-          size='medium'
-          label={`TOPOLOGY: ${topologyData.topologyId} ${id}`}
-        />
-      }
-      /> */}
-
-      {/* <Chip
-        variant='outlined'
-        size='medium'
-        label={`TOPOLOGY: ${topologyData.topologyId} ${id}`}
-        className='margin-bottom-15'
-      /> */}
 
       <TopolgyRegisterationLayout
         propsName={topologyData.topologyId}
