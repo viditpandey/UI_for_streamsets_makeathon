@@ -1,14 +1,19 @@
 import 'regenerator-runtime/runtime.js'
+
+import AppTitleBar from '../Base/AppTitleBar'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
-import Chip from '@material-ui/core/Chip'
+// import Chip from '@material-ui/core/Chip'
+import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { useHistory } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
 import React, { useState, useEffect } from 'react'
+
 import { getTopologies } from '../../actions/TopologyActions'
+import { isEmpty } from 'lodash'
+import { makeStyles } from '@material-ui/core/styles'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function TopologiesLayout () {
-  const classes = useStyles()
   const history = useHistory()
 
   const [topologies, setTopologies] = useState([])
@@ -33,30 +37,44 @@ export default function TopologiesLayout () {
 
   return (
     <div>
-      <Chip variant='outlined' size='medium' label='TOPOLOGIES' className='margin-bottom-15' />
-      <br />
-      <Button
-        onClick={() => history.push('/topologies/new')}
-        variant='contained'
-        color='primary'
-        startIcon={<AddCircleIcon />}
-      >
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <AppTitleBar appTitle='TOPOLOGIES' />
+        </Grid>
+
+        <br />
+        <Grid item xs={4} />
+        <Grid item xs={4}>
+          <Button
+            onClick={() => history.push('/topologies/new')}
+            variant='contained'
+            color='primary'
+            startIcon={<AddCircleIcon />}
+          >
             new topology
-      </Button>
-      <div className='margin-bottom-15' />
-      <List className={classes.root}>
-        {topologies.map(topologyDetails => {
-          console.log('topologyDetails', topologyDetails)
-          return (
-            <Topology
-              key={topologyDetails.topologyId}
-              topology={topologyDetails}
-              history={history}
-            />
-          )
-        })}
-      </List>
+          </Button>
+        </Grid>
+        {isEmpty(topologies) ? null
+          : <Topologies history={history} topologies={topologies} />}
+      </Grid>
     </div>
+  )
+}
+
+const Topologies = ({ topologies, history }) => {
+  const classes = useStyles()
+  return (
+    <List className={classes.root}>
+      {topologies.map(topologyDetails => {
+        return (
+          <Topology
+            key={topologyDetails.topologyId}
+            topology={topologyDetails}
+            history={history}
+          />
+        )
+      })}
+    </List>
   )
 }
 

@@ -1,6 +1,7 @@
 import 'regenerator-runtime/runtime.js'
 
-import Chip from '@material-ui/core/Chip'
+import AppTitleBar from '../Base/AppTitleBar'
+// import Chip from '@material-ui/core/Chip'
 import React, { useState, useEffect } from 'react'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
@@ -19,12 +20,22 @@ export default function TopologyLayout ({ id }) {
 
   return (
     <div>
-      <Chip
+      <AppTitleBar appTitle={`TOPOLOGY: ${topologyData.topologyId} ${id}`} />
+      {/* <AppTitleBar appTitle={
+        <Chip
+          variant='outlined'
+          size='medium'
+          label={`TOPOLOGY: ${topologyData.topologyId} ${id}`}
+        />
+      }
+      /> */}
+
+      {/* <Chip
         variant='outlined'
         size='medium'
         label={`TOPOLOGY: ${topologyData.topologyId} ${id}`}
         className='margin-bottom-15'
-      />
+      /> */}
 
       <TopolgyRegisterationLayout
         propsName={topologyData.topologyId}

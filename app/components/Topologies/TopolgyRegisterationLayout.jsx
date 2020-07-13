@@ -1,3 +1,4 @@
+import AppTitleBar from '../Base/AppTitleBar'
 import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
@@ -16,6 +17,7 @@ import { createTopology, startTopology, stopTopology } from '../../actions/Topol
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
 import { useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
 
@@ -35,6 +37,8 @@ const renderNode = ({ p, handlePipelineClick }) => {
 }
 
 export default function TopolgyRegisterationLayout ({ propsName = '', propsSelectedPipelines = [] }) {
+  const { enqueueSnackbar } = useSnackbar()
+
   const history = useHistory()
   const [viewMode, setPageViewOrEditMode] = useState(!!propsName)
   const [name, setName] = useState(propsName) // name in input for topology name
@@ -141,40 +145,16 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   return (
     <div>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Chip variant='outlined' size='medium' label='NEW TOPOLOGY' className='margin-bottom-15' />
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant='contained'
-            color='primary'
-            disabled={viewMode}
-            size='small'
-            onClick={(e) => {
-              console.log('name', name)
-              startTopology(name)
-            }}
-            startIcon={<PlayCircleFilledIcon />}
-          >
-        START
-          </Button>
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant='contained'
-            color='primary'
-            disabled={viewMode}
-            size='small'
-            onClick={(e) => {
-              stopTopology(name)
-            }}
-            startIcon={<StopIcon />}
-          >
-        STOP
-          </Button>
-        </Grid>
+        {!viewMode && <Grid item xs={12}><AppTitleBar appTitle='NEW TOPOLOGY' /></Grid>}
+        {/* {!viewMode && <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='NEW TOPOLOGY' />} />} */}
+        {viewMode &&
+          <StartStopTopology
+            name={name}
+            viewMode={viewMode}
+          />}
 
-        <Grid item xs={12}>
+        <Grid item xs={4} />
+        <Grid item xs={4}>
           <form noValidate autoComplete='off'>
 
             <TopologyName disabled={viewMode} name={name} setName={setName} />
@@ -193,7 +173,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
 
             <CreateTree
               treeData={treeData}
-              setTreeData={setTreeData}
+              setTreeData={viewMode ? () => { enqueueSnackbar('Editing the topology not allowed.', { variant: 'info' }) } : setTreeData}
               setFinalTreeData={setFinalTreeData}
               setOpen={setOpenConfigDialog}
             />
@@ -222,6 +202,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
                 console.log('This is sent to backend: ', finalTreeData)
 
                 createTopology({ finalTreeData })
+                enqueueSnackbar('Topology created succesfully', { variant: 'success' })
                 history.push('/topologies')
               }}
             />
@@ -257,5 +238,41 @@ const ButtonSubmit = ({ handleSubmit, disabled }) => {
     >
         CREATE TOPOLOGY
     </Button>
+  )
+}
+
+const StartStopTopology = ({ name, viewMode }) => {
+  return (
+    <>
+      <Grid item xs={4}>
+        <Button
+          variant='contained'
+          color='primary'
+          disabled={viewMode}
+          size='small'
+          onClick={(e) => {
+            console.log('name', name)
+            startTopology(name)
+          }}
+          startIcon={<PlayCircleFilledIcon />}
+        >
+        START TOPOLOGY
+        </Button>
+      </Grid>
+      <Grid item xs={4}>
+        <Button
+          variant='contained'
+          color='primary'
+          disabled={viewMode}
+          size='small'
+          onClick={(e) => {
+            stopTopology(name)
+          }}
+          startIcon={<StopIcon />}
+        >
+        STOP TOPOLOGY
+        </Button>
+      </Grid>
+    </>
   )
 }

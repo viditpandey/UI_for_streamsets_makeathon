@@ -1,9 +1,11 @@
+import AppTitleBar from '../Base/AppTitleBar'
+// import Chip from '@material-ui/core/Chip'
 import React from 'react'
-import Chip from '@material-ui/core/Chip'
 
 export default function PipelineLayout ({ id }) {
   return (
-    <Chip variant='outlined' size='medium' label={`PIPELINE: ${id}`} className='margin-bottom-15' />
+    <AppTitleBar appTitle={`PIPELINE: ${id}`} />
+    // <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label={`PIPELINE: ${id}`} />} />
 
   )
 }
