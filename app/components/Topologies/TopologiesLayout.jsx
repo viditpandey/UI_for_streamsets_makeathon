@@ -6,10 +6,12 @@ import Chip from '@material-ui/core/Chip'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { useHistory } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
 import React, { useState, useEffect } from 'react'
+
 import { getTopologies } from '../../actions/TopologyActions'
+import { isEmpty } from 'lodash'
+import { makeStyles } from '@material-ui/core/styles'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function TopologiesLayout () {
-  const classes = useStyles()
   const history = useHistory()
 
   const [topologies, setTopologies] = useState([])
@@ -44,20 +45,26 @@ export default function TopologiesLayout () {
       >
             new topology
       </Button>
-
-      <List className={classes.root}>
-        {topologies.map(topologyDetails => {
-          console.log('topologyDetails', topologyDetails)
-          return (
-            <Topology
-              key={topologyDetails.topologyId}
-              topology={topologyDetails}
-              history={history}
-            />
-          )
-        })}
-      </List>
+      {isEmpty(topologies) ? null
+        : <Topologies history={history} topologies={topologies} />}
     </div>
+  )
+}
+
+const Topologies = ({ topologies, history }) => {
+  const classes = useStyles()
+  return (
+    <List className={classes.root}>
+      {topologies.map(topologyDetails => {
+        return (
+          <Topology
+            key={topologyDetails.topologyId}
+            topology={topologyDetails}
+            history={history}
+          />
+        )
+      })}
+    </List>
   )
 }
 
