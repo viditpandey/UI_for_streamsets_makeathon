@@ -170,7 +170,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
 
             <CreateTree
               treeData={treeData}
-              setTreeData={setTreeData}
+              setTreeData={viewMode ? () => { enqueueSnackbar('Editing the topology not allowed.', { variant: 'info' }) } : setTreeData}
               setFinalTreeData={setFinalTreeData}
               setOpen={setOpenConfigDialog}
             />
