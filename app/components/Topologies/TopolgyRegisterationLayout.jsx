@@ -16,6 +16,7 @@ import { createTopology, startTopology, stopTopology } from '../../actions/Topol
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
 import { useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
 
@@ -35,6 +36,8 @@ const renderNode = ({ p, handlePipelineClick }) => {
 }
 
 export default function TopolgyRegisterationLayout ({ propsName = '', propsSelectedPipelines = [] }) {
+  const { enqueueSnackbar } = useSnackbar()
+
   const history = useHistory()
   const [viewMode, setPageViewOrEditMode] = useState(!!propsName)
   const [name, setName] = useState(propsName) // name in input for topology name
@@ -196,6 +199,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
                 console.log('This is sent to backend: ', finalTreeData)
 
                 createTopology({ finalTreeData })
+                enqueueSnackbar('Topology created succesfully', { variant: 'success' })
                 history.push('/topologies')
               }}
             />
