@@ -35,24 +35,24 @@ export default function TopologiesLayout () {
     fetchTopologies()
   }, [])
 
+  const newTopology = (
+    <Button
+      onClick={() => history.push('/topologies/new')}
+      variant='contained'
+      color='primary'
+      startIcon={<AddCircleIcon />}
+    >
+    new topology
+    </Button>)
+
   return (
     <div>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <AppTitleBar appTitle='TOPOLOGIES' />
-        </Grid>
-
-        <br />
-        <Grid item xs={4} />
-        <Grid item xs={4}>
-          <Button
-            onClick={() => history.push('/topologies/new')}
-            variant='contained'
-            color='primary'
-            startIcon={<AddCircleIcon />}
-          >
-            new topology
-          </Button>
+          <AppTitleBar
+            appTitle='TOPOLOGIES'
+            renderSecondaryButton={newTopology}
+          />
         </Grid>
         {isEmpty(topologies) ? null
           : <Topologies history={history} topologies={topologies} />}
