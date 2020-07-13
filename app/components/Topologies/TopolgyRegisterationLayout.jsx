@@ -145,7 +145,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   return (
     <div>
       <Grid container spacing={3}>
-        {!viewMode && <AppTitleBar appTitle='NEW TOPOLOGY' />}
+        {!viewMode && <Grid item xs={12}><AppTitleBar appTitle='NEW TOPOLOGY' /></Grid>}
         {/* {!viewMode && <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='NEW TOPOLOGY' />} />} */}
         {viewMode &&
           <StartStopTopology
@@ -153,7 +153,8 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
             viewMode={viewMode}
           />}
 
-        <Grid item xs={12}>
+        <Grid item xs={4} />
+        <Grid item xs={4}>
           <form noValidate autoComplete='off'>
 
             <TopologyName disabled={viewMode} name={name} setName={setName} />

@@ -4,6 +4,7 @@ import AppTitleBar from '../Base/AppTitleBar'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
 // import Chip from '@material-ui/core/Chip'
+import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -36,20 +37,26 @@ export default function TopologiesLayout () {
 
   return (
     <div>
-      <AppTitleBar appTitle='TOPOLOGIES' />
-      {/* <AppTitleBar appTitle={<Chip variant='outlined' size='medium' label='TOPOLOGIES' />} /> */}
-      {/* <Chip variant='outlined' size='medium' label='TOPOLOGIES' className='margin-bottom-15' /> */}
-      <br />
-      <Button
-        onClick={() => history.push('/topologies/new')}
-        variant='contained'
-        color='primary'
-        startIcon={<AddCircleIcon />}
-      >
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <AppTitleBar appTitle='TOPOLOGIES' />
+        </Grid>
+
+        <br />
+        <Grid item xs={4} />
+        <Grid item xs={4}>
+          <Button
+            onClick={() => history.push('/topologies/new')}
+            variant='contained'
+            color='primary'
+            startIcon={<AddCircleIcon />}
+          >
             new topology
-      </Button>
-      {isEmpty(topologies) ? null
-        : <Topologies history={history} topologies={topologies} />}
+          </Button>
+        </Grid>
+        {isEmpty(topologies) ? null
+          : <Topologies history={history} topologies={topologies} />}
+      </Grid>
     </div>
   )
 }
