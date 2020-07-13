@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   }
 })
 
-const naviRoutes = ['/pipelines', '/pipelines/Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b', '/topologies']
+const naviRoutes = ['/pipelines', '/topologies', '/topologies/Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b']
 
 export default function SimpleBottomNavigation () {
   // const location = useLocation()
@@ -39,8 +39,8 @@ export default function SimpleBottomNavigation () {
       className={classes.root}
     >
       <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon />} />
-      <BottomNavigationAction label='Single Pipeline' icon={<FavoriteIcon />} />
       <BottomNavigationAction label='Topologies' icon={<BarChartIcon />} />
+      <BottomNavigationAction label='Single Topology' icon={<FavoriteIcon />} />
     </BottomNavigation>
   )
 }
