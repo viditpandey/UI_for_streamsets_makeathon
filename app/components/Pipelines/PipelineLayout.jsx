@@ -1,7 +1,8 @@
-// import Chip from '@material-ui/core/Chip'
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
+import { AppBarContext } from '../Base/Home'
 
-export default function PipelineLayout ({ id, setAppTitle }) {
+export default function PipelineLayout ({ id }) {
+  const { setAppTitle } = useContext(AppBarContext)
   useEffect(() => { setAppTitle({ text: `PIPELINE: ${id}` }) }, [])
 
   return (

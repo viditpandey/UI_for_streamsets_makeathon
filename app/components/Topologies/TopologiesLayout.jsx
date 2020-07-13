@@ -4,14 +4,16 @@ import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
+import { AppBarContext } from '../Base/Home'
 import { getTopologies } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
-export default function TopologiesLayout ({ setAppTitle }) {
+export default function TopologiesLayout () {
   const history = useHistory()
+  const { setAppTitle } = useContext(AppBarContext)
 
   const [topologies, setTopologies] = useState([])
 

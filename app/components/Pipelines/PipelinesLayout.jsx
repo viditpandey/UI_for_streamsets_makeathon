@@ -1,18 +1,20 @@
 import 'regenerator-runtime/runtime.js'
 
-// import AppTitleBar from '../Base/AppTitleBar'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import StopIcon from '@material-ui/icons/Stop'
 
+import { AppBarContext } from '../Base/Home'
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
 import { useInterval } from '../../helper/useInterval'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
-export default function PipelinesLayout ({ setAppTitle }) {
+export default function PipelinesLayout () {
+  const { setAppTitle } = useContext(AppBarContext)
+
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 

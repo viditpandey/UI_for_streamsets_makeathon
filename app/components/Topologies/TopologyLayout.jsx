@@ -1,11 +1,13 @@
 import 'regenerator-runtime/runtime.js'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
+import { AppBarContext } from '../Base/Home'
 import { getTopologyById } from '../../actions/TopologyActions'
 
-export default function TopologyLayout ({ id, setAppTitle }) {
+export default function TopologyLayout ({ id }) {
+  const { setAppTitle } = useContext(AppBarContext)
   const [topologyData, setTopologyData] = useState({})
 
   useEffect(() => {
@@ -21,7 +23,6 @@ export default function TopologyLayout ({ id, setAppTitle }) {
     <div>
 
       <TopolgyRegisterationLayout
-        setAppTitle={setAppTitle}
         propsName={topologyData.topologyId}
         propsSelectedPipelines={topologyData.topologyItems}
       />

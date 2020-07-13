@@ -4,13 +4,14 @@ import Chip from '@material-ui/core/Chip'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Grid from '@material-ui/core/Grid'
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import RenderPipelineConfigs from './RenderPipelineConfigs'
 import SaveIcon from '@material-ui/icons/Save'
 import SortableTree, { walk } from 'react-sortable-tree'
 import StopIcon from '@material-ui/icons/Stop'
 import TopologyName from './TopologyName'
 
+import { AppBarContext } from '../Base/Home'
 import { cloneDeep, isEmpty } from 'lodash'
 import { createTopology, startTopology, stopTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
@@ -47,8 +48,9 @@ const getTreeCompatibleData = ({ list, handlePipelineClick }) => {
   })
 }
 
-export default function TopolgyRegisterationLayout ({ setAppTitle = () => {}, propsName = '', propsSelectedPipelines = [] }) {
+export default function TopolgyRegisterationLayout ({ propsName = '', propsSelectedPipelines = [] }) {
   const { enqueueSnackbar } = useSnackbar()
+  const { setAppTitle } = useContext(AppBarContext)
 
   const history = useHistory()
   const [viewMode, setPageViewOrEditMode] = useState(!!propsName)
