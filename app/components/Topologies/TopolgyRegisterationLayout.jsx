@@ -13,7 +13,7 @@ import StopIcon from '@material-ui/icons/Stop'
 import TopologyName from './TopologyName'
 
 import { cloneDeep } from 'lodash'
-import { createTopology, startTopology, stopTopology } from '../../actions/TopologyActions'
+import { createTopology, startTopology, stopTopology, validateTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
 import { useHistory } from 'react-router-dom'
@@ -252,11 +252,11 @@ const StartStopTopology = ({ name, viewMode }) => {
           size='small'
           onClick={(e) => {
             console.log('name', name)
-            startTopology(name)
+            validateTopology(name)
           }}
           startIcon={<PlayCircleFilledIcon />}
         >
-        START TOPOLOGY
+        VALIDATE TOPOLOGY
         </Button>
       </Grid>
       <Grid item xs={4}>
