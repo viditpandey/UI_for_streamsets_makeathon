@@ -13,16 +13,14 @@ const useStyles = makeStyles({
   root: {
     width: '100%',
     position: 'fixed',
-    bottom: 0
-
+    bottom: 0,
+    zIndex: '10'
   }
 })
 
 const naviRoutes = ['/pipelines', '/topologies', '/topologies/Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b']
 
 export default function SimpleBottomNavigation () {
-  // const location = useLocation()
-  // console.log('SimpleBottomNavigation -> location', location)
   const history = useHistory()
 
   const classes = useStyles()
@@ -30,6 +28,7 @@ export default function SimpleBottomNavigation () {
 
   return (
     <BottomNavigation
+      // style={{ zIndex: '10' }}
       value={value}
       onChange={(event, newValue) => {
         history.push(naviRoutes[newValue])

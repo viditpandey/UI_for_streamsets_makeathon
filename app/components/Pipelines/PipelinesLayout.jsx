@@ -1,41 +1,16 @@
 import 'regenerator-runtime/runtime.js'
 
-// import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import AppTitleBar from '../Base/AppTitleBar'
-// import Chip from '@material-ui/core/Chip'
-// import Collapse from '@material-ui/core/Collapse'
-// import Divider from '@material-ui/core/Divider'
-// import ExpandLess from '@material-ui/icons/ExpandLess'
-// import ExpandMore from '@material-ui/icons/ExpandMore'
 import IconButton from '@material-ui/core/IconButton'
-// import List from '@material-ui/core/List'
-// import ListItem from '@material-ui/core/ListItem'
-// import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-// import ListItemText from '@material-ui/core/ListItemText'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
-// import Paper from '@material-ui/core/Paper'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import React, { useState, useEffect } from 'react'
-// import Switch from '@material-ui/core/Switch'
 import StopIcon from '@material-ui/icons/Stop'
 
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
-// import { makeStyles } from '@material-ui/core/styles'
 import { useInterval } from '../../helper/useInterval'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     width: '100%',
-//     cursor: 'pointer'
-//     // maxWidth: 360,
-//     // backgroundColor: theme.palette.background.paper
-//   },
-//   nested: {
-//     paddingLeft: theme.spacing(4)
-//   }
-// }))
 
 export default function PipelinesLayout ({ renderTitle }) {
   const { enqueueSnackbar } = useSnackbar()
@@ -99,8 +74,10 @@ export default function PipelinesLayout ({ renderTitle }) {
 
       <ListItemWrapper
         items={pipelines}
+        getKey={item => item.pipelineId}
         itemClick={item => history.push(`/pipelines/${item.pipelineId}`)}
         collapsedText={item => returnSecondaryText(item)}
+        getPrimaryText={item => `${item.title} (${item.pipelineId})`}
         secondaryText={item => item.status ? <>{`status: ${item.status}`}</> : null}
         secondaryActionButton={item => {
           const isChecked = checked.indexOf(item.pipelineId) !== -1
@@ -117,21 +94,6 @@ export default function PipelinesLayout ({ renderTitle }) {
           )
         }}
       />
-      {/* <List className={classes.root}>
-        {pipelines.map(pipelineItem => {
-          return (
-
-            <Pipeline
-              key={pipelineItem.pipelineId}
-              pipeline={pipelineItem}
-              history={history}
-              classes={classes}
-              handleToggle={handleToggle}
-              isChecked={checked.indexOf(pipelineItem.pipelineId) !== -1}
-            />
-          )
-        })}
-      </List> */}
     </div>
   )
 }
@@ -146,53 +108,3 @@ const returnSecondaryText = item => {
     </>
   )
 }
-
-// const Pipeline = ({ pipeline, handleToggle, isChecked, history, classes }) => {
-//   const [open, setOpen] = useState(false)
-//   const { pipelineId, title, status, description, created } = pipeline
-//   const secondaryText = (
-//     <>
-//       {`created: ${new Date(created)}`} <br />
-//       {`description: ${description}`} <br />
-//       {status ? `status: ${status}` : null}
-//     </>
-//   )
-//   return (
-//     <Paper className='clickable'>
-//       <ListItem>
-//         {open ? <ExpandLess onClick={() => setOpen(false)} /> : <ExpandMore onClick={() => setOpen(true)} />}
-//         <ListItemText
-//           id={pipelineId}
-//           onClick={() => history.push(`/pipelines/${pipelineId}`)}
-//           primary={`${title} (${pipelineId})`}
-//           // secondary={secondaryText}
-//         />
-//         <ListItemSecondaryAction>
-//           <IconButton
-//             color={!isChecked ? 'primary' : 'secondary'}
-//             aria-label='upload picture'
-//             onClick={handleToggle(pipelineId)}
-//             component='span'
-//           >
-//             {!isChecked
-//               ? <PlayArrowIcon style={{ color: '#077d40' }} />
-//               : <StopIcon />}
-//             {/* {<CheckCircleOutlineIcon />} */}
-//           </IconButton>
-//         </ListItemSecondaryAction>
-//       </ListItem>
-//       <Collapse in={open} timeout='auto' unmountOnExit>
-//         <ListItem button className={classes.nested}>
-//           <ListItemText
-//             id={pipelineId}
-//             onClick={() => history.push(`/pipelines/${pipelineId}`)}
-//             // primary={`${title} (${pipelineId})`}
-//             secondary={secondaryText}
-//           />
-//         </ListItem>
-//       </Collapse>
-//       <Divider />
-//       <div className='margin-bottom-15' />
-//     </Paper>
-//   )
-// }

@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(4)
   }
 }))
-export default function ListItemWrapper ({ items, itemClick, collapsedText, secondaryText, secondaryActionButton }) {
+export default function ListItemWrapper ({ items, itemClick, collapsedText, secondaryText, secondaryActionButton, getPrimaryText, getKey }) {
   const classes = useStyles()
 
   return (
@@ -30,12 +30,14 @@ export default function ListItemWrapper ({ items, itemClick, collapsedText, seco
         return (
 
           <ListItemRenderer
-            key={item.pipelineId}
+            key={getKey(item)}
             item={item}
             itemClick={itemClick}
             secondaryText={secondaryText}
             classes={classes}
+            getKey={getKey}
             collapsedText={collapsedText(item)}
+            getPrimaryText={getPrimaryText}
             secondaryActionButton={secondaryActionButton(item)}
           />
 
@@ -45,17 +47,16 @@ export default function ListItemWrapper ({ items, itemClick, collapsedText, seco
   )
 }
 
-const ListItemRenderer = ({ item, itemClick, collapsedText, secondaryText, classes, secondaryActionButton }) => {
+const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, secondaryText, classes, secondaryActionButton, getKey }) => {
   const [open, setOpen] = useState(false)
-  const { pipelineId, title, topologyId } = item
   return (
     <Paper className='clickable'>
       <ListItem>
         {open ? <ExpandLess onClick={() => setOpen(false)} /> : <ExpandMore onClick={() => setOpen(true)} />}
         <ListItemText
-          id={pipelineId}
-          onClick={item => itemClick(item)}
-          primary={`${title} (${pipelineId || topologyId})`}
+          id={getKey(item)}
+          onClick={e => itemClick(item)}
+          primary={(getPrimaryText && getPrimaryText(item))}
           secondary={secondaryText(item)}
         />
         <ListItemSecondaryAction>
@@ -66,7 +67,7 @@ const ListItemRenderer = ({ item, itemClick, collapsedText, secondaryText, class
         <Collapse in={open} timeout='auto' unmountOnExit>
           <ListItem button className={classes.nested}>
             <ListItemText
-              id={pipelineId}
+              id={getKey(item)}
               secondary={collapsedText}
             />
           </ListItem>
