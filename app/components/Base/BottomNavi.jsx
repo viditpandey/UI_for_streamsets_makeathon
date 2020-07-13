@@ -1,12 +1,12 @@
+import AccountTreeIcon from '@material-ui/icons/AccountTree'
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
-import BarChartIcon from '@material-ui/icons/BarChart'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import React, { useState } from 'react'
+import InfoIcon from '@material-ui/icons/Info'
+import React, { useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 // import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
@@ -18,13 +18,21 @@ const useStyles = makeStyles({
   }
 })
 
-const naviRoutes = ['/pipelines', '/topologies', '/topologies/Demo618e87ac-06d5-45b5-aeee-f63c42b4a76b']
+const naviRoutes = ['/pipelines', '/topologies', '/topologies/id']
 
 export default function SimpleBottomNavigation () {
   const history = useHistory()
-
   const classes = useStyles()
-  const [value, setValue] = useState(0)
+  let defaultValue = false
+  const pageLoc = useLocation().pathname
+  useEffect(() => {
+    const routeRegex = [[/pipelines\/$/], [/topologies/, /topologies\/$/, /topologies\/new$/], [/topologies\/.+/]]
+    routeRegex.forEach((item, i) => {
+      const isRouteMatched = item.filter(r => pageLoc.match(r))
+      if (isRouteMatched && isRouteMatched.length) defaultValue = i
+    })
+  }, [])
+  const [value, setValue] = useState(defaultValue || 0)
 
   return (
     <BottomNavigation
@@ -38,8 +46,8 @@ export default function SimpleBottomNavigation () {
       className={classes.root}
     >
       <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon />} />
-      <BottomNavigationAction label='Topologies' icon={<BarChartIcon />} />
-      <BottomNavigationAction label='Single Topology' icon={<FavoriteIcon />} />
+      <BottomNavigationAction label='Topologies' icon={<AccountTreeIcon />} />
+      <BottomNavigationAction label='Single Topology' icon={<InfoIcon />} />
     </BottomNavigation>
   )
 }

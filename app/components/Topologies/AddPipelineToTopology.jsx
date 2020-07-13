@@ -6,6 +6,11 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import PipelinesForTopology from './PipelinesForTopology'
 import React from 'react'
+import Slide from '@material-ui/core/Slide'
+
+export const Transition = React.forwardRef(function Transition (props, ref) {
+  return <Slide direction='up' ref={ref} {...props} />
+})
 
 const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled }) => {
   return (
@@ -22,6 +27,7 @@ const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled 
       </Button>
       <Dialog
         open={open}
+        TransitionComponent={Transition}
         scroll='body'
         aria-labelledby='scroll-dialog-title'
         aria-describedby='scroll-dialog-description'

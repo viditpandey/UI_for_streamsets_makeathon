@@ -2,7 +2,7 @@ import AppTitleBar from '../Base/AppTitleBar'
 import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
-import DoneIcon from '@material-ui/icons/Done'
+import SettingsIcon from '@material-ui/icons/Settings'
 import Grid from '@material-ui/core/Grid'
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
 import React, { useState, useEffect } from 'react'
@@ -12,7 +12,7 @@ import SortableTree, { walk } from 'react-sortable-tree'
 import StopIcon from '@material-ui/icons/Stop'
 import TopologyName from './TopologyName'
 
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import { createTopology, startTopology, stopTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
@@ -27,10 +27,10 @@ const renderNode = ({ p, handlePipelineClick }) => {
       id={p.pipelineId}
       variant='outlined'
       color='primary'
-      icon={<DoneIcon />}
+      deleteIcon={<SettingsIcon />}
       size='small'
       label={p.title || p.pipelineId}
-      onDelete={() => {}}
+      onDelete={(e) => handlePipelineClick(true, p)}
       onClick={(e) => handlePipelineClick(true, p)}
     />
   )
@@ -64,6 +64,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   const [dependencyCriteria, setDependencyCriteria] = useState('stop')
   const [waitTime, setWaitTime] = useState(0)
   const [finalTreeData, setFinalTreeData] = useState([])
+  const [canSubmit, toggleCanSubmit] = useState(false)
 
   useEffect(() => {
     async function fetchPipelines () {
@@ -76,6 +77,13 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   useEffect(() => {
     updatePipelinesConfigInTree()
   }, [waitTime, threshold])
+
+  useEffect(() => {
+    const isValidName = name && name.length
+    const isValidSelectedPipelines = !isEmpty(selectedPipelines)
+    if (isValidName && isValidSelectedPipelines) toggleCanSubmit(true)
+    else toggleCanSubmit(false)
+  }, [name, selectedPipelines])
 
   useEffect(() => {
     const data = getTreeCompatibleData({ list: selectedPipelines, handlePipelineClick })
@@ -142,12 +150,37 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
     setFinalTreeData(finalTreeData)
   }
 
+  const saveTopology = (
+    <ButtonSubmit
+      hideButton={viewMode}
+      disabled={!canSubmit}
+      handleSubmit={() => {
+        walk({
+          treeData,
+          getNodeKey: (node) => node.pipelineId,
+          ignoreCollapsed: false,
+          callback: (nodeInfo) => formTreeData(nodeInfo)
+        })
+        console.log('This is sent to backend: ', finalTreeData)
+
+        createTopology({ finalTreeData })
+        enqueueSnackbar('Topology created succesfully', { variant: 'success' })
+        history.push('/topologies')
+      }}
+    />)
+
   return (
     <div>
       <Grid container spacing={3}>
-        {!viewMode && <Grid item xs={12}><AppTitleBar appTitle='NEW TOPOLOGY' /></Grid>}
+        {!viewMode &&
+          <Grid item xs={12}>
+            <AppTitleBar
+              appTitle='NEW TOPOLOGY'
+              renderSecondaryButton={saveTopology}
+            />
+          </Grid>}
 
-        <Grid item xs={2} />
+        {/* <Grid item xs={2} /> */}
         <Grid item xs={8}>
           {viewMode &&
             <StartStopTopology
@@ -192,22 +225,6 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
               disabled={viewMode}
             />
 
-            <ButtonSubmit
-              disabled={viewMode}
-              handleSubmit={() => {
-                walk({
-                  treeData,
-                  getNodeKey: (node) => node.pipelineId,
-                  ignoreCollapsed: false,
-                  callback: (nodeInfo) => formTreeData(nodeInfo)
-                })
-                console.log('This is sent to backend: ', finalTreeData)
-
-                createTopology({ finalTreeData })
-                enqueueSnackbar('Topology created succesfully', { variant: 'success' })
-                history.push('/topologies')
-              }}
-            />
           </form>
         </Grid>
       </Grid>
@@ -228,7 +245,8 @@ const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
   )
 }
 
-const ButtonSubmit = ({ handleSubmit, disabled }) => {
+const ButtonSubmit = ({ handleSubmit, disabled, hideButton }) => {
+  if (hideButton) return null
   return (
     <Button
       variant='contained'

@@ -5,6 +5,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import Paper from '@material-ui/core/Paper'
@@ -52,7 +53,9 @@ const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, seco
   return (
     <Paper className='clickable'>
       <ListItem>
-        {open ? <ExpandLess onClick={() => setOpen(false)} /> : <ExpandMore onClick={() => setOpen(true)} />}
+        <ListItemAvatar>
+          {open ? <ExpandLess onClick={() => setOpen(false)} /> : <ExpandMore onClick={() => setOpen(true)} />}
+        </ListItemAvatar>
         <ListItemText
           id={getKey(item)}
           onClick={e => itemClick(item)}

@@ -5,7 +5,12 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import React from 'react'
 import Switch from '@material-ui/core/Switch'
+import Slide from '@material-ui/core/Slide'
 import TextField from '@material-ui/core/TextField'
+
+export const Transition = React.forwardRef(function Transition (props, ref) {
+  return <Slide direction='up' ref={ref} {...props} />
+})
 
 export default function RenderPipelineConfigs ({
   open, setOpen, pipeline, disabled,
@@ -20,6 +25,7 @@ export default function RenderPipelineConfigs ({
       <Dialog
         open={open}
         onClose={() => setSelectedPipeline(null)}
+        TransitionComponent={Transition}
         scroll='body'
         aria-labelledby='scroll-dialog-title'
         aria-describedby='scroll-dialog-description'
