@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { BASE_URL, mockedPipelines } from '../configs/constants'
 
 const GET_ALL_PIPELINES = BASE_URL + '/getpipelines'

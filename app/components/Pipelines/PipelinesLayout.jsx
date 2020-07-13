@@ -16,6 +16,7 @@ import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '.
 import { makeStyles } from '@material-ui/core/styles'
 import { useInterval } from '../../helper/useInterval'
 import { useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PipelinesLayout () {
+  const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const classes = useStyles()
 
@@ -36,6 +38,7 @@ export default function PipelinesLayout () {
     async function fetchPipelines () {
       const res = await getPipelines()
       setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
+      enqueueSnackbar('pipelines fetched succesfully', { variant: 'info' })
     }
     fetchPipelines()
   }, [])
@@ -68,10 +71,12 @@ export default function PipelinesLayout () {
     if (currentIndex === -1) {
       newChecked.push(pipelineId)
       const t = await startPipeline({ pipelineId })
+      enqueueSnackbar('pipeline started succesfully', { variant: 'success' })
       updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     } else {
       newChecked.splice(currentIndex, 1)
       const t = await stopPipeline({ pipelineId })
+      enqueueSnackbar('pipeline stopped succesfully', { variant: 'success' })
       updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     }
     console.log('handle toggle called')
