@@ -12,7 +12,7 @@ export const Transition = React.forwardRef(function Transition (props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled }) => {
+const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled, buttonText }) => {
   return (
     <div>
       <Button
@@ -23,7 +23,8 @@ const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled 
         onClick={(e) => { setOpen(true) }}
         startIcon={<AddCircleIcon />}
       >
-          Add Pipelines to this topology
+        {/* Add Pipelines to this topology */}
+        {buttonText}
       </Button>
       <Dialog
         open={open}

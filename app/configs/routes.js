@@ -10,38 +10,38 @@ const routes = [
   {
     path: '/',
     exact: true,
-    component: () => <PipelinesLayout />
+    component: ({ setAppTitle }) => <PipelinesLayout setAppTitle={setAppTitle} />
   },
   {
     path: '/pipelines',
     exact: true,
-    component: () => <PipelinesLayout />
+    component: ({ setAppTitle }) => <PipelinesLayout setAppTitle={setAppTitle} />
   },
   {
     path: '/pipelines/:id',
     exact: true,
-    component: () => <Pipeline />
+    component: ({ setAppTitle }) => <Pipeline setAppTitle={setAppTitle} />
   },
   {
     path: '/topologies',
     exact: true,
-    component: () => <TopologiesLayout />
+    component: ({ setAppTitle }) => <TopologiesLayout setAppTitle={setAppTitle} />
   },
   {
     path: '/topologies/:id',
     exact: true,
-    component: () => <Topolgy />
+    component: ({ setAppTitle }) => <Topolgy setAppTitle={setAppTitle} />
   }
 ]
 
-const Pipeline = () => {
+const Pipeline = ({ setAppTitle }) => {
   const { id } = useParams()
-  return <PipelineLayout id={id} />
+  return <PipelineLayout id={id} setAppTitle={setAppTitle} />
 }
-const Topolgy = () => {
+const Topolgy = ({ setAppTitle }) => {
   const { id } = useParams()
-  if (id && id.toLowerCase() === 'new') return <TopolgyRegisterationLayout propsSelectedPipelines={[]} />
-  return <TopologyLayout id={id} />
+  if (id && id.toLowerCase() === 'new') return <TopolgyRegisterationLayout setAppTitle={setAppTitle} propsSelectedPipelines={[]} />
+  return <TopologyLayout id={id} setAppTitle={setAppTitle} />
 }
 
 export default routes

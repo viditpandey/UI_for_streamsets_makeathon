@@ -1,4 +1,3 @@
-import AppTitleBar from '../Base/AppTitleBar'
 import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
@@ -48,7 +47,7 @@ const getTreeCompatibleData = ({ list, handlePipelineClick }) => {
   })
 }
 
-export default function TopolgyRegisterationLayout ({ propsName = '', propsSelectedPipelines = [] }) {
+export default function TopolgyRegisterationLayout ({ setAppTitle = () => {}, propsName = '', propsSelectedPipelines = [] }) {
   const { enqueueSnackbar } = useSnackbar()
 
   const history = useHistory()
@@ -66,7 +65,44 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   const [finalTreeData, setFinalTreeData] = useState([])
   const [canSubmit, toggleCanSubmit] = useState(false)
 
+  const formTreeData = nodeInfo => {
+    let dependsOn = 'root'
+    if (nodeInfo.parentNode && nodeInfo.parentNode.pipelineId) dependsOn = nodeInfo.parentNode.pipelineId
+    const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
+    const { pipelineId, waitTime, threshold } = pipelineInfo
+    finalTreeData.push({
+      topologyId: name,
+      pipelineId: pipelineId,
+      waitTime: Number(waitTime || 0),
+      threshold: Number(threshold || 0),
+      createdBy: 'From UI',
+      dependsOn
+    })
+    setFinalTreeData(finalTreeData)
+  }
+
+  const saveTopology = (
+    <ButtonSubmit
+      hideButton={viewMode}
+      disabled={!canSubmit}
+      handleSubmit={() => {
+        walk({
+          treeData,
+          getNodeKey: (node) => node.pipelineId,
+          ignoreCollapsed: false,
+          callback: (nodeInfo) => formTreeData(nodeInfo)
+        })
+        console.log('This is sent to backend: ', finalTreeData)
+
+        createTopology({ finalTreeData })
+        enqueueSnackbar('Topology created succesfully', { variant: 'success' })
+        history.push('/topologies')
+      }}
+    />)
+
   useEffect(() => {
+    !viewMode && setAppTitle({ text: 'NEW TOPOLOGY', button: saveTopology })
+
     async function fetchPipelines () {
       const res = await getPipelines()
       availablePipelines(res)
@@ -134,53 +170,10 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
     setSelectedPipeline(pipeline)
   }
 
-  const formTreeData = nodeInfo => {
-    let dependsOn = 'root'
-    if (nodeInfo.parentNode && nodeInfo.parentNode.pipelineId) dependsOn = nodeInfo.parentNode.pipelineId
-    const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
-    const { pipelineId, waitTime, threshold } = pipelineInfo
-    finalTreeData.push({
-      topologyId: name,
-      pipelineId: pipelineId,
-      waitTime: Number(waitTime || 0),
-      threshold: Number(threshold || 0),
-      createdBy: 'From UI',
-      dependsOn
-    })
-    setFinalTreeData(finalTreeData)
-  }
-
-  const saveTopology = (
-    <ButtonSubmit
-      hideButton={viewMode}
-      disabled={!canSubmit}
-      handleSubmit={() => {
-        walk({
-          treeData,
-          getNodeKey: (node) => node.pipelineId,
-          ignoreCollapsed: false,
-          callback: (nodeInfo) => formTreeData(nodeInfo)
-        })
-        console.log('This is sent to backend: ', finalTreeData)
-
-        createTopology({ finalTreeData })
-        enqueueSnackbar('Topology created succesfully', { variant: 'success' })
-        history.push('/topologies')
-      }}
-    />)
-
   return (
     <div>
       <Grid container spacing={3}>
-        {!viewMode &&
-          <Grid item xs={12}>
-            <AppTitleBar
-              appTitle='NEW TOPOLOGY'
-              renderSecondaryButton={saveTopology}
-            />
-          </Grid>}
 
-        {/* <Grid item xs={2} /> */}
         <Grid item xs={8}>
           {viewMode &&
             <StartStopTopology
@@ -200,6 +193,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
               setLeft={availablePipelines}
               right={selectedPipelines}
               setRight={addPipelinesToTopology}
+              buttonText={`${selectedPipelines.length}/${allPipelines.length + selectedPipelines.length} pipelines selected`}
             />
             <br />
 

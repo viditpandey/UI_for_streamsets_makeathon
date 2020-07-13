@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime.js'
 
-import AppTitleBar from '../Base/AppTitleBar'
+// import AppTitleBar from '../Base/AppTitleBar'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
@@ -12,7 +12,7 @@ import { useInterval } from '../../helper/useInterval'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
-export default function PipelinesLayout ({ renderTitle }) {
+export default function PipelinesLayout ({ setAppTitle }) {
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 
@@ -20,6 +20,7 @@ export default function PipelinesLayout ({ renderTitle }) {
   const [pipelines, setPipelines] = useState([])
 
   useEffect(() => {
+    setAppTitle({ text: 'PIPELINES' })
     async function fetchPipelines () {
       const res = await getPipelines()
       setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
@@ -70,7 +71,6 @@ export default function PipelinesLayout ({ renderTitle }) {
 
   return (
     <div>
-      <AppTitleBar appTitle='PIPELINES' />
 
       <ListItemWrapper
         items={pipelines}

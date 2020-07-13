@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function AppTitleBar ({ appTitle, renderSecondaryButton }) {
+export default function AppTitleBar ({ text, button }) {
   const classes = useStyles()
   return (
     <div className={`margin-bottom-15 ${classes.root}`}>
@@ -28,9 +28,9 @@ export default function AppTitleBar ({ appTitle, renderSecondaryButton }) {
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' className={classes.title}>
-            {appTitle}
+            {text}
           </Typography>
-          {renderSecondaryButton}
+          {button}
         </Toolbar>
       </AppBar>
     </div>

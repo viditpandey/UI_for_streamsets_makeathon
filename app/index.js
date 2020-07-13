@@ -1,8 +1,7 @@
 import Home from './components/Base/Home'
 import React from 'react'
-import routes from './configs/routes'
 
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 
 var ReactDOM = require('react-dom')
@@ -14,16 +13,6 @@ class App extends React.Component {
       <Router>
         <SnackbarProvider maxSnack={3}>
           <Home />
-          {routes.map((route, i) => {
-            return (
-              <Route
-                key={i}
-                path={route.path}
-                exact={route.exact}
-                children={<route.component />}
-              />
-            )
-          })}
         </SnackbarProvider>
       </Router>
     )

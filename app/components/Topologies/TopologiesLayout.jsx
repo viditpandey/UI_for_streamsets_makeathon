@@ -1,6 +1,5 @@
 import 'regenerator-runtime/runtime.js'
 
-import AppTitleBar from '../Base/AppTitleBar'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -11,18 +10,10 @@ import { getTopologies } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
-export default function TopologiesLayout () {
+export default function TopologiesLayout ({ setAppTitle }) {
   const history = useHistory()
 
   const [topologies, setTopologies] = useState([])
-
-  useEffect(() => {
-    async function fetchTopologies () {
-      const res = await getTopologies()
-      setTopologies(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
-    }
-    fetchTopologies()
-  }, [])
 
   const newTopology = (
     <Button
@@ -34,15 +25,18 @@ export default function TopologiesLayout () {
     new topology
     </Button>)
 
+  useEffect(() => {
+    setAppTitle({ text: 'TOPOLOGIES', button: newTopology })
+    async function fetchTopologies () {
+      const res = await getTopologies()
+      setTopologies(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
+    }
+    fetchTopologies()
+  }, [])
+
   return (
     <div>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <AppTitleBar
-            appTitle='TOPOLOGIES'
-            renderSecondaryButton={newTopology}
-          />
-        </Grid>
         {isEmpty(topologies) ? null
           : <Topologies history={history} topologies={topologies} />}
       </Grid>

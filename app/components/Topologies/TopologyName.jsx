@@ -8,7 +8,7 @@ const Name = ({ name, setName, disabled }) => {
       value={name}
       disabled={disabled}
       onChange={e => setName(e.target.value)}
-      variant='outlined'
+      // variant='outlined'
       style={{ marginBottom: '15px' }}
       label='Topology Name'
     />
