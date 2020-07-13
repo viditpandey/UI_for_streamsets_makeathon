@@ -61,6 +61,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   const [openConfigDialog, setOpenConfigDialog] = useState(false) // Open Dialog to manage time dependency & threshold for each pipeline in treeData
   const [selectedPipeline, setSelectedPipeline] = useState(null) // to save in state, which pipeline chip was clicked
   const [threshold, setThreshold] = useState(0)
+  const [dependencyCriteria, setDependencyCriteria] = useState('stop')
   const [waitTime, setWaitTime] = useState(0)
   const [finalTreeData, setFinalTreeData] = useState([])
 
@@ -120,6 +121,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   const handlePipelineClick = (val, pipeline) => {
     setThreshold((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).threshold) || 0)
     setWaitTime((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).waitTime) || 0)
+    setDependencyCriteria((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).dependencyCriteria) || 'stop')
     setOpenConfigDialog(val)
     setSelectedPipeline(pipeline)
   }
@@ -185,6 +187,9 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
               threshold={threshold}
               setWaitTime={setWaitTime}
               waitTime={waitTime}
+              dependencyCriteria={dependencyCriteria}
+              setDependencyCriteria={setDependencyCriteria}
+              disabled={viewMode}
             />
 
             <ButtonSubmit

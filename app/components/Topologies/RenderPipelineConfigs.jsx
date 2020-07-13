@@ -4,11 +4,17 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import React from 'react'
+import Switch from '@material-ui/core/Switch'
 import TextField from '@material-ui/core/TextField'
 
-export default function RenderPipelineConfigs ({ open, setOpen, pipeline, setSelectedPipeline, threshold, setThreshold, waitTime, setWaitTime }) {
+export default function RenderPipelineConfigs ({
+  open, setOpen, pipeline, disabled,
+  setSelectedPipeline, threshold, setThreshold, waitTime,
+  setWaitTime, dependencyCriteria, setDependencyCriteria
+}) {
   let titleDialog = 'No pipeline Selected'
-  if (pipeline) titleDialog = `Pipeline: ${pipeline.title}`
+  if (!pipeline) return null
+  else titleDialog = `Pipeline: ${pipeline.title || pipeline.pipelineId}`
   return (
     <div>
       <Dialog
@@ -27,6 +33,7 @@ export default function RenderPipelineConfigs ({ open, setOpen, pipeline, setSel
             onChange={e => setThreshold(e.target.value)}
             variant='outlined'
             style={{ marginBottom: '15px' }}
+            disabled={disabled}
             label='Retry threshold limit (# times).'
           />
           <TextField
@@ -35,15 +42,29 @@ export default function RenderPipelineConfigs ({ open, setOpen, pipeline, setSel
             type='number'
             onChange={e => setWaitTime(e.target.value)}
             variant='outlined'
+            disabled={disabled}
             style={{ marginBottom: '15px' }}
             label='Time dependency (seconds).'
           />
+          <br />
+          {`Run this pipeline at ${dependencyCriteria} of parent pipeline`}
+          <Switch
+            checked={dependencyCriteria === 'stop'}
+            onChange={e => { !disabled && setDependencyCriteria(dependencyCriteria === 'start' ? 'stop' : 'start') }}
+            name='dependencyCriteria'
+            inputProps={{ 'aria-label': 'secondary checkbox' }}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} color='primary'>
-              Cancel
+          <Button
+            onClick={() => setOpen(false)} color='primary'
+          >
+              Close
           </Button>
-          <Button onClick={() => setOpen(false)} color='primary'>
+          <Button
+            disabled={disabled}
+            onClick={() => setOpen(false)} color='primary'
+          >
               Done
           </Button>
         </DialogActions>
