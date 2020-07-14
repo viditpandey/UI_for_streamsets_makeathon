@@ -28,3 +28,7 @@ body {
     border: none !important;
     box-shadow: none;
 }
+
+.float-right{
+    float: right;
+}

@@ -7,7 +7,7 @@ import Chip from '@material-ui/core/Chip'
 import Divider from '@material-ui/core/Divider'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import SettingsIcon from '@material-ui/icons/Settings'
-// import Grid from '@material-ui/core/Grid'
+import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
 import React, { useState, useEffect, useContext } from 'react'
@@ -210,8 +210,11 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
             viewMode={viewMode}
           />}
         <form noValidate autoComplete='off'>
+          <Grid container spacing={3}>
 
-          <TopologyName disabled={viewMode} name={name} setName={setName} />
+            <Grid item xs={12} md={9}><TopologyName disabled={viewMode} name={name} setName={setName} /></Grid>
+            <Grid item md={3} xs={12}><div className='float-right'>{saveTopology}</div></Grid>
+          </Grid>
           <br />
 
           <AddPipelines
@@ -247,7 +250,6 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
             setDependencyCriteria={setDependencyCriteria}
             disabled={viewMode}
           />
-          {saveTopology}
 
         </form>
         {/* </Grid>
