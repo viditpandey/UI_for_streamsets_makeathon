@@ -1,8 +1,12 @@
+// import Accordion from '@material-ui/core/Accordion'
+// import AccordionSummary from '@material-ui/core/AccordionSummary'
+// import AccordionDetails from '@material-ui/core/AccordionDetails'
 import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import SettingsIcon from '@material-ui/icons/Settings'
-import Grid from '@material-ui/core/Grid'
+// import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
 import React, { useState, useEffect, useContext } from 'react'
 import RenderPipelineConfigs from './RenderPipelineConfigs'
@@ -76,18 +80,19 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   const [dependencyCriteria, setDependencyCriteria] = useState('stop')
   const [waitTime, setWaitTime] = useState(0)
   const [finalTreeData, setFinalTreeData] = useState([])
-  const [canSubmit, toggleCanSubmit] = useState(false)
+  // const [canSubmit, toggleCanSubmit] = useState(false)
 
   const formTreeData = nodeInfo => {
     let dependsOn = 'root'
     if (nodeInfo.parentNode && nodeInfo.parentNode.pipelineId) dependsOn = nodeInfo.parentNode.pipelineId
     const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
-    const { pipelineId, waitTime, threshold } = pipelineInfo
+    const { pipelineId, waitTime, threshold, dependencyCriteria } = pipelineInfo
     finalTreeData.push({
       topologyId: name,
       pipelineId: pipelineId,
       waitTime: Number(waitTime || 0),
       threshold: Number(threshold || 0),
+      dependencyCriteria: dependencyCriteria || 'stop',
       createdBy: 'From UI',
       dependsOn
     })
@@ -97,24 +102,26 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   const saveTopology = (
     <ButtonSubmit
       hideButton={viewMode}
-      disabled={!canSubmit}
       handleSubmit={() => {
-        walk({
-          treeData,
-          getNodeKey: (node) => node.pipelineId,
-          ignoreCollapsed: false,
-          callback: (nodeInfo) => formTreeData(nodeInfo)
-        })
-        console.log('This is sent to backend: ', finalTreeData, JSON.stringify(finalTreeData))
+        if (!isFormValid()) enqueueSnackbar('Name or Selected Pipelines cannot be empty.', { variant: 'error' })
+        else {
+          walk({
+            treeData,
+            getNodeKey: (node) => node.pipelineId,
+            ignoreCollapsed: false,
+            callback: (nodeInfo) => formTreeData(nodeInfo)
+          })
+          console.log('This is sent to backend: ', finalTreeData)
 
-        createTopology({ finalTreeData })
-        enqueueSnackbar('Topology created succesfully', { variant: 'success' })
-        history.push('/topologies')
+          createTopology({ finalTreeData })
+          enqueueSnackbar('Topology created succesfully', { variant: 'success' })
+          history.push('/topologies')
+        }
       }}
     />)
 
   useEffect(() => {
-    !viewMode && setAppTitle({ text: 'NEW TOPOLOGY', button: saveTopology })
+    !viewMode && setAppTitle({ text: 'NEW TOPOLOGY' })
 
     async function fetchPipelines () {
       const res = await getPipelines()
@@ -125,12 +132,18 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
 
   useEffect(() => { updatePipelinesConfigInTree() }, [waitTime, threshold, dependencyCriteria])
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   const isValidName = name && name.length
+  //   const isValidSelectedPipelines = !isEmpty(selectedPipelines)
+  //   if (isValidName && isValidSelectedPipelines) toggleCanSubmit(true)
+  //   else toggleCanSubmit(false)
+  // }, [name, selectedPipelines])
+
+  const isFormValid = () => {
     const isValidName = name && name.length
     const isValidSelectedPipelines = !isEmpty(selectedPipelines)
-    if (isValidName && isValidSelectedPipelines) toggleCanSubmit(true)
-    else toggleCanSubmit(false)
-  }, [name, selectedPipelines])
+    return (isValidName && isValidSelectedPipelines)
+  }
 
   useEffect(() => {
     const data = getTreeCompatibleData({ list: selectedPipelines, handlePipelineClick })
@@ -183,65 +196,68 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   }
 
   return (
-    <div>
-      <Grid container spacing={3}>
+    <Paper>
+      <div style={{ padding: '15px' }}>
+        {/* <Grid container spacing={3}>
 
-        <Grid item xs={8}>
-          {viewMode &&
-            <StartStopTopology
-              name={name}
-              viewMode={viewMode}
-            />}
-          <form noValidate autoComplete='off'>
+          <Grid item xs={8}> */}
+        {viewMode &&
+          <StartStopTopology
+            name={name}
+            viewMode={viewMode}
+          />}
+        <form noValidate autoComplete='off'>
 
-            <TopologyName disabled={viewMode} name={name} setName={setName} />
-            <br />
+          <TopologyName disabled={viewMode} name={name} setName={setName} />
+          <br />
 
-            <AddPipelines
-              disabled={viewMode}
-              open={openDialog}
-              setOpen={setOpenDialog}
-              left={allPipelines}
-              setLeft={availablePipelines}
-              right={selectedPipelines}
-              setRight={addPipelinesToTopology}
-              buttonText={`${selectedPipelines.length}/${allPipelines.length + selectedPipelines.length} pipelines selected`}
-            />
-            <br />
+          <AddPipelines
+            disabled={viewMode}
+            open={openDialog}
+            setOpen={setOpenDialog}
+            left={allPipelines}
+            setLeft={availablePipelines}
+            right={selectedPipelines}
+            setRight={addPipelinesToTopology}
+            buttonText={`${selectedPipelines.length}/${allPipelines.length + selectedPipelines.length} pipelines selected`}
+          />
+          <br />
 
-            <CreateTree
-              treeData={treeData}
-              setTreeData={viewMode ? () => { enqueueSnackbar('Editing the topology not allowed.', { variant: 'info' }) } : setTreeData}
-              setFinalTreeData={setFinalTreeData}
-              setOpen={setOpenConfigDialog}
-            />
-            <br />
+          <CreateTree
+            treeData={treeData}
+            setTreeData={viewMode ? () => { enqueueSnackbar('Editing the topology not allowed.', { variant: 'info' }) } : setTreeData}
+            setFinalTreeData={setFinalTreeData}
+            setOpen={setOpenConfigDialog}
+          />
+          <br />
 
-            <RenderPipelineConfigs
-              pipeline={selectedPipeline}
-              setSelectedPipeline={setSelectedPipeline}
-              open={openConfigDialog}
-              setOpen={setOpenConfigDialog}
-              setThreshold={setThreshold}
-              threshold={threshold}
-              setWaitTime={setWaitTime}
-              waitTime={waitTime}
-              dependencyCriteria={dependencyCriteria}
-              setDependencyCriteria={setDependencyCriteria}
-              disabled={viewMode}
-            />
+          <RenderPipelineConfigs
+            pipeline={selectedPipeline}
+            setSelectedPipeline={setSelectedPipeline}
+            open={openConfigDialog}
+            setOpen={setOpenConfigDialog}
+            setThreshold={setThreshold}
+            threshold={threshold}
+            setWaitTime={setWaitTime}
+            waitTime={waitTime}
+            dependencyCriteria={dependencyCriteria}
+            setDependencyCriteria={setDependencyCriteria}
+            disabled={viewMode}
+          />
+          {saveTopology}
 
-          </form>
-        </Grid>
-      </Grid>
-    </div>
+        </form>
+        {/* </Grid>
+        </Grid> */}
+      </div>
+    </Paper>
   )
 }
 
 const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
   return (
-    <div style={{ height: 500 }}>
+    <div style={{ height: '300px', overFlowY: 'auto' }}>
       <SortableTree
         treeData={treeData}
         getNodeKey={({ node }) => { return node.pipelineId }}
