@@ -12,7 +12,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}
 
-  switch (status || topology.status) {
+  switch (status || topology.topologyStatus) {
     case 'EMPTY':
       buttonText = 'CREATE TOPOLOGY'
       handleClickAction = createTopology
@@ -23,7 +23,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
     case 'FINISHED':
       buttonText = 'VALIDATE TOPOLOGY'
       startIcon = <CheckCircleOutlineIcon />
-      //   handleClickAction = validateTopology
+      handleClickAction = validateTopology
       break
 
     case 'VALIDATING':

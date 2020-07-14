@@ -48,7 +48,7 @@ export const startTopology = async ({ topologyId }) => {
 export const validateTopology = async ({ topologyId }) => {
   try {
     const res = await axios({
-      method: 'post',
+      method: 'get',
       url: VALIDATE_TOPOLOGY(topologyId)
     }
     ).catch(e => ({ data: {} }))
@@ -85,7 +85,7 @@ export const getTopologies = async () => {
     }
     ).catch(e => ({ data: [] }))
     const response = res.data
-    console.log(`get all topologies attempted , response received: ${JSON.stringify(response)}`)
+    console.log('get all topologies attempted , response received')
     return response
   } catch (e) {
     console.error('[TopologyActions.getTopologies] error:', e)

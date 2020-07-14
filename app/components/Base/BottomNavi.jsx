@@ -14,29 +14,30 @@ const useStyles = makeStyles({
     width: '100%',
     position: 'fixed',
     bottom: 0,
-    zIndex: '10'
+    zIndex: '10',
+    boxShadow: '0px 4px 5px 10px rgba(0,0,0,0.12)'
   }
 })
 
-const naviRoutes = ['/pipelines', '/topologies', '/topologies/id']
+const naviRoutes = ['/pipelines', '/topologies', '/topologies/new']
 
+const routeRegex = [[/pipelines/, /pipelines\/$/], [/topologies/, /topologies\/$/, /topologies\/new$/], [/topologies\/.+/]]
 export default function SimpleBottomNavigation () {
   const history = useHistory()
   const classes = useStyles()
-  let defaultValue = false
   const pageLoc = useLocation().pathname
-  useEffect(() => {
-    const routeRegex = [[/pipelines\/$/], [/topologies/, /topologies\/$/, /topologies\/new$/], [/topologies\/.+/]]
+  const getDefaultValue = () => {
+    let defaultValue = 0
     routeRegex.forEach((item, i) => {
       const isRouteMatched = item.filter(r => pageLoc.match(r))
       if (isRouteMatched && isRouteMatched.length) defaultValue = i
     })
-  }, [])
-  const [value, setValue] = useState(defaultValue || 0)
+    return defaultValue
+  }
+  const [value, setValue] = useState(getDefaultValue())
 
   return (
     <BottomNavigation
-      // style={{ zIndex: '10' }}
       value={value}
       onChange={(event, newValue) => {
         history.push(naviRoutes[newValue])

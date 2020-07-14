@@ -19,10 +19,10 @@ import TopologyActionButton from './TopologyActionButton'
 
 import { AppBarContext } from '../Base/Home'
 import { cloneDeep, isEmpty } from 'lodash'
-import { createTopology, startTopology, stopTopology } from '../../actions/TopologyActions'
+import { createTopology, startTopology, stopTopology, validateTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
@@ -31,23 +31,27 @@ import 'react-sortable-tree/style.css'
 
 const getStyleByPipelineStatus = {
   STARTING: { background: '#0063bf' }, // dark-blue
-  RETRY: { background: 'CF142B' }, // red
-  RUNNING: { background: '#75eb3d' }, // light green
+  RETRY: { background: '#f2dede' }, // red
+  RUNNING: { background: '#dff0d8' }, // light green
   FINISHED: { background: '#077d40' }, // dark green
   EDITED: { background: '#dedede' }, // grey
-  STOPPED: { background: 'CF142B' }, // red
-  RUN_ERROR: { background: 'CF142B' }, // red
+  STOPPED: { background: '#f2dede' }, // red
+  ERROR: { background: '#f2dede' }, // red
+  RUN_ERROR: { background: '#f2dede' }, // red
+  INVALID: { background: '#f2dede' }, // red
+  VALID: { background: '#dff0d8' }, // light green
   undefined: { background: '#dedede' } // grey
 }
 
 const renderNode = ({ p, handlePipelineClick }) => {
+  console.log(getStyleByPipelineStatus[p.status])
   return (
     <Chip
       id={p.pipelineId}
       style={getStyleByPipelineStatus[p.status]}
       deleteIcon={<SettingsIcon />}
       size='medium'
-      label={p.title || p.pipelineId}
+      label={`${p.title || p.pipelineId} (${p.status || '...'})`}
       onDelete={(e) => handlePipelineClick(true, p)}
       onClick={(e) => handlePipelineClick(true, p)}
     />
@@ -70,7 +74,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
 
-  const history = useHistory()
+  // const history = useHistory()
   const [topologyData, setTopologyData] = useState(propsTopologyData)
   const [viewMode, setPageViewOrEditMode] = useState(!!propsName)
   const [name, setName] = useState(propsName) // name in input for topology name
@@ -116,7 +120,8 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
 
       createTopology({ finalTreeData })
       enqueueSnackbar('Topology created succesfully', { variant: 'success' })
-      history.push('/topologies')
+      // history.push('/topologies')
+      window.location = '/topologies'
     }
   }
 
@@ -227,9 +232,9 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
                   createTopology={createTopologyButtonAction}
-                  startTopology={() => startTopology(name)}
-                  stopTopology={() => stopTopology(name)}
-                  // validateTopology={validateTopology}
+                  startTopology={() => startTopology({ topologyId: name })}
+                  stopTopology={() => stopTopology({ topologyId: name })}
+                  validateTopology={() => validateTopology({ topologyId: name })}
                 />
               </div>
             </Grid>
