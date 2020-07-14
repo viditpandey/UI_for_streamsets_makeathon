@@ -31,7 +31,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
 
     case 'VALIDATING':
       buttonText = 'VALIDATING'
-      style = { background: '#dedede' } // grey
+      style = { background: '#0063bf' } // dark - blue
       startIcon = <CircularProgress />
       handleClickAction = () => {}
       break
