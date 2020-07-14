@@ -21,6 +21,17 @@ import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
 
+// const PIPELINE_STATUS = ['STARTING', 'RETRY', , 'RUNNING', 'FINISHED', 'EDITED', 'STOPPED']
+
+// const getStyleByPipelineStatus = {
+//   STARTING: {},
+//   RETRY: {},
+//   RUNNING: {},
+//   FINISHED: {},
+//   EDITED: {},
+//   STOPPED: {}
+// }
+
 const renderNode = ({ p, handlePipelineClick }) => {
   return (
     <Chip

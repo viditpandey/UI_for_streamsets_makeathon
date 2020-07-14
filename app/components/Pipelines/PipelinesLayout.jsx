@@ -20,7 +20,7 @@ export default function PipelinesLayout () {
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 
-  const [checked, setChecked] = useState([])
+  // const [checked, setChecked] = useState([])
   const [pipelines, setPipelines] = useState([])
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function PipelinesLayout () {
       updatedPipelines.push(updatePipeline({ pipelineId, property: 'status', newVal: status }))
     })
     latestStatus.length && setPipelines(updatedPipelines)
-  }, pipelines.length ? 5000 : null)
+  }, pipelines.length ? 3000 : null)
 
   const updatePipeline = ({ pipelineId, property, newVal }) => {
     let updatedPipeline = []
@@ -54,30 +54,40 @@ export default function PipelinesLayout () {
     return updatedPipeline
   }
 
-  const handleToggle = (pipelineId) => async () => {
-    const currentIndex = checked.indexOf(pipelineId)
-    const newChecked = [...checked]
+  const shouldStartPipeline = pipelineId => {
+    const data = pipelines.find(p => p.pipelineId === pipelineId)
+    if (data) {
+      if (!data.status) return true // if status is undefined, attempt to start pipeline
+      return ['RETRY', 'FINISHED', 'EDITED', 'STOPPED'].indexOf(data.status)
+    } else return false
+  }
 
-    if (currentIndex === -1) {
-      newChecked.push(pipelineId)
+  const handlePipelineActionButtonClick = (pipelineId) => async () => {
+    // const currentIndex = checked.indexOf(pipelineId)
+    // const newChecked = [...checked]
+
+    // console.log('handleToggle -> shouldStartPipeline(pipelineId)', shouldStartPipeline(pipelineId))
+    if (shouldStartPipeline(pipelineId)) {
+      // newChecked.push(pipelineId)
       const t = await startPipeline({ pipelineId })
       enqueueSnackbar('pipeline started succesfully', { variant: 'success' })
       updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     } else {
-      newChecked.splice(currentIndex, 1)
+      // newChecked.splice(currentIndex, 1)
       const t = await stopPipeline({ pipelineId })
       enqueueSnackbar('pipeline stopped succesfully', { variant: 'success' })
       updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
     }
     console.log('handle toggle called')
-    setChecked(newChecked)
+    // setChecked(newChecked)
   }
 
   const getPipelineActionButton = item => {
     // const isChecked = checked.indexOf(item.pipelineId) !== -1
-    let button = <CircularProgress />
+    let button = <PlayArrowIcon style={{ color: '#077d40' }} />
     switch (item.status) {
       case 'STARTING':
+      case 'RETRY':
         button = <CircularProgress />
         break
       case 'RUNNING':
@@ -97,7 +107,7 @@ export default function PipelinesLayout () {
     return (
       <IconButton
         aria-label='start/stop pipeline'
-        onClick={handleToggle(item.pipelineId)}
+        onClick={handlePipelineActionButtonClick(item.pipelineId)}
         component='span'
       >
         {button}
