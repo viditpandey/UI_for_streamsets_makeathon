@@ -91,7 +91,7 @@ export default function PipelinesLayout () {
         button = <CircularProgress />
         break
       case 'RUNNING':
-        button = <StopIcon style={{ color: 'CF142B' }} />
+        button = <StopIcon style={{ color: '#CF142B' }} />
         break
       case 'FINISHED':
         button = <ReplayIcon />

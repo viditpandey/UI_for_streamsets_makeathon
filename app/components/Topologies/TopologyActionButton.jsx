@@ -11,9 +11,11 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
   let startIcon = <SaveIcon />
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}
+  let style = { background: '#5cb85c' }
 
   switch (status || topology.status) {
     case 'EMPTY':
+      style = { background: '#5cb85c' } // green
       buttonText = 'CREATE TOPOLOGY'
       handleClickAction = createTopology
       break
@@ -22,24 +24,28 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
     case 'STOPPED':
     case 'FINISHED':
       buttonText = 'VALIDATE TOPOLOGY'
+      style = { background: '#5cb85c' } // green
       startIcon = <CheckCircleOutlineIcon />
       //   handleClickAction = validateTopology
       break
 
     case 'VALIDATING':
       buttonText = 'VALIDATING'
+      style = { background: '#dedede' } // grey
       startIcon = <CircularProgress />
       handleClickAction = () => {}
       break
 
     case 'VALIDATED':
       buttonText = 'START TOPOLOGY'
+      style = { background: '#5cb85c' } // green
       startIcon = <PlayCircleFilledWhiteIcon />
       handleClickAction = startTopology
       break
 
     case 'RUNNING':
       buttonText = 'STOP TOPOLOGY'
+      style = { background: '#CF142B' } // red
       startIcon = <HighlightOffIcon />
       handleClickAction = stopTopology
       break
@@ -59,6 +65,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       variant='contained'
       color='primary'
       disabled={disabled}
+      style={style}
       size='small'
       onClick={(e) => handleClickAction()}
       startIcon={startIcon}
