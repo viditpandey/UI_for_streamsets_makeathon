@@ -1,9 +1,10 @@
-// import Accordion from '@material-ui/core/Accordion'
-// import AccordionSummary from '@material-ui/core/AccordionSummary'
-// import AccordionDetails from '@material-ui/core/AccordionDetails'
+import Accordion from '@material-ui/core/Accordion'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
+import Collapse from '@material-ui/core/Collapse'
 import Chip from '@material-ui/core/Chip'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import SettingsIcon from '@material-ui/icons/Settings'
 // import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -256,13 +257,28 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
 
 const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
+  const [open, setOpen] = useState(false)
   return (
-    <div style={{ height: '300px', overFlowY: 'auto' }}>
-      <SortableTree
-        treeData={treeData}
-        getNodeKey={({ node }) => { return node.pipelineId }}
-        onChange={treeData => { setTreeData(treeData); setFinalTreeData([]) }}
-      />
+    <div>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          onClick={() => setOpen(!open)}
+          aria-controls='panel1a-content'
+          id='panel1a-header'
+        >
+          Configure your pipelines dependency:
+        </AccordionSummary>
+        <Collapse in={open} timeout='auto' unmountOnExit>
+          <div style={{ height: '500px', overFlowY: 'auto' }}>
+            <SortableTree
+              treeData={treeData}
+              getNodeKey={({ node }) => { return node.pipelineId }}
+              onChange={treeData => { setTreeData(treeData); setFinalTreeData([]) }}
+            />
+          </div>
+        </Collapse>
+      </Accordion>
     </div>
   )
 }

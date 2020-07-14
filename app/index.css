@@ -12,3 +12,7 @@ body > div {
 .margin-bottom-15 {
     margin-bottom: 15px;
 }
+
+.app-body {
+    margin-bottom: 65px;
+}

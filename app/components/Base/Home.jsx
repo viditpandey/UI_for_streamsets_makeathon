@@ -11,23 +11,25 @@ const Home = (props) => {
   const setAppTitle = appBar => setAppBar(appBar)
   return (
     <div>
-      <AppBarContext.Provider value={{
-        setAppTitle: setAppTitle
-      }}
-      >
-        <AppTitleBar text={appBar.text} button={appBar.button} />
-        {routes.map((route, i) => {
-          return (
-            <Route
-              key={i}
-              path={route.path}
-              exact={route.exact}
-              children={<route.component />}
-            />
-          )
-        })}
-        <BottomNavi />
-      </AppBarContext.Provider>
+      <div className='app-body'>
+        <AppBarContext.Provider value={{
+          setAppTitle: setAppTitle
+        }}
+        >
+          <AppTitleBar text={appBar.text} button={appBar.button} />
+          {routes.map((route, i) => {
+            return (
+              <Route
+                key={i}
+                path={route.path}
+                exact={route.exact}
+                children={<route.component />}
+              />
+            )
+          })}
+          <BottomNavi />
+        </AppBarContext.Provider>
+      </div>
     </div>
   )
 }
