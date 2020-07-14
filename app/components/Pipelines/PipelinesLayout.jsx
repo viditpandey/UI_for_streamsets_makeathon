@@ -1,9 +1,11 @@
 import 'regenerator-runtime/runtime.js'
 
+import CircularProgress from '@material-ui/core/CircularProgress'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import React, { useState, useEffect, useContext } from 'react'
+import ReplayIcon from '@material-ui/icons/Replay'
 import StopIcon from '@material-ui/icons/Stop'
 
 import { AppBarContext } from '../Base/Home'
@@ -71,6 +73,41 @@ export default function PipelinesLayout () {
     setChecked(newChecked)
   }
 
+  const getPipelineActionButton = item => {
+    // const isChecked = checked.indexOf(item.pipelineId) !== -1
+    let button = <CircularProgress />
+    switch (item.status) {
+      case 'STARTING':
+        button = <CircularProgress />
+        break
+      case 'RUNNING':
+        button = <StopIcon style={{ color: 'CF142B' }} />
+        break
+      case 'FINISHED':
+        button = <ReplayIcon />
+        break
+      case 'EDITED':
+      case 'STOPPED':
+        button = <PlayArrowIcon style={{ color: '#077d40' }} />
+        break
+
+      default:
+        break
+    }
+    return (
+      <IconButton
+        aria-label='start/stop pipeline'
+        onClick={handleToggle(item.pipelineId)}
+        component='span'
+      >
+        {button}
+        {/* {!isChecked
+          ? <PlayArrowIcon style={{ color: '#077d40' }} />
+          : <StopIcon style={{ color: 'CF142B' }} />} */}
+      </IconButton>
+    )
+  }
+
   return (
     <div>
 
@@ -81,20 +118,7 @@ export default function PipelinesLayout () {
         collapsedText={item => returnSecondaryText(item)}
         getPrimaryText={item => `${item.title} (${item.pipelineId})`}
         secondaryText={item => <>{`status: ${item.status || '...'}`}</>}
-        secondaryActionButton={item => {
-          const isChecked = checked.indexOf(item.pipelineId) !== -1
-          return (
-            <IconButton
-              aria-label='start/stop pipeline'
-              onClick={handleToggle(item.pipelineId)}
-              component='span'
-            >
-              {!isChecked
-                ? <PlayArrowIcon style={{ color: '#077d40' }} />
-                : <StopIcon />}
-            </IconButton>
-          )
-        }}
+        secondaryActionButton={getPipelineActionButton}
       />
     </div>
   )
