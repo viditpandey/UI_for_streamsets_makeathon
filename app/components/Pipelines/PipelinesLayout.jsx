@@ -80,7 +80,7 @@ export default function PipelinesLayout () {
         itemClick={item => history.push(`/pipelines/${item.pipelineId}`)}
         collapsedText={item => returnSecondaryText(item)}
         getPrimaryText={item => `${item.title} (${item.pipelineId})`}
-        secondaryText={item => item.status ? <>{`status: ${item.status}`}</> : null}
+        secondaryText={item => <>{`status: ${item.status || '...'}`}</>}
         secondaryActionButton={item => {
           const isChecked = checked.indexOf(item.pipelineId) !== -1
           return (

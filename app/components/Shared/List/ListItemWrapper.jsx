@@ -3,6 +3,7 @@ import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
+import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -26,25 +27,30 @@ export default function ListItemWrapper ({ items, itemClick, collapsedText, seco
   const classes = useStyles()
 
   return (
-    <List className={classes.root}>
-      {items.map(item => {
-        return (
+    <Grid container spacing={0} alignItems='center'>
+      <Grid item xs={1} />
+      <Grid item xs={10}>
+        <List className={classes.root}>
+          {items.map(item => {
+            return (
 
-          <ListItemRenderer
-            key={getKey(item)}
-            item={item}
-            itemClick={itemClick}
-            secondaryText={secondaryText}
-            classes={classes}
-            getKey={getKey}
-            collapsedText={collapsedText(item)}
-            getPrimaryText={getPrimaryText}
-            secondaryActionButton={secondaryActionButton(item)}
-          />
+              <ListItemRenderer
+                key={getKey(item)}
+                item={item}
+                itemClick={itemClick}
+                secondaryText={secondaryText}
+                classes={classes}
+                getKey={getKey}
+                collapsedText={collapsedText(item)}
+                getPrimaryText={getPrimaryText}
+                secondaryActionButton={secondaryActionButton(item)}
+              />
 
-        )
-      })}
-    </List>
+            )
+          })}
+        </List>
+      </Grid>
+    </Grid>
   )
 }
 
@@ -76,7 +82,7 @@ const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, seco
           </ListItem>
         </Collapse>}
       <Divider />
-      <div className='margin-bottom-15' />
+      {open && <div className='margin-bottom-15' />}
     </Paper>
   )
 }

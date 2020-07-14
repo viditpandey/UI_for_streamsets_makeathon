@@ -2,7 +2,6 @@ import 'regenerator-runtime/runtime.js'
 
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import React, { useState, useEffect, useContext } from 'react'
 
@@ -38,23 +37,23 @@ export default function TopologiesLayout () {
 
   return (
     <div>
-      <Grid container spacing={3}>
-        {isEmpty(topologies) ? null
-          : <Topologies history={history} topologies={topologies} />}
-      </Grid>
+      {isEmpty(topologies) ? null
+        : <Topologies history={history} topologies={topologies} />}
     </div>
   )
 }
 
 const Topologies = ({ topologies, history }) => {
+  console.log('--------', topologies)
   return (
     <ListItemWrapper
       items={topologies}
       itemClick={item => history.push(`/topologies/${item.topologyId}`)}
-      primary={item => `${item.topologyId}`}
+      getPrimaryText={item => `${item.topologyId}`}
       getKey={item => item.topologyId}
+      secondaryText={item => `contains ${item.topologyItems.length} pipeline(s)`}
       collapsedText={item => getTopologyItems(item)}
-
+      secondaryActionButton={() => {}}
     />
   )
 }
