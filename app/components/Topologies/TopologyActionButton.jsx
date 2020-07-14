@@ -13,7 +13,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
   let handleClickAction = () => {}
   let style = { background: '#5cb85c' }
 
-  switch (status || topology.status) {
+  switch (status || topology.topologyStatus) {
     case 'EMPTY':
       style = { background: '#5cb85c' } // green
       buttonText = 'CREATE TOPOLOGY'
@@ -26,7 +26,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       buttonText = 'VALIDATE TOPOLOGY'
       style = { background: '#5cb85c' } // green
       startIcon = <CheckCircleOutlineIcon />
-      //   handleClickAction = validateTopology
+      handleClickAction = validateTopology
       break
 
     case 'VALIDATING':

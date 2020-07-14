@@ -9,9 +9,11 @@ import { AppBarContext } from '../Base/Home'
 import { getTopologies } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 export default function TopologiesLayout () {
   const history = useHistory()
+  const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
 
   const [topologies, setTopologies] = useState([])
@@ -31,6 +33,7 @@ export default function TopologiesLayout () {
     async function fetchTopologies () {
       const res = await getTopologies()
       setTopologies(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
+      enqueueSnackbar('Topologies fetched succesfully', { variant: 'info' })
     }
     fetchTopologies()
   }, [])
@@ -44,7 +47,6 @@ export default function TopologiesLayout () {
 }
 
 const Topologies = ({ topologies, history }) => {
-  console.log('--------', topologies)
   return (
     <ListItemWrapper
       items={topologies}
