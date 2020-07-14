@@ -11,12 +11,14 @@ const Home = (props) => {
   const setAppTitle = appBar => setAppBar(appBar)
   return (
     <div>
+      <div className='app-bar'>
+        <AppTitleBar text={appBar.text} button={appBar.button} />
+      </div>
       <div className='app-body'>
         <AppBarContext.Provider value={{
           setAppTitle: setAppTitle
         }}
         >
-          <AppTitleBar text={appBar.text} button={appBar.button} />
           {routes.map((route, i) => {
             return (
               <Route
@@ -27,9 +29,9 @@ const Home = (props) => {
               />
             )
           })}
-          <BottomNavi />
         </AppBarContext.Provider>
       </div>
+      <BottomNavi />
     </div>
   )
 }

@@ -5,7 +5,7 @@ body {
     margin: 0;
 }
 
-body > div {
+.app-body > div {
     margin: 15px;
 }
 
@@ -15,4 +15,16 @@ body > div {
 
 .app-body {
     margin-bottom: 65px;
+    margin-top: 75px;
+}
+
+.app-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.rst__rowContents {
+    border: none !important;
+    box-shadow: none;
 }

@@ -5,6 +5,8 @@ import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
 import { AppBarContext } from '../Base/Home'
 import { getTopologyById } from '../../actions/TopologyActions'
+import { isEmpty } from 'lodash'
+import { useInterval } from '../../helper/useInterval'
 
 export default function TopologyLayout ({ id }) {
   const { setAppTitle } = useContext(AppBarContext)
@@ -18,6 +20,12 @@ export default function TopologyLayout ({ id }) {
     }
     getTopologyData(id)
   }, [])
+
+  useInterval(async () => {
+    const { topologyId } = topologyData
+    const latestStatus = await getTopologyById({ topologyId })
+    !isEmpty(latestStatus) && setTopologyData(latestStatus)
+  }, id ? 3000 : null)
 
   return (
     <div>

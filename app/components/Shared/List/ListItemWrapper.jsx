@@ -72,6 +72,7 @@ const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, seco
           {secondaryActionButton}
         </ListItemSecondaryAction>
       </ListItem>
+      <Divider />
       {collapsedText &&
         <Collapse in={open} timeout='auto' unmountOnExit>
           <ListItem button className={classes.nested}>
@@ -81,7 +82,6 @@ const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, seco
             />
           </ListItem>
         </Collapse>}
-      <Divider />
       {open && <div className='margin-bottom-15' />}
     </Paper>
   )

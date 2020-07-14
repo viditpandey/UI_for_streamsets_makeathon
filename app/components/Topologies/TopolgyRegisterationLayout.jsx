@@ -1,9 +1,10 @@
-import Accordion from '@material-ui/core/Accordion'
+// import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AddPipelines from './AddPipelineToTopology'
 import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import Chip from '@material-ui/core/Chip'
+import Divider from '@material-ui/core/Divider'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import SettingsIcon from '@material-ui/icons/Settings'
 // import Grid from '@material-ui/core/Grid'
@@ -28,23 +29,24 @@ import 'react-sortable-tree/style.css'
 
 // const PIPELINE_STATUS = ['STARTING', 'RETRY', , 'RUNNING', 'FINISHED', 'EDITED', 'STOPPED']
 
-// const getStyleByPipelineStatus = {
-//   STARTING: {},
-//   RETRY: {},
-//   RUNNING: {},
-//   FINISHED: {},
-//   EDITED: {},
-//   STOPPED: {}
-// }
+const getStyleByPipelineStatus = {
+  STARTING: { background: '#0063bf' }, // dark-blue
+  RETRY: { background: 'CF142B' }, // red
+  RUNNING: { background: '#75eb3d' }, // light green
+  FINISHED: { background: '#077d40' }, // dark green
+  EDITED: { background: '#dedede' }, // grey
+  STOPPED: { background: 'CF142B' }, // red
+  RUN_ERROR: { background: 'CF142B' }, // red
+  undefined: { background: '#dedede' } // grey
+}
 
 const renderNode = ({ p, handlePipelineClick }) => {
   return (
     <Chip
       id={p.pipelineId}
-      variant='outlined'
-      color='primary'
+      style={getStyleByPipelineStatus[p.status]}
       deleteIcon={<SettingsIcon />}
-      size='small'
+      size='medium'
       label={p.title || p.pipelineId}
       onDelete={(e) => handlePipelineClick(true, p)}
       onClick={(e) => handlePipelineClick(true, p)}
@@ -257,10 +259,10 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
 
 const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   return (
     <div>
-      <Accordion>
+      <Paper>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           onClick={() => setOpen(!open)}
@@ -270,6 +272,7 @@ const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
           Configure your pipelines dependency:
         </AccordionSummary>
         <Collapse in={open} timeout='auto' unmountOnExit>
+          <Divider />
           <div style={{ height: '500px', overFlowY: 'auto' }}>
             <SortableTree
               treeData={treeData}
@@ -278,7 +281,7 @@ const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
             />
           </div>
         </Collapse>
-      </Accordion>
+      </Paper>
     </div>
   )
 }
