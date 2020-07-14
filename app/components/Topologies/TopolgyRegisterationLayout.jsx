@@ -71,7 +71,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
   const [allPipelines, availablePipelines] = useState([]) // all pipelines in env, to be shown as available while adding pipelines to topology
   const [openDialog, setOpenDialog] = useState(false) // open Add Pipelines To Topology Dialog
   const [openConfigDialog, setOpenConfigDialog] = useState(false) // Open Dialog to manage time dependency & threshold for each pipeline in treeData
-  const [selectedPipeline, setSelectedPipeline] = useState(null) // to save in state, which pipeline chip was clicked
+  const [selectedPipeline, setSelectedPipeline] = useState({}) // to save in state, which pipeline chip was clicked
   const [threshold, setThreshold] = useState(0)
   const [dependencyCriteria, setDependencyCriteria] = useState('stop')
   const [waitTime, setWaitTime] = useState(0)
@@ -105,7 +105,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
           ignoreCollapsed: false,
           callback: (nodeInfo) => formTreeData(nodeInfo)
         })
-        console.log('This is sent to backend: ', finalTreeData)
+        console.log('This is sent to backend: ', finalTreeData, JSON.stringify(finalTreeData))
 
         createTopology({ finalTreeData })
         enqueueSnackbar('Topology created succesfully', { variant: 'success' })
@@ -123,9 +123,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
     fetchPipelines()
   }, [])
 
-  useEffect(() => {
-    updatePipelinesConfigInTree()
-  }, [waitTime, threshold])
+  useEffect(() => { updatePipelinesConfigInTree() }, [waitTime, threshold, dependencyCriteria])
 
   useEffect(() => {
     const isValidName = name && name.length
@@ -171,6 +169,7 @@ export default function TopolgyRegisterationLayout ({ propsName = '', propsSelec
       if (itemNode.pipelineId === selectedPipeline.pipelineId) {
         itemNode.waitTime = waitTime
         itemNode.threshold = threshold
+        itemNode.dependencyCriteria = dependencyCriteria
       }
     })
   }
