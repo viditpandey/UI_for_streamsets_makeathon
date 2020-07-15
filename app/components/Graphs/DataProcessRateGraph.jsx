@@ -1,6 +1,7 @@
 import React from 'react'
 // import { Chart, useChartConfig } from 'react-charts'
-import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, LabelList, Legend, Label, Brush } from 'recharts'
+import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, LabelList, Label, Brush } from 'recharts'
+// import { getPipelineHistory } from '../../actions/MetricsActions'
 export default function MyChart () {
   const data02 = [
     { name: 'Page A', uv: 400, pv: 1, amt: 3400 },
@@ -9,6 +10,7 @@ export default function MyChart () {
     { name: 'Page D', uv: 100, pv: 4, amt: 2400 },
     { uv: 500, pv: 5 }
   ]
+  // getPipelineHistory({ pipelineId: 'Test2e6ddd5c1-8fb5-44bb-8d1e-272d3cc88855' })
 
   return (
 
