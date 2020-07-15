@@ -5,6 +5,7 @@ import PipelineLayout from '../components/Pipelines/PipelineLayout'
 import TopologiesLayout from '../components/Topologies/TopologiesLayout'
 import TopolgyRegisterationLayout from '../components/Topologies/TopolgyRegisterationLayout'
 import TopologyLayout from '../components/Topologies/TopologyLayout'
+import Line from '../components/Graphs/DataProcessRateGraph'
 
 const routes = [
   {
@@ -31,6 +32,10 @@ const routes = [
     path: '/topologies/:id',
     exact: true,
     component: () => <Topolgy />
+  }, {
+    path: '/metrics',
+    exact: true,
+    component: () => <Line />
   }
 ]
 
