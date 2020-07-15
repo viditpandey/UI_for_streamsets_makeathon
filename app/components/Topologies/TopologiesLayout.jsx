@@ -1,15 +1,15 @@
-import 'regenerator-runtime/runtime.js'
-
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
+import DeleteIcon from '@material-ui/icons/Delete'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import React, { useState, useEffect, useContext } from 'react'
 
 import { AppBarContext } from '../Base/Home'
-import { getTopologies } from '../../actions/TopologyActions'
+import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
+import { IconButton } from '@material-ui/core'
 
 export default function TopologiesLayout () {
   const history = useHistory()
@@ -45,9 +45,7 @@ export default function TopologiesLayout () {
     setAppTitle({ text: 'TOPOLOGIES', button: newTopology })
     async function fetchTopologies () {
       const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
-      // const res = await getTopologies()
       res && setTopologies(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
-      // res && enqueueSnackbar('Topologies fetched succesfully', { variant: 'info' })
     }
     fetchTopologies()
   }, [])
@@ -55,12 +53,37 @@ export default function TopologiesLayout () {
   return (
     <div>
       {isEmpty(topologies) ? null
-        : <Topologies history={history} topologies={topologies} />}
+        : (
+          <Topologies
+            history={history}
+            topologies={topologies}
+            deleteTopology={deleteTopology}
+            axiosHandler={axiosHandler}
+          />
+        )}
     </div>
   )
 }
 
-const Topologies = ({ topologies, history }) => {
+const Topologies = ({ topologies, history, deleteTopology, axiosHandler }) => {
+  const deleteTopologyButton = item => {
+    return (
+      <IconButton
+        aria-label='delete topology'
+        onClick={async (item) => {
+          await axiosHandler({
+            method: deleteTopology,
+            methodParams: { topologyId: item.topologyId },
+            errorMessage: 'Something went wring while deleting the topology',
+            successMessage: 'Topology deleted successfuly.'
+          })
+        }}
+        component='span'
+      >
+        <DeleteIcon />
+      </IconButton>
+    )
+  }
   return (
     <ListItemWrapper
       items={topologies}
@@ -69,7 +92,7 @@ const Topologies = ({ topologies, history }) => {
       getKey={item => item.topologyId}
       secondaryText={item => `contains ${item.topologyItems.length} pipeline(s)`}
       collapsedText={item => getTopologyItems(item)}
-      secondaryActionButton={() => {}}
+      secondaryActionButton={item => deleteTopologyButton(item)}
     />
   )
 }

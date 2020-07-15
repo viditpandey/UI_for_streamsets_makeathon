@@ -1,5 +1,3 @@
-import 'regenerator-runtime/runtime.js'
-
 import React, { useState, useEffect, useContext } from 'react'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
@@ -7,6 +5,8 @@ import { AppBarContext } from '../Base/Home'
 import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
+
+const MetricsLayout = React.lazy(() => import('../Graphs/DataProcessRateGraph'))
 
 const MAX_POLL_COUNT = 2
 
@@ -20,7 +20,7 @@ export default function TopologyLayout ({ id }) {
     async function getTopologyData (id) {
       const res = await getTopologyById({ topologyId: id })
       setTopologyData(res)
-      setAppTitle({ text: `TOPOLOGY: ${res.topologyId} ${id}` })
+      setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
     }
     getTopologyData(id)
     id && setPolling(true)
@@ -44,6 +44,9 @@ export default function TopologyLayout ({ id }) {
         propsName={topologyData.topologyId}
         propsSelectedPipelines={topologyData.topologyItems}
         propsTopologyData={topologyData}
+        renderMetrics={() => {
+          return <MetricsLayout topologyData={topologyData} />
+        }}
       />
     </div>
   )

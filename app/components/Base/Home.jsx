@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime.js'
+
 import React, { useState, Suspense } from 'react'
 import BottomNavi from './BottomNavi'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -5,10 +7,10 @@ import routes from '../../configs/routes'
 import AppTitleBar from './AppTitleBar'
 
 import { Route } from 'react-router-dom'
-export const AppBarContext = React.createContext({ text: 'Streamsets Orchestrator' })
+export const AppBarContext = React.createContext({ text: '' })
 
 const Home = (props) => {
-  const [appBar, setAppBar] = useState({ text: 'Streamsets Orchestrator' })
+  const [appBar, setAppBar] = useState({ text: '' })
   const setAppTitle = appBar => setAppBar(appBar)
   return (
     <div>

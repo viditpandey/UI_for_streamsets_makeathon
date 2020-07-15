@@ -2,6 +2,7 @@ export const BASE_URL = 'http://localhost:8081'
 
 export const mockedTopology = {
   topologyId: 'test2',
+  topologyStatus: 'RUNNING',
   topologyItems: [
     {
       createTimestamp: '12-07-2020 12:29:59',

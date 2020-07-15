@@ -1,9 +1,6 @@
-import AccordionSummary from '@material-ui/core/AccordionSummary'
+import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
 import AddPipelines from './AddPipelineToTopology'
-import Collapse from '@material-ui/core/Collapse'
 import Chip from '@material-ui/core/Chip'
-import Divider from '@material-ui/core/Divider'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Grid from '@material-ui/core/Grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
@@ -16,7 +13,11 @@ import TopologyActionButton from './TopologyActionButton'
 
 import { AppBarContext } from '../Base/Home'
 import { cloneDeep, isEmpty } from 'lodash'
-import { createTopology, startTopology, stopTopology, validateTopology, resetTopology } from '../../actions/TopologyActions'
+import {
+  createTopology, startTopology,
+  stopTopology, validateTopology,
+  pauseTopology, resetTopology
+} from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
 import { withStyles } from '@material-ui/core/styles'
@@ -107,7 +108,10 @@ const getTreeCompatibleData = ({ list, handlePipelineClick }) => {
   })
 }
 
-export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, propsName = '', propsSelectedPipelines = [] }) {
+export default function TopolgyRegisterationLayout ({
+  propsTopologyData = {}, propsName = '',
+  propsSelectedPipelines = [], renderMetrics = () => {}
+}) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
 
@@ -231,12 +235,20 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
       <div style={{ padding: '15px' }}>
 
         <form noValidate autoComplete='off'>
-          <Grid container spacing={3}>
+          <Grid container justify='center' spacing={3} alignItems='center'>
 
-            <Grid item xs={12} md={9}><TopologyName disabled={viewMode} name={name} setName={setName} /></Grid>
+            <Grid item xs={12} md={7}>
+              <TopologyName
+                disabled={viewMode}
+                name={name}
+                topologyStatus={topologyData.topologyStatus}
+                setName={setName}
+              />
+            </Grid>
 
-            <Grid item md={3} xs={12}>
-              <div className='float-right'>
+            <Grid item md={5} xs={12}>
+              {/* <div className='float-right1'> */}
+              <div>
                 <TopologyActionButton
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
@@ -245,6 +257,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
                   stopTopology={() => stopTopology({ topologyId: name })}
                   validateTopology={() => validateTopology({ topologyId: name })}
                   resetTopology={() => resetTopology({ topologyId: name })}
+                  pauseTopology={() => pauseTopology(name)}
                 />
               </div>
             </Grid>
@@ -272,6 +285,11 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
           />
           <br />
 
+          {/* <div>
+            {renderMetrics(topologyData)}
+            <br />
+          </div> */}
+
           <RenderPipelineConfigs
             pipeline={selectedPipeline}
             setSelectedPipeline={setSelectedPipeline}
@@ -296,29 +314,23 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
 const CreateTree = ({ treeData, setTreeData, setFinalTreeData, selectedPipelines }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
   const height = (selectedPipelines.length * 70) || 100
-  const [open, setOpen] = useState(true)
+  // const [open, setOpen] = useState(true)
   return (
     <div>
-      <Paper>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          onClick={() => setOpen(!open)}
-          aria-controls='panel1a-content'
-          id='panel1a-header'
-        >
-          Configure your pipelines dependency:
-        </AccordionSummary>
-        <Collapse in={open} timeout='auto' unmountOnExit>
-          <Divider />
-          <div className='graph-area-style' style={{ height: height }}>
-            <SortableTree
-              treeData={treeData}
-              getNodeKey={({ node }) => { return node.pipelineId }}
-              onChange={treeData => { setTreeData(treeData); setFinalTreeData([]) }}
-            />
-          </div>
-        </Collapse>
-      </Paper>
+      <AccordianWrapper
+        title='Configure your pipelines dependency:'
+        defaultExpanded
+        renderChildrend={() => {
+          return (
+            <div className='graph-area-style' style={{ height: height }}>
+              <SortableTree
+                treeData={treeData}
+                getNodeKey={({ node }) => { return node.pipelineId }}
+                onChange={treeData => { setTreeData(treeData); setFinalTreeData([]) }}
+              />
+            </div>)
+        }}
+      />
     </div>
   )
 }

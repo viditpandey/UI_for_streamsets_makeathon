@@ -7,18 +7,21 @@ import { Typography } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
   root: {
     ...theme.typography.button,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#dedede' || theme.palette.background.default,
     padding: theme.spacing(1)
   }
 }))
 
-const Name = ({ name, setName, disabled }) => {
+const Name = ({ name, setName, disabled, topologyStatus }) => {
   if (disabled) {
     const classes = useStyles()
+    const status = `(${topologyStatus})`
     return (
-      <Typography className={classes.root} variant='h4' component='h6'>
-        {name}
-      </Typography>
+      <div>
+        <Typography className={classes.root} variant='h4' component='h6'>
+          {`${name} ${topologyStatus ? status : ''}`}
+        </Typography>
+      </div>
     )
   }
   return (
@@ -27,7 +30,6 @@ const Name = ({ name, setName, disabled }) => {
       value={name}
       disabled={disabled}
       onChange={e => setName(e.target.value)}
-      // variant='outlined'
       label='Topology Name'
     />
   )
