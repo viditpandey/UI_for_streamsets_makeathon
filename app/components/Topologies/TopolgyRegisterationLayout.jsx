@@ -16,7 +16,11 @@ import TopologyActionButton from './TopologyActionButton'
 
 import { AppBarContext } from '../Base/Home'
 import { cloneDeep, isEmpty } from 'lodash'
-import { createTopology, startTopology, stopTopology, validateTopology, resetTopology } from '../../actions/TopologyActions'
+import {
+  createTopology, startTopology,
+  stopTopology, validateTopology,
+  pauseTopology, resetTopology
+} from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
 import { withStyles } from '@material-ui/core/styles'
@@ -233,9 +237,9 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
         <form noValidate autoComplete='off'>
           <Grid container spacing={3}>
 
-            <Grid item xs={12} md={9}><TopologyName disabled={viewMode} name={name} setName={setName} /></Grid>
+            <Grid item xs={12} md={7}><TopologyName disabled={viewMode} name={name} setName={setName} /></Grid>
 
-            <Grid item md={3} xs={12}>
+            <Grid item md={5} xs={12}>
               <div className='float-right'>
                 <TopologyActionButton
                   status={!viewMode && 'EMPTY'}
@@ -245,6 +249,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
                   stopTopology={() => stopTopology({ topologyId: name })}
                   validateTopology={() => validateTopology({ topologyId: name })}
                   resetTopology={() => resetTopology({ topologyId: name })}
+                  pauseTopology={() => pauseTopology(name)}
                 />
               </div>
             </Grid>

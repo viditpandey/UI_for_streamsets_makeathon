@@ -2,22 +2,34 @@ import Button from '@material-ui/core/Button'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled'
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite'
 import React from 'react'
 import ReplayIcon from '@material-ui/icons/Replay'
 import SaveIcon from '@material-ui/icons/Save'
 
-export default function TopologyActionButton ({ topology, status, disabled, createTopology, startTopology, stopTopology, validateTopology, resetTopology }) {
+export default function TopologyActionButton ({
+  topology, status, disabled,
+  disabledSecondary,
+  createTopology, startTopology, stopTopology,
+  validateTopology, resetTopology, pauseTopology
+}) {
   let startIcon = <SaveIcon />
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}
   let style = { background: '#5cb85c' }
+  let renderSecondaryButton = true
+  const secondaryButtonIcon = <PauseCircleFilledIcon />
+  let secondaryButtonText = 'PERFORM ACTION'
+  let handleSecondaryClickAction = () => {}
+  const secondaryButtonStyle = { background: '#509ade' }
 
   switch (status || topology.topologyStatus) {
     case 'EMPTY':
       style = { background: '#5cb85c' } // green
       buttonText = 'CREATE TOPOLOGY'
       handleClickAction = createTopology
+      renderSecondaryButton = false
       break
 
     case 'STOPPED':
@@ -25,12 +37,14 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       style = { background: '#5cb85c' } // green
       startIcon = <PlayCircleFilledWhiteIcon />
       handleClickAction = startTopology
+      renderSecondaryButton = false
       break
     case 'FINISHED':
       buttonText = 'RESET TOPOLOGY'
       style = { background: '#5cb85c' } // green
       startIcon = <ReplayIcon />
       handleClickAction = resetTopology
+      renderSecondaryButton = false
       break
 
     case 'TO_START':
@@ -38,6 +52,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       style = { background: '#5cb85c' } // green
       startIcon = <CheckCircleOutlineIcon />
       handleClickAction = validateTopology
+      renderSecondaryButton = false
       break
 
     case 'VALIDATING':
@@ -45,6 +60,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       style = { background: '#0063bf' } // dark - blue
       startIcon = <CircularProgress size={15} />
       handleClickAction = () => {}
+      renderSecondaryButton = false
       break
 
     case 'VALIDATED':
@@ -52,6 +68,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       style = { background: '#5cb85c' } // green
       startIcon = <PlayCircleFilledWhiteIcon />
       handleClickAction = startTopology
+      renderSecondaryButton = false
       break
 
     case 'RUNNING':
@@ -59,6 +76,9 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       style = { background: '#D9534F' } // light-red
       startIcon = <HighlightOffIcon />
       handleClickAction = stopTopology
+      renderSecondaryButton = true
+      secondaryButtonText = 'PAUSE TOPOLOGY'
+      handleSecondaryClickAction = pauseTopology
       break
 
     case 'ERROR':
@@ -72,16 +92,34 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
   }
 
   return (
-    <Button
-      variant='contained'
-      color='primary'
-      disabled={disabled}
-      style={style}
-      size='small'
-      onClick={(e) => handleClickAction()}
-      startIcon={startIcon}
-    >
-      {buttonText}
-    </Button>
+    <div>
+      {renderSecondaryButton && (
+        <Button
+          variant='contained'
+          color='primary'
+          disabled={disabledSecondary}
+          style={secondaryButtonStyle}
+          size='small'
+          onClick={(e) => handleSecondaryClickAction()}
+          startIcon={secondaryButtonIcon}
+        >
+          {secondaryButtonText}
+        </Button>
+      )}
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <Button
+        variant='contained'
+        color='primary'
+        disabled={disabled}
+        style={style}
+        size='small'
+        onClick={(e) => handleClickAction()}
+        startIcon={startIcon}
+      >
+        {buttonText}
+      </Button>
+    </div>
   )
 }
