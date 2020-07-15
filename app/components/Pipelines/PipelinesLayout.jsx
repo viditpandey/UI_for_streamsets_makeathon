@@ -37,7 +37,6 @@ export default function PipelinesLayout () {
     setAppTitle({ text: 'PIPELINES' })
     async function fetchPipelines () {
       const res = await axiosHandler({ method: getPipelines, errorMessage: 'pipelines fetch failed', infoMessage: 'pipelines fetched succesfully' })
-      // enqueueSnackbar('pipelines fetched succesfully', { variant: 'info' })
       res && setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
     }
     fetchPipelines()
@@ -74,17 +73,22 @@ export default function PipelinesLayout () {
 
   const handlePipelineActionButtonClick = (pipelineId) => async () => {
     if (shouldStartPipeline(pipelineId)) {
-      const res = await axiosHandler({ method: startPipeline, methodParams: { pipelineId }, errorMessage: 'Pipeline start failed', successMessage: 'pipeline started succesfully' })
-      // const t = await startPipeline({ pipelineId })
-      // t && enqueueSnackbar('pipeline started succesfully', { variant: 'success' })
+      const res = await axiosHandler({
+        method: startPipeline,
+        methodParams: { pipelineId },
+        errorMessage: 'Pipeline start failed',
+        successMessage: 'pipeline started succesfully'
+      })
       res && updatePipeline({ pipelineId: res.pipelineId, property: 'status', newVal: res.status })
     } else {
-      const res = await axiosHandler({ method: stopPipeline, methodParams: { pipelineId }, errorMessage: 'Pipeline stop failed', successMessage: 'Pipeline stopped succesfully' })
-      // const t = await stopPipeline({ pipelineId })
-      // t && enqueueSnackbar('pipeline stopped succesfully', { variant: 'success' })
+      const res = await axiosHandler({
+        method: stopPipeline,
+        methodParams: { pipelineId },
+        errorMessage: 'Pipeline stop failed',
+        successMessage: 'Pipeline stopped succesfully'
+      })
       res && updatePipeline({ pipelineId: res.pipelineId, property: 'status', newVal: res.status })
     }
-    console.log('handle toggle called')
   }
 
   const getPipelineActionButton = item => {
@@ -115,9 +119,6 @@ export default function PipelinesLayout () {
         component='span'
       >
         {button}
-        {/* {!isChecked
-          ? <PlayArrowIcon style={{ color: '#077d40' }} />
-          : <StopIcon style={{ color: 'CF142B' }} />} */}
       </IconButton>
     )
   }
