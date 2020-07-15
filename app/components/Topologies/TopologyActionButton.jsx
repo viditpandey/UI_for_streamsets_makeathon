@@ -1,6 +1,7 @@
 import Button from '@material-ui/core/Button'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Grid from '@material-ui/core/Grid'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled'
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite'
@@ -18,7 +19,7 @@ export default function TopologyActionButton ({
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}
   let style = { background: '#5cb85c' }
-  let renderSecondaryButton = true
+  let renderSecondaryButton = false
   const secondaryButtonIcon = <PauseCircleFilledIcon />
   let secondaryButtonText = 'PERFORM ACTION'
   let handleSecondaryClickAction = () => {}
@@ -93,33 +94,36 @@ export default function TopologyActionButton ({
 
   return (
     <div>
-      {renderSecondaryButton && (
-        <Button
-          variant='contained'
-          color='primary'
-          disabled={disabledSecondary}
-          style={secondaryButtonStyle}
-          size='small'
-          onClick={(e) => handleSecondaryClickAction()}
-          startIcon={secondaryButtonIcon}
-        >
-          {secondaryButtonText}
-        </Button>
-      )}
-      &nbsp;
-      &nbsp;
-      &nbsp;
-      <Button
-        variant='contained'
-        color='primary'
-        disabled={disabled}
-        style={style}
-        size='small'
-        onClick={(e) => handleClickAction()}
-        startIcon={startIcon}
-      >
-        {buttonText}
-      </Button>
+      <Grid container spacing={3}>
+        {renderSecondaryButton && (
+          <Grid item xs={12} md={6}>
+            <Button
+              variant='contained'
+              color='primary'
+              disabled={disabledSecondary}
+              style={secondaryButtonStyle}
+              size='small'
+              onClick={(e) => handleSecondaryClickAction()}
+              startIcon={secondaryButtonIcon}
+            >
+              {secondaryButtonText}
+            </Button>
+          </Grid>
+        )}
+        <Grid item xs={12} md={renderSecondaryButton ? 6 : 12}>
+          <Button
+            variant='contained'
+            color='primary'
+            disabled={disabled}
+            style={style}
+            size='small'
+            onClick={(e) => handleClickAction()}
+            startIcon={startIcon}
+          >
+            {buttonText}
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   )
 }
