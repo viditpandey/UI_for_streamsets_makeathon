@@ -24,7 +24,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
     case 'FINISHED':
       buttonText = 'RESET TOPOLOGY'
       style = { background: '#5cb85c' } // green
-      startIcon = <CheckCircleOutlineIcon />
+      startIcon = <ReplayIcon />
       handleClickAction = resetTopology
       break
 
@@ -38,7 +38,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
     case 'VALIDATING':
       buttonText = 'VALIDATING'
       style = { background: '#0063bf' } // dark - blue
-      startIcon = <CircularProgress />
+      startIcon = <CircularProgress size={15} />
       handleClickAction = () => {}
       break
 
@@ -51,7 +51,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
 
     case 'RUNNING':
       buttonText = 'STOP TOPOLOGY'
-      style = { background: '#CF142B' } // red
+      style = { background: '#D9534F' } // light-red
       startIcon = <HighlightOffIcon />
       handleClickAction = stopTopology
       break
