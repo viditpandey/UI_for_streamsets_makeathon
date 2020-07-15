@@ -12,13 +12,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Name = ({ name, setName, disabled, status }) => {
+const Name = ({ name, setName, disabled, topologyStatus }) => {
   if (disabled) {
     const classes = useStyles()
+    const status = `(${topologyStatus})`
     return (
-      <Typography className={classes.root} variant='h4' component='h6'>
-        {name}
-      </Typography>
+      <div>
+        <Typography className={classes.root} variant='h4' component='h6'>
+          {`${name} ${topologyStatus ? status : ''}`}
+        </Typography>
+      </div>
     )
   }
   return (
@@ -27,7 +30,6 @@ const Name = ({ name, setName, disabled, status }) => {
       value={name}
       disabled={disabled}
       onChange={e => setName(e.target.value)}
-      // variant='outlined'
       label='Topology Name'
     />
   )

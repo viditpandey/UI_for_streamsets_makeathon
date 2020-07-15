@@ -240,7 +240,14 @@ export default function TopolgyRegisterationLayout ({
         <form noValidate autoComplete='off'>
           <Grid container spacing={3} alignItems='center'>
 
-            <Grid item xs={12} md={7}><TopologyName disabled={viewMode} name={name} setName={setName} /></Grid>
+            <Grid item xs={12} md={7}>
+              <TopologyName
+                disabled={viewMode}
+                name={name}
+                topologyStatus={topologyData.topologyStatus}
+                setName={setName}
+              />
+            </Grid>
 
             <Grid item md={5} xs={12}>
               <div className='float-right'>
