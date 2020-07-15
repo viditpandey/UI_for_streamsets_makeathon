@@ -40,7 +40,7 @@ const getStyleByPipelineStatus = {
 }
 
 const renderNode = ({ p, handlePipelineClick }) => {
-  const chipLabel = <div>`${p.title || p.pipelineId} (${p.status || '...'})`<div style={{ margin: '0 10px' }}><LinearProgress /></div></div>
+  const chipLabel = <div>{p.title || p.pipelineId} ({p.status || '...'})<div style={{ margin: '0 10px' }}><LinearProgress /></div></div>
   return (
     <Chip
       id={p.pipelineId}
