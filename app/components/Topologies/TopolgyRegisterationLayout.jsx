@@ -19,9 +19,23 @@ import { cloneDeep, isEmpty } from 'lodash'
 import { createTopology, startTopology, stopTopology, validateTopology, resetTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
+import { withStyles } from '@material-ui/core/styles'
 import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
+
+const BorderLinearProgress = ({ loaderBackground, backgroundColor }) => withStyles((theme) => ({
+  root: {
+    borderRadius: 10
+  },
+  colorPrimary: {
+    backgroundColor: loaderBackground
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: backgroundColor || '#1a90ff'
+  }
+}))(LinearProgress)
 
 // const PIPELINE_STATUS = ['STARTING', 'RETRY', , 'RUNNING', 'FINISHED', 'EDITED', 'STOPPED']
 
@@ -35,12 +49,39 @@ const getStyleByPipelineStatus = {
   ERROR: { background: '#f2dede' }, // red
   RUN_ERROR: { background: '#f2dede' }, // red
   INVALID: { background: '#f2dede' }, // red
-  VALID: { background: '#dff0d8' }, // light green
+  VALID: { background: '#dff0d8' }, // light green,
+  VALIDATING: { background: '#a9cae8' }, // light-blue
   undefined: { background: '#dedede' } // grey
 }
 
+const loaderColorByPipelineStatus = {
+  STARTING: { background: '#509ade' }, // light-blue
+  // RETRY: { background: '#f7a6a6' }, // red
+  RUNNING: { background: '#b3d6a5' }, // light green
+  // FINISHED: { background: '#709c5f' }, // slightly darker than light green
+  // EDITED: { background: '#b5b5b5' }, // grey
+  // STOPPED: { background: '#f7a6a6' }, // red
+  // ERROR: { background: '#f7a6a6' }, // red
+  // RUN_ERROR: { background: '#f7a6a6' }, // red
+  // INVALID: { background: '#f7a6a6' }, // red
+  // VALID: { background: '#dff0d8' }, // light green,
+  VALIDATING: { background: '#509ade' } // light-blue
+  // undefined: { background: '#b5b5b5' } // grey
+}
+
+const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING']
+
 const renderNode = ({ p, handlePipelineClick }) => {
-  const chipLabel = <div>{p.title || p.pipelineId} ({p.status || '...'})<div style={{ margin: '0 10px' }}><LinearProgress /></div></div>
+  const CustomProgressBar = PIPELINES_IN_PROGRESS.indexOf(p.status) !== -1 ? BorderLinearProgress({
+    loaderBackground: loaderColorByPipelineStatus[p.status].background,
+    backgroundColor: getStyleByPipelineStatus[p.status].background
+  }) : () => null
+  const chipLabel = (
+    <div>{p.title || p.pipelineId} ({p.status || '...'})
+      <div style={{ margin: '0 10px' }}>
+        {<CustomProgressBar />}
+      </div>
+    </div>)
   return (
     <Chip
       id={p.pipelineId}
@@ -226,6 +267,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
             treeData={treeData}
             setTreeData={viewMode ? () => { enqueueSnackbar('Editing the topology not allowed.', { variant: 'info' }) } : setTreeData}
             setFinalTreeData={setFinalTreeData}
+            selectedPipelines={selectedPipelines}
             setOpen={setOpenConfigDialog}
           />
           <br />
@@ -251,8 +293,9 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
   )
 }
 
-const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
+const CreateTree = ({ treeData, setTreeData, setFinalTreeData, selectedPipelines }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
+  const height = (selectedPipelines.length * 70) || 100
   const [open, setOpen] = useState(true)
   return (
     <div>
@@ -267,7 +310,7 @@ const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
         </AccordionSummary>
         <Collapse in={open} timeout='auto' unmountOnExit>
           <Divider />
-          <div style={{ height: '500px', overFlowY: 'auto' }}>
+          <div className='graph-area-style' style={{ height: height }}>
             <SortableTree
               treeData={treeData}
               getNodeKey={({ node }) => { return node.pipelineId }}

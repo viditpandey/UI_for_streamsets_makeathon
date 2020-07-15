@@ -8,9 +8,13 @@ import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
 
+const MAX_POLL_COUNT = 2
+
 export default function TopologyLayout ({ id }) {
   const { setAppTitle } = useContext(AppBarContext)
   const [topologyData, setTopologyData] = useState({})
+  const [shouldPoll, setPolling] = useState(false)
+  const [sameStatus, setSameStatus] = useState(0)
 
   useEffect(() => {
     async function getTopologyData (id) {
@@ -19,13 +23,19 @@ export default function TopologyLayout ({ id }) {
       setAppTitle({ text: `TOPOLOGY: ${res.topologyId} ${id}` })
     }
     getTopologyData(id)
+    id && setPolling(true)
   }, [])
 
   useInterval(async () => {
-    const { topologyId } = topologyData
+    if (!shouldPoll) return
+    const { topologyId, topologyStatus } = topologyData
     const latestStatus = await getTopologyById({ topologyId })
-    !isEmpty(latestStatus) && setTopologyData(latestStatus)
-  }, id ? 3000 : null)
+    if (!isEmpty(latestStatus)) setTopologyData(latestStatus)
+    else setPolling(false)
+    if (latestStatus && topologyStatus === latestStatus.topologyStatus) setSameStatus(sameStatus + 1)
+    else setSameStatus(1)
+    if (sameStatus >= MAX_POLL_COUNT) { setPolling(false); setSameStatus(1) }
+  }, shouldPoll ? 3000 : null)
 
   return (
     <div>

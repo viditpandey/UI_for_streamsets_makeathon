@@ -33,3 +33,9 @@ body {
 .float-right{
     float: right;
 }
+
+.graph-area-style {
+    padding-top: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+}

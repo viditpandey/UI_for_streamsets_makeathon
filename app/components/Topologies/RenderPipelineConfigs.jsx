@@ -8,6 +8,8 @@ import Switch from '@material-ui/core/Switch'
 import Slide from '@material-ui/core/Slide'
 import TextField from '@material-ui/core/TextField'
 
+import { Typography } from '@material-ui/core'
+
 export const Transition = React.forwardRef(function Transition (props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 })
@@ -42,6 +44,11 @@ export default function RenderPipelineConfigs ({
             disabled={disabled}
             label='Retry threshold limit (# times).'
           />
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
           <TextField
             id='pipeline_time_dependency'
             value={waitTime}
@@ -54,14 +61,14 @@ export default function RenderPipelineConfigs ({
           />
           <br />
           {!hideToggle &&
-            <div>{`Run this pipeline at ${dependencyCriteria} of parent pipeline`}
+            <Typography>{`Run this pipeline at ${dependencyCriteria} of parent pipeline`}
               <Switch
                 checked={dependencyCriteria === 'stop'}
                 onChange={e => { !disabled && setDependencyCriteria(dependencyCriteria === 'start' ? 'stop' : 'start') }}
                 name='dependencyCriteria'
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
               />
-            </div>}
+            </Typography>}
         </DialogContent>
         <DialogActions>
           <Button
