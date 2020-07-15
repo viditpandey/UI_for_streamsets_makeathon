@@ -3,7 +3,7 @@ import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import InfoIcon from '@material-ui/icons/Info'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -19,9 +19,9 @@ const useStyles = makeStyles({
   }
 })
 
-const naviRoutes = ['/pipelines', '/topologies', '/topologies/new']
+const naviRoutes = ['/pipelines', '/topologies', '/topologies/create']
 
-const routeRegex = [[/pipelines/, /pipelines\/$/], [/topologies/, /topologies\/$/, /topologies\/new$/], [/topologies\/.+/]]
+const routeRegex = [[/pipelines/, /pipelines\/$/], [/topologies/, /topologies\/$/, /topologies\/create$/], [/topologies\/.+/]]
 export default function SimpleBottomNavigation () {
   const history = useHistory()
   const classes = useStyles()

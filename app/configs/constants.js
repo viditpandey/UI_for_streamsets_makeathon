@@ -16,7 +16,7 @@ export const mockedTopology = {
       updateTimestamp: '',
       updatedBy: '',
       waitTime: 1,
-      dependencyCriteria: 'start'
+      dependencyCriteria: 'stop'
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
@@ -31,7 +31,7 @@ export const mockedTopology = {
       updateTimestamp: '',
       updatedBy: '',
       waitTime: 2,
-      dependencyCriteria: 'stop'
+      dependencyCriteria: 'start'
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
