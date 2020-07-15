@@ -1,19 +1,16 @@
-// import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AddPipelines from './AddPipelineToTopology'
-// import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import Chip from '@material-ui/core/Chip'
 import Divider from '@material-ui/core/Divider'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Grid from '@material-ui/core/Grid'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import Paper from '@material-ui/core/Paper'
-// import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
 import React, { useState, useEffect, useContext } from 'react'
 import RenderPipelineConfigs from './RenderPipelineConfigs'
 import SortableTree, { walk } from 'react-sortable-tree'
-// import StopIcon from '@material-ui/icons/Stop'
 import TopologyName from './TopologyName'
 import TopologyActionButton from './TopologyActionButton'
 
@@ -22,7 +19,6 @@ import { cloneDeep, isEmpty } from 'lodash'
 import { createTopology, startTopology, stopTopology, validateTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
-// import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
@@ -44,13 +40,14 @@ const getStyleByPipelineStatus = {
 }
 
 const renderNode = ({ p, handlePipelineClick }) => {
+  const chipLabel = <div>`${p.title || p.pipelineId} (${p.status || '...'})`<div style={{ margin: '0 10px' }}><LinearProgress /></div></div>
   return (
     <Chip
       id={p.pipelineId}
       style={getStyleByPipelineStatus[p.status]}
       deleteIcon={<SettingsIcon />}
       size='medium'
-      label={`${p.title || p.pipelineId} (${p.status || '...'})`}
+      label={chipLabel}
       onDelete={(e) => handlePipelineClick(true, p)}
       onClick={(e) => handlePipelineClick(true, p)}
     />
@@ -73,7 +70,6 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
 
-  // const history = useHistory()
   const [topologyData, setTopologyData] = useState(propsTopologyData)
   const [viewMode, setPageViewOrEditMode] = useState(!!propsName)
   const [name, setName] = useState(propsName) // name in input for topology name
@@ -87,7 +83,6 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
   const [dependencyCriteria, setDependencyCriteria] = useState('stop')
   const [waitTime, setWaitTime] = useState(0)
   const [finalTreeData, setFinalTreeData] = useState([])
-  // const [canSubmit, toggleCanSubmit] = useState(false)
 
   const formTreeData = nodeInfo => {
     let dependsOn = 'root'
@@ -119,31 +114,8 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
 
       createTopology({ finalTreeData })
       enqueueSnackbar('Topology created succesfully', { variant: 'success' })
-      // history.push('/topologies')
-      // window.location = '/topologies'
     }
   }
-
-  // const saveTopology = (
-  //   <ButtonSubmit
-  //     hideButton={viewMode}
-  //     handleSubmit={() => {
-  //       if (!isFormValid()) enqueueSnackbar('Name or Selected Pipelines cannot be empty.', { variant: 'error' })
-  //       else {
-  //         walk({
-  //           treeData,
-  //           getNodeKey: (node) => node.pipelineId,
-  //           ignoreCollapsed: false,
-  //           callback: (nodeInfo) => formTreeData(nodeInfo)
-  //         })
-  //         console.log('This is sent to backend: ', finalTreeData)
-
-  //         createTopology({ finalTreeData })
-  //         enqueueSnackbar('Topology created succesfully', { variant: 'success' })
-  //         history.push('/topologies')
-  //       }
-  //     }}
-  //   />)
 
   useEffect(() => {
     !viewMode && setAppTitle({ text: 'NEW TOPOLOGY' })
@@ -216,14 +188,6 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
   return (
     <Paper>
       <div style={{ padding: '15px' }}>
-        {/* <Grid container spacing={3}>
-
-          <Grid item xs={8}> */}
-        {/* {viewMode &&
-          <StartStopTopology
-            name={name}
-            viewMode={viewMode}
-          />} */}
 
         <form noValidate autoComplete='off'>
           <Grid container spacing={3}>
@@ -281,8 +245,6 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
           />
 
         </form>
-        {/* </Grid>
-        </Grid> */}
       </div>
     </Paper>
   )
@@ -316,58 +278,3 @@ const CreateTree = ({ treeData, setTreeData, setFinalTreeData }) => {
     </div>
   )
 }
-
-// const ButtonSubmit = ({ handleSubmit, disabled, hideButton }) => {
-//   if (hideButton) return null
-//   return (
-//     <Button
-//       variant='contained'
-//       color='primary'
-//       disabled={disabled}
-//       size='small'
-//       onClick={(e) => { handleSubmit() }}
-//       startIcon={<SaveIcon />}
-//     >
-//         CREATE TOPOLOGY
-//     </Button>
-//   )
-// }
-
-// const StartStopTopology = ({ name, viewMode }) => {
-//   return (
-//     <div>
-//       {/* <Grid item xs={4}> */}
-//       <Button
-//         variant='contained'
-//         color='primary'
-//         disabled={viewMode}
-//         size='small'
-//         onClick={(e) => {
-//           console.log('name', name)
-//           startTopology(name)
-//         }}
-//         startIcon={<PlayCircleFilledIcon />}
-//       >
-//         START TOPOLOGY
-//       </Button>
-//       <div className='margin-bottom-15' />
-//       {/* </Grid>
-//       <Grid item xs={4}> */}
-//       <Button
-//         variant='contained'
-//         color='primary'
-//         disabled={viewMode}
-//         size='small'
-//         onClick={(e) => {
-//           stopTopology(name)
-//         }}
-//         startIcon={<StopIcon />}
-//       >
-//         STOP TOPOLOGY
-//       </Button>
-//       <div className='margin-bottom-15' />
-
-//       {/* </Grid> */}
-//     </div>
-//   )
-// }
