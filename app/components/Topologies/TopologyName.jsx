@@ -7,12 +7,12 @@ import { Typography } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
   root: {
     ...theme.typography.button,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#dedede' || theme.palette.background.default,
     padding: theme.spacing(1)
   }
 }))
 
-const Name = ({ name, setName, disabled }) => {
+const Name = ({ name, setName, disabled, status }) => {
   if (disabled) {
     const classes = useStyles()
     return (

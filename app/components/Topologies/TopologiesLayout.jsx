@@ -1,5 +1,3 @@
-import 'regenerator-runtime/runtime.js'
-
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'

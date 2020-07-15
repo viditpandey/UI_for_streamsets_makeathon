@@ -111,7 +111,10 @@ const getTreeCompatibleData = ({ list, handlePipelineClick }) => {
   })
 }
 
-export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, propsName = '', propsSelectedPipelines = [] }) {
+export default function TopolgyRegisterationLayout ({
+  propsTopologyData = {}, propsName = '',
+  propsSelectedPipelines = [], renderMetrics = null
+}) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
 
@@ -235,7 +238,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
       <div style={{ padding: '15px' }}>
 
         <form noValidate autoComplete='off'>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} alignItems='center'>
 
             <Grid item xs={12} md={7}><TopologyName disabled={viewMode} name={name} setName={setName} /></Grid>
 
@@ -276,6 +279,11 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
             setOpen={setOpenConfigDialog}
           />
           <br />
+
+          {/* <div>
+            {renderMetrics(topologyData)}
+            <br />
+          </div> */}
 
           <RenderPipelineConfigs
             pipeline={selectedPipeline}

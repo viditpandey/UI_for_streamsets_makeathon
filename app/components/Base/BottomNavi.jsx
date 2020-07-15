@@ -46,7 +46,7 @@ export default function SimpleBottomNavigation () {
       showLabels
       className={classes.root}
     >
-      <BottomNavigationAction label='All Pipelines' icon={<AllInclusiveIcon />} />
+      <BottomNavigationAction label='Pipelines' icon={<AllInclusiveIcon />} />
       <BottomNavigationAction label='Topologies' icon={<AccountTreeIcon />} />
       <BottomNavigationAction label='Single Topology' icon={<InfoIcon />} />
     </BottomNavigation>

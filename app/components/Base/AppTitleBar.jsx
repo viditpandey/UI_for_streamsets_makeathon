@@ -5,7 +5,9 @@ import React from 'react'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 
+import { CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1
@@ -28,7 +30,7 @@ export default function AppTitleBar ({ text, button }) {
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' className={classes.title}>
-            {text}
+            {text || <CircularProgress color='inherit' />}
           </Typography>
           {button}
         </Toolbar>

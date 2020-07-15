@@ -1,5 +1,3 @@
-import 'regenerator-runtime/runtime.js'
-
 import React, { useState, useEffect, useContext } from 'react'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
@@ -20,7 +18,7 @@ export default function TopologyLayout ({ id }) {
     async function getTopologyData (id) {
       const res = await getTopologyById({ topologyId: id })
       setTopologyData(res)
-      setAppTitle({ text: `TOPOLOGY: ${res.topologyId} ${id}` })
+      setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
     }
     getTopologyData(id)
     id && setPolling(true)
