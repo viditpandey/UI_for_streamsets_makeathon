@@ -21,6 +21,11 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       break
 
     case 'STOPPED':
+      buttonText = 'START TOPOLOGY'
+      style = { background: '#5cb85c' } // green
+      startIcon = <PlayCircleFilledWhiteIcon />
+      handleClickAction = startTopology
+      break
     case 'FINISHED':
       buttonText = 'RESET TOPOLOGY'
       style = { background: '#5cb85c' } // green
