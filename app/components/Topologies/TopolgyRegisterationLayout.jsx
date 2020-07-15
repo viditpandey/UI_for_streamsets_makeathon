@@ -30,10 +30,10 @@ import 'react-sortable-tree/style.css'
 // const PIPELINE_STATUS = ['STARTING', 'RETRY', , 'RUNNING', 'FINISHED', 'EDITED', 'STOPPED']
 
 const getStyleByPipelineStatus = {
-  STARTING: { background: '#0063bf' }, // dark-blue
+  STARTING: { background: '#a9cae8' }, // light-blue
   RETRY: { background: '#f2dede' }, // red
   RUNNING: { background: '#dff0d8' }, // light green
-  FINISHED: { background: '#077d40' }, // dark green
+  FINISHED: { background: '#b3d6a5' }, // slightly darker than light green
   EDITED: { background: '#dedede' }, // grey
   STOPPED: { background: '#f2dede' }, // red
   ERROR: { background: '#f2dede' }, // red
@@ -44,7 +44,6 @@ const getStyleByPipelineStatus = {
 }
 
 const renderNode = ({ p, handlePipelineClick }) => {
-  console.log(getStyleByPipelineStatus[p.status])
   return (
     <Chip
       id={p.pipelineId}
@@ -121,7 +120,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
       createTopology({ finalTreeData })
       enqueueSnackbar('Topology created succesfully', { variant: 'success' })
       // history.push('/topologies')
-      window.location = '/topologies'
+      // window.location = '/topologies'
     }
   }
 

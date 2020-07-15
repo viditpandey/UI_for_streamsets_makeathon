@@ -19,7 +19,10 @@ export const createTopology = async (formData) => {
         topologyFields
       }
     }
-    ).catch(e => ({ data: {} }))
+    ).then(res => {
+      window.location = '/topologies'
+    })
+      .catch(e => ({ data: {} }))
     const response = res.data
     console.log(`create topology attempted for topologyId ${formData.topologyId}, response received: ${JSON.stringify(response)}`)
     return response
