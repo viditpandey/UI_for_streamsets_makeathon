@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { BASE_URL, mockedTopology } from '../configs/constants'
 
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
@@ -103,13 +104,14 @@ export const getTopologies = async () => {
       method: 'get',
       url: GET_ALL_TOPOLOGIES
     }
-    ).catch(e => ({ data: [] }))
+    ).catch(e => { throw (e) })
+    // ).catch(e => ({ data: [] }))
     const response = res.data
     console.log('get all topologies attempted , response received')
     return response
   } catch (e) {
     console.error('[TopologyActions.getTopologies] error:', e)
-    return []
+    throw e
   }
 }
 

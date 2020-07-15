@@ -16,6 +16,19 @@ export default function TopologiesLayout () {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
 
+  const axiosHandler = async ({ method = () => {}, methodParams, errorMessage = 'Action failed', successMessage, infoMessage }) => {
+    let failed = false
+    const res = await method(methodParams)
+      .catch(e => {
+        failed = true
+        enqueueSnackbar(errorMessage, { variant: 'error' })
+        return null
+      })
+    !failed && successMessage && enqueueSnackbar(successMessage, { variant: 'success' })
+    !failed && infoMessage && enqueueSnackbar(infoMessage, { variant: 'info' })
+    return res
+  }
+
   const [topologies, setTopologies] = useState([])
 
   const newTopology = (
@@ -31,9 +44,10 @@ export default function TopologiesLayout () {
   useEffect(() => {
     setAppTitle({ text: 'TOPOLOGIES', button: newTopology })
     async function fetchTopologies () {
-      const res = await getTopologies()
-      setTopologies(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
-      enqueueSnackbar('Topologies fetched succesfully', { variant: 'info' })
+      const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
+      // const res = await getTopologies()
+      res && setTopologies(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
+      // res && enqueueSnackbar('Topologies fetched succesfully', { variant: 'info' })
     }
     fetchTopologies()
   }, [])

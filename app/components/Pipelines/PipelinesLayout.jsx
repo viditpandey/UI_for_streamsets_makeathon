@@ -20,15 +20,27 @@ export default function PipelinesLayout () {
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 
-  // const [checked, setChecked] = useState([])
+  const axiosHandler = async ({ method = () => {}, methodParams, errorMessage = 'Action failed', successMessage, infoMessage }) => {
+    let failed = false
+    const res = await method(methodParams)
+      .catch(e => {
+        failed = true
+        enqueueSnackbar(errorMessage, { variant: 'error' })
+        return null
+      })
+    !failed && successMessage && enqueueSnackbar(successMessage, { variant: 'success' })
+    !failed && infoMessage && enqueueSnackbar(infoMessage, { variant: 'info' })
+    return res
+  }
+
   const [pipelines, setPipelines] = useState([])
 
   useEffect(() => {
     setAppTitle({ text: 'PIPELINES' })
     async function fetchPipelines () {
-      const res = await getPipelines()
-      setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
-      enqueueSnackbar('pipelines fetched succesfully', { variant: 'info' })
+      const res = await axiosHandler({ method: getPipelines, errorMessage: 'pipelines fetch failed', infoMessage: 'pipelines fetched succesfully' })
+      // enqueueSnackbar('pipelines fetched succesfully', { variant: 'info' })
+      res && setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
     }
     fetchPipelines()
   }, [])
@@ -63,27 +75,21 @@ export default function PipelinesLayout () {
   }
 
   const handlePipelineActionButtonClick = (pipelineId) => async () => {
-    // const currentIndex = checked.indexOf(pipelineId)
-    // const newChecked = [...checked]
-
-    // console.log('handleToggle -> shouldStartPipeline(pipelineId)', shouldStartPipeline(pipelineId))
     if (shouldStartPipeline(pipelineId)) {
-      // newChecked.push(pipelineId)
-      const t = await startPipeline({ pipelineId })
-      enqueueSnackbar('pipeline started succesfully', { variant: 'success' })
-      updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
+      const res = await axiosHandler({ method: startPipeline, methodParams: { pipelineId }, errorMessage: 'Pipeline start failed', successMessage: 'pipeline started succesfully' })
+      // const t = await startPipeline({ pipelineId })
+      // t && enqueueSnackbar('pipeline started succesfully', { variant: 'success' })
+      res && updatePipeline({ pipelineId: res.pipelineId, property: 'status', newVal: res.status })
     } else {
-      // newChecked.splice(currentIndex, 1)
-      const t = await stopPipeline({ pipelineId })
-      enqueueSnackbar('pipeline stopped succesfully', { variant: 'success' })
-      updatePipeline({ pipelineId: t.pipelineId, property: 'status', newVal: t.status })
+      const res = await axiosHandler({ method: stopPipeline, methodParams: { pipelineId }, errorMessage: 'Pipeline stop failed', successMessage: 'Pipeline stopped succesfully' })
+      // const t = await stopPipeline({ pipelineId })
+      // t && enqueueSnackbar('pipeline stopped succesfully', { variant: 'success' })
+      res && updatePipeline({ pipelineId: res.pipelineId, property: 'status', newVal: res.status })
     }
     console.log('handle toggle called')
-    // setChecked(newChecked)
   }
 
   const getPipelineActionButton = item => {
-    // const isChecked = checked.indexOf(item.pipelineId) !== -1
     let button = <PlayArrowIcon style={{ color: '#077d40' }} />
     switch (item.status) {
       case 'STARTING':
