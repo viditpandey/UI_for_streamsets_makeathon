@@ -94,7 +94,7 @@ export default function TopologyActionButton ({
 
   return (
     <div>
-      <Grid container spacing={3}>
+      <Grid container spacing={0} justify='flex-end'>
         {renderSecondaryButton && (
           <Grid item xs={12} md={6}>
             <Button

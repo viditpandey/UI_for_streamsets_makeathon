@@ -6,6 +6,8 @@ import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
 
+const MetricsLayout = React.lazy(() => import('../Graphs/DataProcessRateGraph'))
+
 const MAX_POLL_COUNT = 2
 
 export default function TopologyLayout ({ id }) {
@@ -42,6 +44,9 @@ export default function TopologyLayout ({ id }) {
         propsName={topologyData.topologyId}
         propsSelectedPipelines={topologyData.topologyItems}
         propsTopologyData={topologyData}
+        renderMetrics={() => {
+          return <MetricsLayout topologyData={topologyData} />
+        }}
       />
     </div>
   )
