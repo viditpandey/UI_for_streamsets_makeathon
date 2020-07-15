@@ -20,7 +20,7 @@ export default function TopologiesLayout () {
 
   const newTopology = (
     <Button
-      onClick={() => history.push('/topologies/new')}
+      onClick={() => history.push('/topologies/create')}
       variant='contained'
       color='primary'
       startIcon={<AddCircleIcon />}

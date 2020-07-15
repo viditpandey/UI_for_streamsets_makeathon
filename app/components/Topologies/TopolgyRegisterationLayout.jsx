@@ -100,7 +100,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
       pipelineId: pipelineId,
       waitTime: Number(waitTime || 0),
       threshold: Number(threshold || 0),
-      dependencyCriteria: dependencyCriteria || 'stop',
+      dependencyCriteria: dependsOn === 'root' ? 'stop' : (dependencyCriteria || 'stop'),
       createdBy: 'From UI',
       dependsOn
     })
@@ -210,6 +210,10 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
     setSelectedPipeline(pipeline)
   }
 
+  const hideToggleForRootNode = () => {
+    return treeData.map(p => p.pipelineId).indexOf(selectedPipeline.pipelineId) !== -1
+  }
+
   return (
     <Paper>
       <div style={{ padding: '15px' }}>
@@ -221,6 +225,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
             name={name}
             viewMode={viewMode}
           />} */}
+
         <form noValidate autoComplete='off'>
           <Grid container spacing={3}>
 
@@ -273,6 +278,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
             dependencyCriteria={dependencyCriteria}
             setDependencyCriteria={setDependencyCriteria}
             disabled={viewMode}
+            hideToggle={hideToggleForRootNode()}
           />
 
         </form>

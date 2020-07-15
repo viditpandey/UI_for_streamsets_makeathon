@@ -15,7 +15,7 @@ export const Transition = React.forwardRef(function Transition (props, ref) {
 export default function RenderPipelineConfigs ({
   open, setOpen, pipeline, disabled,
   setSelectedPipeline, threshold, setThreshold, waitTime,
-  setWaitTime, dependencyCriteria, setDependencyCriteria
+  setWaitTime, dependencyCriteria, setDependencyCriteria, hideToggle
 }) {
   let titleDialog = 'No pipeline Selected'
   if (!pipeline) return null
@@ -53,13 +53,15 @@ export default function RenderPipelineConfigs ({
             label='Time dependency (seconds).'
           />
           <br />
-          {`Run this pipeline at ${dependencyCriteria} of parent pipeline`}
-          <Switch
-            checked={dependencyCriteria === 'stop'}
-            onChange={e => { !disabled && setDependencyCriteria(dependencyCriteria === 'start' ? 'stop' : 'start') }}
-            name='dependencyCriteria'
-            inputProps={{ 'aria-label': 'secondary checkbox' }}
-          />
+          {!hideToggle &&
+            <div>{`Run this pipeline at ${dependencyCriteria} of parent pipeline`}
+              <Switch
+                checked={dependencyCriteria === 'stop'}
+                onChange={e => { !disabled && setDependencyCriteria(dependencyCriteria === 'start' ? 'stop' : 'start') }}
+                name='dependencyCriteria'
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
+            </div>}
         </DialogContent>
         <DialogActions>
           <Button
