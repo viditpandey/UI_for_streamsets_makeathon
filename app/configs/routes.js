@@ -5,11 +5,13 @@ import { useParams } from 'react-router-dom'
 // import TopologiesLayout from '../components/Topologies/TopologiesLayout'
 // import TopolgyRegisterationLayout from '../components/Topologies/TopolgyRegisterationLayout'
 // import TopologyLayout from '../components/Topologies/TopologyLayout'
+// import Line from '../components/Graphs/DataProcessRateGraph'
 const PipelinesLayout = React.lazy(() => import('../components/Pipelines/PipelinesLayout'))
 const PipelineLayout = React.lazy(() => import('../components/Pipelines/PipelineLayout'))
 const TopologiesLayout = React.lazy(() => import('../components/Topologies/TopologiesLayout'))
 const TopolgyRegisterationLayout = React.lazy(() => import('../components/Topologies/TopolgyRegisterationLayout'))
 const TopologyLayout = React.lazy(() => import('../components/Topologies/TopologyLayout'))
+const Line = React.lazy(() => import('../components/Graphs/DataProcessRateGraph'))
 
 const routes = [
   {
@@ -36,6 +38,10 @@ const routes = [
     path: '/topologies/:id',
     exact: true,
     component: () => <Topolgy />
+  }, {
+    path: '/metrics',
+    exact: true,
+    component: () => <Line />
   }
 ]
 
