@@ -7,7 +7,7 @@ import React from 'react'
 import ReplayIcon from '@material-ui/icons/Replay'
 import SaveIcon from '@material-ui/icons/Save'
 
-export default function TopologyActionButton ({ topology, status, disabled, createTopology, startTopology, stopTopology, validateTopology }) {
+export default function TopologyActionButton ({ topology, status, disabled, createTopology, startTopology, stopTopology, validateTopology, resetTopology }) {
   let startIcon = <SaveIcon />
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}
@@ -20,9 +20,15 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
       handleClickAction = createTopology
       break
 
-    case 'TO_START':
     case 'STOPPED':
     case 'FINISHED':
+      buttonText = 'RESET TOPOLOGY'
+      style = { background: '#5cb85c' } // green
+      startIcon = <CheckCircleOutlineIcon />
+      handleClickAction = resetTopology
+      break
+
+    case 'TO_START':
       buttonText = 'VALIDATE TOPOLOGY'
       style = { background: '#5cb85c' } // green
       startIcon = <CheckCircleOutlineIcon />
@@ -53,7 +59,7 @@ export default function TopologyActionButton ({ topology, status, disabled, crea
     case 'ERROR':
       buttonText = 'RETRY VALIDATION'
       startIcon = <ReplayIcon />
-      //   handleClickAction = validateTopology
+      handleClickAction = validateTopology
       break
 
     default:

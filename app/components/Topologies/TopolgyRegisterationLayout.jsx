@@ -19,7 +19,7 @@ import TopologyActionButton from './TopologyActionButton'
 
 import { AppBarContext } from '../Base/Home'
 import { cloneDeep, isEmpty } from 'lodash'
-import { createTopology, startTopology, stopTopology, validateTopology } from '../../actions/TopologyActions'
+import { createTopology, startTopology, stopTopology, validateTopology, resetTopology } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
 import { listToTree } from '../../helper/tree_util_functions'
 // import { useHistory } from 'react-router-dom'
@@ -234,6 +234,7 @@ export default function TopolgyRegisterationLayout ({ propsTopologyData = {}, pr
                   startTopology={() => startTopology({ topologyId: name })}
                   stopTopology={() => stopTopology({ topologyId: name })}
                   validateTopology={() => validateTopology({ topologyId: name })}
+                  resetTopology={() => resetTopology({ topologyId: name })}
                 />
               </div>
             </Grid>
