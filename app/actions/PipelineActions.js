@@ -8,13 +8,17 @@ const PIPELINES_STATUS = BASE_URL + '/getpipelinestatus'
 
 export const getPipelines = async () => {
   try {
-    const res = await axios.get(GET_ALL_PIPELINES).catch(e => ({ data: mockedPipelines }))
+    const res = await axios.get(GET_ALL_PIPELINES)
+      .catch(e => { throw (e) })
+    // .catch(e => ({ data: mockedPipelines }))
     const pipelines = res.data
+    console.log('mockedPipelines', mockedPipelines)
     console.log('GET: Here\'s the list of pipelines', pipelines)
     return pipelines
   } catch (e) {
     console.error('[PipelineActions.getPipelines] error:', e)
     return mockedPipelines
+    // throw e
   }
 }
 
@@ -29,13 +33,15 @@ export const startPipeline = async ({ pipelineId }) => {
         rev: 0
       }
     }
-    ).catch(e => ({ data: {} }))
+    ).catch(e => { throw (e) })
+    // ).catch(e => ({ data: {} }))
     const pipelineStatus = res.data
     console.log(`start attempted for pipelineId ${pipelineId}, response received: ${JSON.stringify(pipelineStatus)}`)
     return pipelineStatus
   } catch (e) {
     console.error('[PipelineActions.startPipeline] error:', e)
-    return {}
+    // return {}
+    throw e
   }
 }
 
@@ -45,13 +51,15 @@ export const stopPipeline = async ({ pipelineId }) => {
       pipelineId,
       action: 'stop',
       rev: 0
-    }).catch(e => ({ data: {} }))
+    }).catch(e => { throw e })
+    // }).catch(e => ({ data: {} }))
     const pipelineStatus = res.data
     console.log(`stop attempted for pipelineId ${pipelineId}, response received: ${JSON.stringify(pipelineStatus)}`)
     return pipelineStatus
   } catch (e) {
     console.error('[PipelineActions.stopPipeline] error:', e)
-    return {}
+    // return {}
+    throw e
   }
 }
 
