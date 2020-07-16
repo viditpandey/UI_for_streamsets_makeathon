@@ -1,27 +1,41 @@
 import React, { useEffect } from 'react'
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, LabelList, BarChart, Legend, Bar, Label } from 'recharts'
 import moment from 'moment'
-import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 
-export default function MyChart ({ topologyData = [], metricsData }) {
+export default function MyChart ({ topologyData = [], metricsData = [] }) {
   const [toggle, setToggle] = React.useState(true)
   // const [processedData, setProcessedData] = React.useState({})
   const data = []
+  const processedData = []
 
   topologyData && topologyData.forEach((element) => {
     const startTime = moment(element.startTime, 'DD-MM-YYYY hh:mm:ss')
     const endTime = moment(element.endTime, 'DD-MM-YYYY hh:mm:ss')
-    console.log('----444444444----', element.pipelineId)
-    // const res = await getNumberOfRecordsProcessed({ pipelineId: element.pipelineId }).catch(e => console.log(e))
+    const totalTime = endTime.diff(startTime) / 1000
     console.log(metricsData)
-    const row = {
+    const dataRow = {
       name: element.pipelineTitle,
-      ProcessingTime: endTime.diff(startTime) / 1000
+      YAxisData: totalTime / 1000
     }
-    data.push(row)
+
+    const processedDataRow = {
+      name: metricsData && metricsData.find(i => i.name === element.pipelineId),
+      YAxisData: metricsData && (metricsData.find(i => i.name === element.pipelineId).res / totalTime)
+    }
+    console.log('---oooo-----', processedDataRow)
+    processedData.push(processedDataRow)
+    data.push(dataRow)
   })
   return (
-    toggle ? MyBarChart({ data }) : MyLineChart({ data })
+    toggle
+      ? (
+        <div>
+          {MyBarChart({ data })}
+          {MyBarChart({ processedData })}
+
+        </div>
+      )
+      : MyLineChart({ data })
   )
 }
 
@@ -68,7 +82,7 @@ function MyBarChart ({ data }) {
         <Label value='seconds' position='insideLeft' angle={90} />
       </YAxis>
       <Tooltip />
-      <Bar dataKey='ProcessingTime' fill='#8884d8' />
+      <Bar dataKey='YAxisData' fill='#8884d8' />
     </BarChart>
   )
 }
