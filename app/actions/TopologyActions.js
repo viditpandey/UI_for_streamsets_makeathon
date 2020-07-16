@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { BASE_URL, mockedTopology } from '../configs/constants'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
 const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
@@ -15,7 +15,7 @@ const DELETE_TOPOLOGY = topologyId => `${BASE_URL}/deleteTopology/${topologyId}`
 export const createTopology = async (formData) => {
   console.log('createTopology, formdata:', formData)
   try {
-    const history = useHistory()
+    // const history = useHistory()
     const topologyFields = formData.finalTreeData
     const res = await axios({
       method: 'post',
@@ -25,8 +25,8 @@ export const createTopology = async (formData) => {
       }
     }
     ).then(res => {
-      // window.location = '/topologies'
-      history.push('/topologies')
+      window.location = '/topologies'
+      // history.push('/topologies')
     })
       .catch(e => ({ data: {} }))
     const response = res.data
@@ -136,15 +136,15 @@ export const getTopologyById = async ({ topologyId }) => {
 
 export const deleteTopology = async ({ topologyId }) => {
   try {
-    const history = useHistory()
+    // const history = useHistory()
     const res = await axios({
       method: 'delete',
       url: DELETE_TOPOLOGY()
       // data: {}
     })
       .then(res => {
-        // window.location = '/topologies'
-        history.push('/topologies')
+        window.location = '/topologies'
+        // history.push('/topologies')
       })
       .catch(e => { throw (e) })
     const response = res.data
