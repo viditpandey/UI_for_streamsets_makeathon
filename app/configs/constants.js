@@ -16,6 +16,23 @@ export const HEX_CODES = {
 
 }
 
+export const getStyleByPipelineStatus = {
+  STARTING: { background: HEX_CODES.lightBlue },
+  RETRY: { background: HEX_CODES.lightRed },
+  RUNNING: { background: HEX_CODES.lightGreen },
+  FINISHED: { background: HEX_CODES.greenVariant1 }, // slightly darker than light green
+  EDITED: { background: HEX_CODES.grey },
+  STOPPED: { background: HEX_CODES.lightRed },
+  ERROR: { background: HEX_CODES.lightRed },
+  RUN_ERROR: { background: HEX_CODES.lightRed },
+  INVALID: { background: HEX_CODES.lightRed },
+  VALID: { background: HEX_CODES.lightGreen },
+  VALIDATING: { background: HEX_CODES.lightBlue },
+  TO_START: { background: HEX_CODES.grey },
+  PAUSED: { background: HEX_CODES.yellow },
+  undefined: { background: HEX_CODES.grey }
+}
+
 export const mockedTopology = {
   topologyId: 'test2',
   topologyStatus: 'RUNNING',

@@ -2,19 +2,20 @@ import React from 'react'
 import TextField from '@material-ui/core/TextField'
 
 import { makeStyles } from '@material-ui/core/styles'
+import { getStyleByPipelineStatus } from '../../configs/constants'
 import { Typography } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (topologyStatus) => makeStyles((theme) => ({
   root: {
     ...theme.typography.button,
-    backgroundColor: '#dedede' || theme.palette.background.default,
+    backgroundColor: getStyleByPipelineStatus[topologyStatus].background || '#dedede' || theme.palette.background.default,
     padding: theme.spacing(1)
   }
 }))
 
 const Name = ({ name, setName, disabled, topologyStatus }) => {
   if (disabled) {
-    const classes = useStyles()
+    const classes = useStyles(topologyStatus)()
     const status = `(${topologyStatus})`
     return (
       <div>
