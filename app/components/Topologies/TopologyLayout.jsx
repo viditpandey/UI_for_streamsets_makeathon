@@ -84,7 +84,7 @@ export default function TopologyLayout ({ id }) {
         <Switch
           checked={autoRefresh}
           onChange={e => {
-            enqueueSnackbar(`Topology status auto refresh turned ${!autoRefresh ? 'on' : 'off'}`, { variant: 'info' })
+            enqueueSnackbar(`Topology status auto refresh turned ${!autoRefresh ? 'on' : 'off'}`, { variant: 'success' })
             setAutoRefresh(!autoRefresh)
           }}
           name='topologyAutoRefreshStatus'
