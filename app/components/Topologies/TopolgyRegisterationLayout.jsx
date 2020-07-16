@@ -84,7 +84,7 @@ const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
   }) : () => null
   const chipLabel = (
 
-    <div>{p.title || p.pipelineId} ({statusLabel})
+    <div>{p.title || p.pipelineTitle || p.pipelineId} ({statusLabel})
       <div style={{ margin: '0 10px' }}>
         {<CustomProgressBar />}
       </div>

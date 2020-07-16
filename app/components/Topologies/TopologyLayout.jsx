@@ -30,7 +30,6 @@ export default function TopologyLayout ({ id }) {
   useEffect(() => {
     async function getTopologyData (id) {
       const res = await getTopologyById({ topologyId: id })
-      if (res && (res.topologyStatus !== topologyData.topologyStatus)) enqueueSnackbar(`Topology Status recently changed to ${res.topologyStatus} from previous ${topologyData.topologyStatus}`, { variant: 'info' })
       setTopologyData(res)
       setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
       res && setPolling(true)
@@ -44,6 +43,7 @@ export default function TopologyLayout ({ id }) {
     const { topologyId } = topologyData
     const latestStatus = await getTopologyById({ topologyId })
     if (!isEmpty(latestStatus)) {
+      if (latestStatus.topologyStatus !== topologyData.topologyStatus) enqueueSnackbar(`Topology Status changed from ${topologyData.topologyStatus} to ${latestStatus.topologyStatus}.`, { variant: 'info' })
       setTopologyData(latestStatus)
       setFetchMetrics(true)
     }
