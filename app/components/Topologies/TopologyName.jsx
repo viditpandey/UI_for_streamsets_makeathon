@@ -8,7 +8,7 @@ import { Typography } from '@material-ui/core'
 const useStyles = (topologyStatus) => makeStyles((theme) => ({
   root: {
     ...theme.typography.button,
-    backgroundColor: getStyleByPipelineStatus[topologyStatus].background || '#dedede' || theme.palette.background.default,
+    backgroundColor: (getStyleByPipelineStatus[topologyStatus] && getStyleByPipelineStatus[topologyStatus].background) || '#dedede' || theme.palette.background.default,
     padding: theme.spacing(1)
   }
 }))
