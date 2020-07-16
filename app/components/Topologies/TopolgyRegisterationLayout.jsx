@@ -116,7 +116,8 @@ const getTreeCompatibleData = ({ list, topologyStatus, handlePipelineClick }) =>
 
 export default function TopolgyRegisterationLayout ({
   propsTopologyData = {}, propsName = '',
-  propsSelectedPipelines = [], renderMetrics = () => {}
+  propsSelectedPipelines = [], renderMetrics = () => {},
+  setPollCount = () => {}
 }) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)

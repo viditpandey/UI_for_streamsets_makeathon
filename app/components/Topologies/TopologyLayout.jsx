@@ -1,43 +1,55 @@
 import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
 import MetricsLayout from '../Graphs/DataProcessRateGraph'
 import React, { useState, useEffect, useContext } from 'react'
+import Switch from '@material-ui/core/Switch'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
 import { AppBarContext } from '../Base/Home'
 import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
+import { Typography } from '@material-ui/core'
 import { useInterval } from '../../helper/useInterval'
 import { useSnackbar } from 'notistack'
-// const MAX_POLL_COUNT = 200
+
+// const MAX_POLL_COUNT = 50
 
 export default function TopologyLayout ({ id }) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
   const [topologyData, setTopologyData] = useState({})
-  const [shouldPoll, setPolling] = useState(false)
+  const [autoRefresh, setAutoRefresh] = useState(true)
+  // const [shouldPoll, setPolling] = useState(false)
+  // const [pollCount, setPollCount] = useState(0)
   const [fetchMetrics, setFetchMetrics] = useState(false)
   const [metricsData, setMetricsData] = useState([])
-
-  const shouldPollContinue = () => {
-    // const inactiveStatus = ['TO_START', 'FINISHED', 'EDITED', 'STOPPED', 'ERROR', 'RUN_ERROR', 'INVALID']
-    const inactiveStatus = ['FINISHED']
-    const topologyInactive = inactiveStatus.indexOf(topologyData.topologyStatus) !== -1
-    if (topologyInactive) return false
-    return true
-  }
 
   useEffect(() => {
     async function getTopologyData (id) {
       const res = await getTopologyById({ topologyId: id })
-      if (res && (res.topologyStatus !== topologyData.topologyStatus)) enqueueSnackbar(`Topology Status recently changed to ${res.topologyStatus} from previous ${topologyData.topologyStatus}`, { variant: 'info' })
+      if (res && (res.topologyStatus !== topologyData.topologyStatus)) enqueueSnackbar(`Topology Status recently changed to ${res.topologyStatus} from ${topologyData.topologyStatus || '...'}`, { variant: 'info' })
       setTopologyData(res)
       setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
-      res && setPolling(true)
+      // res && setPolling(true)
       res && setFetchMetrics(true)
     }
     getTopologyData(id)
   }, [])
+
+  const shouldPollContinue = () => {
+    return autoRefresh
+    // if (autoRefresh) return true
+    // // const inactiveStatus = ['TO_START', 'FINISHED', 'EDITED', 'STOPPED', 'ERROR', 'RUN_ERROR', 'INVALID']
+    // const inactiveStatus = ['FINISHED']
+    // const topologyInactive = inactiveStatus.indexOf(topologyData.topologyStatus) !== -1
+    // if (topologyInactive) {
+    //   return true
+    //   // setPollCount(pollCount + 1)
+    //   // if (pollCount > MAX_POLL_COUNT) return false
+    //   // else return true
+    // }
+    // return true
+  }
 
   useInterval(async () => {
     if (!shouldPollContinue()) return
@@ -49,7 +61,7 @@ export default function TopologyLayout ({ id }) {
     }
     // else setPolling(false)
     // if (sameStatus >= MAX_POLL_COUNT) { setPolling(false); setSameStatus(1) }
-  }, shouldPoll ? 2000 : null)
+  }, autoRefresh ? 2000 : null)
 
   useEffect(() => {
     if (fetchMetrics) { console.log('this is not called'); getProcessedRecordsNumber(topologyData) }
@@ -68,11 +80,23 @@ export default function TopologyLayout ({ id }) {
 
   return (
     <div>
+      <Typography>{'Auto refresh topology status'}
+        <Switch
+          checked={autoRefresh}
+          onChange={e => {
+            enqueueSnackbar(`Topology status auto refresh turned ${!autoRefresh ? 'on' : 'off'}`, { variant: 'info' })
+            setAutoRefresh(!autoRefresh)
+          }}
+          name='topologyAutoRefreshStatus'
+          inputProps={{ 'aria-label': 'secondary checkbox' }}
+        />
+      </Typography>
 
       <TopolgyRegisterationLayout
         propsName={topologyData.topologyId}
         propsSelectedPipelines={topologyData.topologyItems}
         propsTopologyData={topologyData}
+        // setPollCount={setPollCount}
         renderMetrics={() => {
           return (
             <AccordianWrapper

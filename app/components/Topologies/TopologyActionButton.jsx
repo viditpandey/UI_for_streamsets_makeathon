@@ -64,7 +64,7 @@ export default function TopologyActionButton ({
     case 'VALIDATING':
       buttonText = 'VALIDATING'
       style = { background: HEX_CODES.blue }
-      startIcon = <CircularProgress color={HEX_CODES.lightGreen} size={15} />
+      startIcon = <CircularProgress color='inherit' size={15} />
       handleClickAction = () => {}
       renderSecondaryButton = false
       break
@@ -86,7 +86,7 @@ export default function TopologyActionButton ({
       renderSecondaryButton = true
       secondaryButtonText = 'PAUSING TOPOLOGY'
       handleSecondaryClickAction = () => {}
-      secondaryButtonIcon = <CircularProgress color={HEX_CODES.lightGreen} size={15} />
+      secondaryButtonIcon = <CircularProgress color='inherit' size={15} />
       break
 
     case 'RUNNING':
