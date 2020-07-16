@@ -5,9 +5,12 @@ export const HEX_CODES = {
   blue: '#0063bf',
   red: '#D9534F',
   grey: '#dedede',
+  yellow: '#fafab1',
+
   lightBlue: '#a9cae8',
   lightRed: '#f2dede',
   lightGreen: '#dff0d8',
+
   greenVariant1: '#b3d6a5',
   blueVariant1: '#509ade'
 
