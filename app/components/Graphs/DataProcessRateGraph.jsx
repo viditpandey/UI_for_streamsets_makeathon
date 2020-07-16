@@ -3,8 +3,7 @@ import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, LabelList, BarCh
 import moment from 'moment'
 import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 
-export default function MyChart ({ topologyData = [] }) {
-  console.log('-----tttttttttt---', topologyData)
+export default function MyChart ({ topologyData = [], metricsData }) {
   const [toggle, setToggle] = React.useState(true)
   // const [processedData, setProcessedData] = React.useState({})
   const data = []
@@ -12,9 +11,9 @@ export default function MyChart ({ topologyData = [] }) {
   topologyData && topologyData.forEach((element) => {
     const startTime = moment(element.startTime, 'DD-MM-YYYY hh:mm:ss')
     const endTime = moment(element.endTime, 'DD-MM-YYYY hh:mm:ss')
-    console.log('--------', element.pipelineId)
+    console.log('----444444444----', element.pipelineId)
     // const res = await getNumberOfRecordsProcessed({ pipelineId: element.pipelineId }).catch(e => console.log(e))
-    // console.log(res)
+    console.log(metricsData)
     const row = {
       name: element.pipelineTitle,
       ProcessingTime: endTime.diff(startTime) / 1000

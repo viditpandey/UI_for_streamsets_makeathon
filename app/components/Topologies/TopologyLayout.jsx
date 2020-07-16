@@ -7,14 +7,15 @@ import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
 import MetricsLayout from '../Graphs/DataProcessRateGraph'
-
+import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 // const MAX_POLL_COUNT = 200
 
 export default function TopologyLayout ({ id }) {
   const { setAppTitle } = useContext(AppBarContext)
   const [topologyData, setTopologyData] = useState({})
   const [shouldPoll, setPolling] = useState(false)
-  // const [sameStatus, setSameStatus] = useState(0)
+  const [fetchMetrics, setFetchMetrics] = useState(false)
+  const [metricsData, setMetricsData] = useState([])
 
   const shouldPollContinue = () => {
     // const inactiveStatus = ['TO_START', 'FINISHED', 'EDITED', 'STOPPED', 'ERROR', 'RUN_ERROR', 'INVALID']
@@ -29,21 +30,38 @@ export default function TopologyLayout ({ id }) {
       const res = await getTopologyById({ topologyId: id })
       setTopologyData(res)
       setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
+      res && setPolling(true)
+      res && setFetchMetrics(true)
     }
     getTopologyData(id)
-    id && setPolling(true)
   }, [])
 
   useInterval(async () => {
     if (!shouldPollContinue()) return
     const { topologyId } = topologyData
     const latestStatus = await getTopologyById({ topologyId })
-    if (!isEmpty(latestStatus)) setTopologyData(latestStatus)
+    if (!isEmpty(latestStatus)) {
+      setTopologyData(latestStatus)
+      setFetchMetrics(true)
+    }
     // else setPolling(false)
-    // if (latestStatus && topologyStatus === latestStatus.topologyStatus) setSameStatus(sameStatus + 1)
-    // else setSameStatus(1)
     // if (sameStatus >= MAX_POLL_COUNT) { setPolling(false); setSameStatus(1) }
   }, shouldPoll ? 2000 : null)
+
+  useEffect(() => {
+    if (fetchMetrics) { console.log('this is not called'); getProcessedRecordsNumber(topologyData) }
+  }, [fetchMetrics])
+
+  async function getProcessedRecordsNumber (topologyData) {
+    if (!fetchMetrics) return
+    if ((topologyData.topologyStatus === 'FINISHED') && topologyData.topologyItems) {
+      const allPipelineIDs = topologyData.topologyItems.map(p => p.pipelineId)
+      const finalRes = await Promise.all(allPipelineIDs.map(i => getNumberOfRecordsProcessed({ pipelineId: i })))
+      if (!isEmpty(finalRes)) setFetchMetrics(false)
+      const updatedData = allPipelineIDs.map((pipelineId, index) => ({ name: pipelineId, res: finalRes[index] }))
+      setMetricsData(updatedData)
+    }
+  }
 
   return (
     <div>
@@ -58,7 +76,12 @@ export default function TopologyLayout ({ id }) {
               title='View Metrics'
               renderChildrend={() => {
                 return (
-                  <MetricsLayout topologyData={topologyData.topologyItems} />
+                  <div className='padding-top-30'>
+                    <MetricsLayout
+                      topologyData={topologyData.topologyItems}
+                      metricsData={metricsData}
+                    />
+                  </div>
                 )
               }}
             />

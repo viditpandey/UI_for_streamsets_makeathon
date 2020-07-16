@@ -199,13 +199,10 @@ export default function TopolgyRegisterationLayout ({
   }, [propsName, propsSelectedPipelines])
 
   useEffect(() => {
-    const filteredPipelinesNotInTopology = cloneDeep(allPipelines)
-    selectedPipelines.forEach(p => {
-      const matchingPipeline = allPipelines.findIndex(item => item.pipelineId === p.pipelineId)
-      if (matchingPipeline !== -1) {
-        filteredPipelinesNotInTopology.splice(matchingPipeline)
-      }
-    })
+    if (isEmpty(allPipelines)) return
+    const allPipelinesCloned = cloneDeep(allPipelines)
+    const SelectedPipelineIDs = selectedPipelines.map(i => i.pipelineId)
+    const filteredPipelinesNotInTopology = allPipelinesCloned.filter(i => SelectedPipelineIDs.indexOf(i.pipelineId) === -1)
     availablePipelines(filteredPipelinesNotInTopology)
   }, [selectedPipelines])
 
@@ -326,7 +323,7 @@ const CreateTree = ({ treeData, setTreeData, setFinalTreeData, selectedPipelines
         defaultExpanded
         renderChildrend={() => {
           return (
-            <div className='graph-area-style' style={{ height: height }}>
+            <div className='graph-area-style padding-top-30' style={{ height: height }}>
               <SortableTree
                 treeData={treeData}
                 getNodeKey={({ node }) => { return node.pipelineId }}

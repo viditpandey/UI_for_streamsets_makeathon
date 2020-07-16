@@ -27,7 +27,7 @@ body {
 
 .rst__rowContents {
     border: none !important;
-    box-shadow: none;
+    box-shadow: none !important;
 }
 
 .float-right{
@@ -35,9 +35,12 @@ body {
 }
 
 .graph-area-style {
-    padding-top: 15px;
     max-height: 600px;
     overflow-y: auto;
+}
+
+.padding-top-30 {
+    padding-top: 30px;
 }
 
 .full-width {
