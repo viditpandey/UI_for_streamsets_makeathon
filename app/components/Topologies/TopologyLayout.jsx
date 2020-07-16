@@ -1,3 +1,4 @@
+import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
 import React, { useState, useEffect, useContext } from 'react'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
@@ -45,7 +46,16 @@ export default function TopologyLayout ({ id }) {
         propsSelectedPipelines={topologyData.topologyItems}
         propsTopologyData={topologyData}
         renderMetrics={() => {
-          return <MetricsLayout topologyData={topologyData} />
+          return (
+            <AccordianWrapper
+              title='View Metrics'
+              renderChildrend={() => {
+                return (
+                  <MetricsLayout topologyData={topologyData} />
+                )
+              }}
+            />
+          )
         }}
       />
     </div>
