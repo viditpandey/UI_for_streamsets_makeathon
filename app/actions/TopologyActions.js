@@ -130,7 +130,7 @@ export const getTopologyById = async ({ topologyId }) => {
     const res = await axios.get(GET_TOPOLOGY_BY_ID(topologyId)).catch(e => ({ data: mockedTopology }))
     // const res = await axios.get(GET_TOPOLOGY_BY_ID(topologyId)).catch(e => ({ data: {} }))
     const response = res.data
-    console.log(`Fetched topology data for id: ${topologyId}, data received: ${response}`)
+    // console.log(`Fetched topology data for id: ${topologyId}, data received: ${response}`)
     return response
   } catch (error) {
     console.log('fetching topology data by topoligy ID failed -> error', error)

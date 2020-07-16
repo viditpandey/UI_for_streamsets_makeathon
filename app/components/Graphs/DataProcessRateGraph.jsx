@@ -20,7 +20,8 @@ export default function MyChart ({ topologyData = [], metricsData = [] }) {
 
     const processedDataRow = {
       name: metricsData && element.pipelineTitle,
-      YAxisData: metricsData && (metricsData.find(i => i.name === element.pipelineId).res / totalTime)
+      YAxisData: metricsData && (metricsData.find(i => i.name === element.pipelineId)) &&
+      (metricsData.find(i => i.name === element.pipelineId).res / totalTime)
     }
 
     processedData.push(processedDataRow)
