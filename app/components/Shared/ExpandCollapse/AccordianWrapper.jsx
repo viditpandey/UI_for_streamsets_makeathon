@@ -19,7 +19,6 @@ export default function AccordianWrapper ({ defaultExpanded = false, renderChild
           id='panel1a-header'
         >
           <Typography variant='h6' component='div'>
-                Configure your pipelines dependency:
             {title}
           </Typography>
         </AccordionSummary>
