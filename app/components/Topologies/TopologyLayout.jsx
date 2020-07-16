@@ -6,8 +6,7 @@ import { AppBarContext } from '../Base/Home'
 import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
-
-const MetricsLayout = React.lazy(() => import('../Graphs/DataProcessRateGraph'))
+import MetricsLayout from '../Graphs/DataProcessRateGraph'
 
 // const MAX_POLL_COUNT = 200
 
@@ -59,7 +58,7 @@ export default function TopologyLayout ({ id }) {
               title='View Metrics'
               renderChildrend={() => {
                 return (
-                  <MetricsLayout topologyData={topologyData} />
+                  <MetricsLayout topologyData={topologyData.topologyItems} />
                 )
               }}
             />

@@ -284,11 +284,9 @@ export default function TopolgyRegisterationLayout ({
             setOpen={setOpenConfigDialog}
           />
           <br />
-
-          {/* <div>
+          <div>
             {renderMetrics(topologyData)}
-            <br />
-          </div> */}
+          </div>
 
           <RenderPipelineConfigs
             pipeline={selectedPipeline}

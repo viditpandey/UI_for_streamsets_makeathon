@@ -9,12 +9,12 @@ export default function MyChart ({ topologyData = [] }) {
   // const [processedData, setProcessedData] = React.useState({})
   const data = []
 
-  topologyData && topologyData.forEach(async (element) => {
+  topologyData && topologyData.forEach((element) => {
     const startTime = moment(element.startTime, 'DD-MM-YYYY hh:mm:ss')
     const endTime = moment(element.endTime, 'DD-MM-YYYY hh:mm:ss')
     console.log('--------', element.pipelineId)
-    const res = await getNumberOfRecordsProcessed({ pipelineId: element.pipelineId }).catch(e => console.log(e))
-    console.log(res)
+    // const res = await getNumberOfRecordsProcessed({ pipelineId: element.pipelineId }).catch(e => console.log(e))
+    // console.log(res)
     const row = {
       name: element.pipelineTitle,
       ProcessingTime: endTime.diff(startTime) / 1000
