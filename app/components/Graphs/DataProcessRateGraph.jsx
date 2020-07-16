@@ -1,41 +1,75 @@
-import React from 'react'
-// import { Chart, useChartConfig } from 'react-charts'
-import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, LabelList, Label, Brush } from 'recharts'
-// import { getPipelineHistory } from '../../actions/MetricsActions'
-export default function MyChart () {
-  const data02 = [
-    { name: 'Page A', uv: 400, pv: 1, amt: 3400 },
-    { name: 'Page B', uv: 200, pv: 2, amt: 2400 },
-    { name: 'Page C', uv: 300, pv: 3, amt: 2400 },
-    { name: 'Page D', uv: 100, pv: 4, amt: 2400 },
-    { uv: 500, pv: 5 }
-  ]
-  // getPipelineHistory({ pipelineId: 'Test2e6ddd5c1-8fb5-44bb-8d1e-272d3cc88855' })
+import React, { useEffect } from 'react'
+import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, LabelList, BarChart, Legend, Bar, Label } from 'recharts'
+import moment from 'moment'
+import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 
+export default function MyChart ({ topologyData = [] }) {
+  console.log('-----tttttttttt---', topologyData)
+  const [toggle, setToggle] = React.useState(true)
+  // const [processedData, setProcessedData] = React.useState({})
+  const data = []
+
+  topologyData && topologyData.forEach(async (element) => {
+    const startTime = moment(element.startTime, 'DD-MM-YYYY hh:mm:ss')
+    const endTime = moment(element.endTime, 'DD-MM-YYYY hh:mm:ss')
+    console.log('--------', element.pipelineId)
+    const res = await getNumberOfRecordsProcessed({ pipelineId: element.pipelineId }).catch(e => console.log(e))
+    console.log(res)
+    const row = {
+      name: element.pipelineTitle,
+      ProcessingTime: endTime.diff(startTime) / 1000
+    }
+    data.push(row)
+  })
   return (
+    toggle ? MyBarChart({ data }) : MyLineChart({ data })
+  )
+}
 
+function MyLineChart ({ data }) {
+  return (
     <div className='line-chart-wrapper'>
-      <LineChart width={800} height={800} data={data02} syncId='test'>
+      <LineChart
+        width={800} height={300} data={data} syncId='test' margin={{
+          top: 5, right: 30, left: 20, bottom: 5
+        }}
+      >
         <CartesianGrid stroke='#f5f5f5' fill='#e6e6e6' />
-        <XAxis type='number' dataKey='pv' height={40}>
-          <Label value='Pipelines' position='insideBottom' />
-        </XAxis>
-        <YAxis type='number' unit='rate' width={80}>
-          <Label value='y' position='insideLeft' angle={90} />
-        </YAxis>
-        <Tooltip trigger='click' />
+        <XAxis dataKey='name' />
+        <YAxis domain={[0, 'dataMax+20']} unit=' seconds' />
+        <Tooltip />
         <Line
-          key='uv'
+          key='ProcessingTime'
           type='monotone'
-          dataKey='uv'
+          dataKey='ProcessingTime'
           stroke='#ff7300'
-          strokeDasharray='3 3'
         >
           <LabelList position='bottom' offset={10} dataKey='name' />
         </Line>
-        <Brush dataKey='name' height={30} />
       </LineChart>
     </div>
+  )
+}
 
+function MyBarChart ({ data }) {
+  return (
+    <BarChart
+      width={500}
+      height={300}
+      data={data}
+      margin={{
+        top: 5, right: 30, left: 20, bottom: 5
+      }}
+    >
+      <CartesianGrid />
+      <XAxis dataKey='name'>
+        {/* <Label value='Pipelines' position='center' /> */}
+      </XAxis>
+      <YAxis domain={[0, 'dataMax+20']}>
+        <Label value='seconds' position='insideLeft' angle={90} />
+      </YAxis>
+      <Tooltip />
+      <Bar dataKey='ProcessingTime' fill='#8884d8' />
+    </BarChart>
   )
 }
