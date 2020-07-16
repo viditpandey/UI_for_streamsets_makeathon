@@ -1,5 +1,18 @@
 export const BASE_URL = 'http://localhost:8081'
 
+export const HEX_CODES = {
+  green: '#5cb85c',
+  blue: '#0063bf',
+  red: '#D9534F',
+  grey: '#dedede',
+  lightBlue: '#a9cae8',
+  lightRed: '#f2dede',
+  lightGreen: '#dff0d8',
+  greenVariant1: '#b3d6a5',
+  blueVariant1: '#509ade'
+
+}
+
 export const mockedTopology = {
   topologyId: 'test2',
   topologyStatus: 'RUNNING',

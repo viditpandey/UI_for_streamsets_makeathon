@@ -8,6 +8,7 @@ import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite'
 import React from 'react'
 import ReplayIcon from '@material-ui/icons/Replay'
 import SaveIcon from '@material-ui/icons/Save'
+import { HEX_CODES } from '../../configs/constants'
 
 export default function TopologyActionButton ({
   topology, status, disabled,
@@ -18,16 +19,16 @@ export default function TopologyActionButton ({
   let startIcon = <SaveIcon />
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}
-  let style = { background: '#5cb85c' }
+  let style = { background: HEX_CODES.green }
   let renderSecondaryButton = false
   const secondaryButtonIcon = <PauseCircleFilledIcon />
   let secondaryButtonText = 'PERFORM ACTION'
   let handleSecondaryClickAction = () => {}
-  const secondaryButtonStyle = { background: '#509ade' }
+  const secondaryButtonStyle = { background: HEX_CODES.blue }
 
   switch (status || topology.topologyStatus) {
     case 'EMPTY':
-      style = { background: '#5cb85c' } // green
+      style = { background: HEX_CODES.green }
       buttonText = 'CREATE TOPOLOGY'
       handleClickAction = createTopology
       renderSecondaryButton = false
@@ -35,14 +36,14 @@ export default function TopologyActionButton ({
 
     case 'STOPPED':
       buttonText = 'START TOPOLOGY'
-      style = { background: '#5cb85c' } // green
+      style = { background: HEX_CODES.green }
       startIcon = <PlayCircleFilledWhiteIcon />
       handleClickAction = startTopology
       renderSecondaryButton = false
       break
     case 'FINISHED':
       buttonText = 'RESET TOPOLOGY'
-      style = { background: '#5cb85c' } // green
+      style = { background: HEX_CODES.green }
       startIcon = <ReplayIcon />
       handleClickAction = resetTopology
       renderSecondaryButton = false
@@ -50,7 +51,7 @@ export default function TopologyActionButton ({
 
     case 'TO_START':
       buttonText = 'VALIDATE TOPOLOGY'
-      style = { background: '#5cb85c' } // green
+      style = { background: HEX_CODES.green }
       startIcon = <CheckCircleOutlineIcon />
       handleClickAction = validateTopology
       renderSecondaryButton = false
@@ -58,7 +59,7 @@ export default function TopologyActionButton ({
 
     case 'VALIDATING':
       buttonText = 'VALIDATING'
-      style = { background: '#0063bf' } // dark - blue
+      style = { background: HEX_CODES.blue }
       startIcon = <CircularProgress size={15} />
       handleClickAction = () => {}
       renderSecondaryButton = false
@@ -66,7 +67,7 @@ export default function TopologyActionButton ({
 
     case 'VALIDATED':
       buttonText = 'START TOPOLOGY'
-      style = { background: '#5cb85c' } // green
+      style = { background: HEX_CODES.green }
       startIcon = <PlayCircleFilledWhiteIcon />
       handleClickAction = startTopology
       renderSecondaryButton = false
@@ -74,7 +75,7 @@ export default function TopologyActionButton ({
 
     case 'RUNNING':
       buttonText = 'STOP TOPOLOGY'
-      style = { background: '#D9534F' } // light-red
+      style = { background: HEX_CODES.red }
       startIcon = <HighlightOffIcon />
       handleClickAction = stopTopology
       renderSecondaryButton = true
@@ -85,6 +86,7 @@ export default function TopologyActionButton ({
     case 'ERROR':
       buttonText = 'RETRY VALIDATION'
       startIcon = <ReplayIcon />
+      renderSecondaryButton = false
       handleClickAction = validateTopology
       break
 
@@ -94,10 +96,11 @@ export default function TopologyActionButton ({
 
   return (
     <div>
-      <Grid container spacing={0} justify='flex-end'>
+      <Grid container spacing={3} justify='flex-end'>
         {renderSecondaryButton && (
           <Grid item xs={12} md={6}>
             <Button
+              className='full-width'
               variant='contained'
               color='primary'
               disabled={disabledSecondary}
@@ -110,8 +113,9 @@ export default function TopologyActionButton ({
             </Button>
           </Grid>
         )}
-        <Grid item xs={12} md={renderSecondaryButton ? 6 : 12}>
+        <Grid item xs={12} md={6}>
           <Button
+            className='full-width'
             variant='contained'
             color='primary'
             disabled={disabled}

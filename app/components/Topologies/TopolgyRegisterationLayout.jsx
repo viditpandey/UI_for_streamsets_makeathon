@@ -19,6 +19,7 @@ import {
   pauseTopology, resetTopology
 } from '../../actions/TopologyActions'
 import { getPipelines } from '../../actions/PipelineActions'
+import { HEX_CODES } from '../../configs/constants'
 import { listToTree } from '../../helper/tree_util_functions'
 import { withStyles } from '@material-ui/core/styles'
 import { useSnackbar } from 'notistack'
@@ -41,32 +42,32 @@ const BorderLinearProgress = ({ loaderBackground, backgroundColor }) => withStyl
 // const PIPELINE_STATUS = ['STARTING', 'RETRY', , 'RUNNING', 'FINISHED', 'EDITED', 'STOPPED']
 
 const getStyleByPipelineStatus = {
-  STARTING: { background: '#a9cae8' }, // light-blue
-  RETRY: { background: '#f2dede' }, // red
-  RUNNING: { background: '#dff0d8' }, // light green
-  FINISHED: { background: '#b3d6a5' }, // slightly darker than light green
-  EDITED: { background: '#dedede' }, // grey
-  STOPPED: { background: '#f2dede' }, // red
-  ERROR: { background: '#f2dede' }, // red
-  RUN_ERROR: { background: '#f2dede' }, // red
-  INVALID: { background: '#f2dede' }, // red
-  VALID: { background: '#dff0d8' }, // light green,
-  VALIDATING: { background: '#a9cae8' }, // light-blue
-  undefined: { background: '#dedede' } // grey
+  STARTING: { background: HEX_CODES.lightBlue },
+  RETRY: { background: HEX_CODES.lightRed },
+  RUNNING: { background: HEX_CODES.lightGreen },
+  FINISHED: { background: HEX_CODES.greenVariant1 }, // slightly darker than light green
+  EDITED: { background: HEX_CODES.grey },
+  STOPPED: { background: HEX_CODES.lightRed },
+  ERROR: { background: HEX_CODES.lightRed },
+  RUN_ERROR: { background: HEX_CODES.lightRed },
+  INVALID: { background: HEX_CODES.lightRed },
+  VALID: { background: HEX_CODES.lightGreen },
+  VALIDATING: { background: HEX_CODES.lightBlue },
+  undefined: { background: HEX_CODES.grey }
 }
 
 const loaderColorByPipelineStatus = {
-  STARTING: { background: '#509ade' }, // light-blue
+  STARTING: { background: HEX_CODES.blueVariant1 }, // light-blue
   // RETRY: { background: '#f7a6a6' }, // red
-  RUNNING: { background: '#b3d6a5' }, // light green
+  RUNNING: { background: HEX_CODES.greenVariant1 }, // light green
   // FINISHED: { background: '#709c5f' }, // slightly darker than light green
   // EDITED: { background: '#b5b5b5' }, // grey
   // STOPPED: { background: '#f7a6a6' }, // red
   // ERROR: { background: '#f7a6a6' }, // red
   // RUN_ERROR: { background: '#f7a6a6' }, // red
   // INVALID: { background: '#f7a6a6' }, // red
-  // VALID: { background: '#dff0d8' }, // light green,
-  VALIDATING: { background: '#509ade' } // light-blue
+  // VALID: { background: HEX_CODES.lightGreen }, // light green,
+  VALIDATING: { background: HEX_CODES.blueVariant1 } // light-blue
   // undefined: { background: '#b5b5b5' } // grey
 }
 
@@ -247,7 +248,7 @@ export default function TopolgyRegisterationLayout ({
             </Grid>
 
             <Grid item md={5} xs={12}>
-              {/* <div className='float-right1'> */}
+              {/* <div className='float-right'> */}
               <div>
                 <TopologyActionButton
                   status={!viewMode && 'EMPTY'}
