@@ -1,16 +1,18 @@
 import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
+import MetricsLayout from '../Graphs/DataProcessRateGraph'
 import React, { useState, useEffect, useContext } from 'react'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
 import { AppBarContext } from '../Base/Home'
+import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
-import MetricsLayout from '../Graphs/DataProcessRateGraph'
-import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
+import { useSnackbar } from 'notistack'
 // const MAX_POLL_COUNT = 200
 
 export default function TopologyLayout ({ id }) {
+  const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
   const [topologyData, setTopologyData] = useState({})
   const [shouldPoll, setPolling] = useState(false)
@@ -28,6 +30,7 @@ export default function TopologyLayout ({ id }) {
   useEffect(() => {
     async function getTopologyData (id) {
       const res = await getTopologyById({ topologyId: id })
+      if (res && (res.topologyStatus !== topologyData.topologyStatus)) enqueueSnackbar(`Topology Status recently changed to ${res.topologyStatus} from previous ${topologyData.topologyStatus}`, { variant: 'info' })
       setTopologyData(res)
       setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
       res && setPolling(true)

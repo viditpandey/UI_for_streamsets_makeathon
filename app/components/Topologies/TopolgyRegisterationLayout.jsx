@@ -256,11 +256,15 @@ export default function TopolgyRegisterationLayout ({
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
                   createTopology={createTopologyButtonAction}
-                  startTopology={() => startTopology({ topologyId: name })}
-                  stopTopology={() => stopTopology(topologyData)}
-                  validateTopology={() => validateTopology({ topologyId: name })}
-                  resetTopology={() => resetTopology({ topologyId: name })}
-                  pauseTopology={() => { setTopologyData({ ...topologyData, topologyStatus: 'PAUSING' }); pauseTopology(topologyData) }}
+                  startTopology={() => { startTopology({ topologyId: name }); enqueueSnackbar('Topology Start.', { variant: 'success' }) }}
+                  stopTopology={() => { stopTopology(topologyData); enqueueSnackbar('Topology Stop.', { variant: 'success' }) }}
+                  validateTopology={() => { validateTopology({ topologyId: name }); enqueueSnackbar('Topology Validate.', { variant: 'info' }) }}
+                  resetTopology={() => { resetTopology({ topologyId: name }); enqueueSnackbar('Topology Reset Status.', { variant: 'success' }) }}
+                  pauseTopology={() => {
+                    setTopologyData({ ...topologyData, topologyStatus: 'PAUSING' })
+                    pauseTopology(topologyData)
+                    enqueueSnackbar('Topology Pause.', { variant: 'info' })
+                  }}
                 />
               </div>
             </Grid>
