@@ -70,7 +70,7 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler }) => {
     return (
       <IconButton
         aria-label='delete topology'
-        onClick={async (item) => {
+        onClick={async (e) => {
           await axiosHandler({
             method: deleteTopology,
             methodParams: { topologyId: item.topologyId },

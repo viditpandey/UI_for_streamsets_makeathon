@@ -7,7 +7,7 @@ const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
 const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
 const GET_TOPOLOGY_BY_ID = topologyId => `${BASE_URL}/getTopology/${topologyId}`
 const START_TOPOLOGY = topologyId => `${BASE_URL}/startTopology/${topologyId}`
-const STOP_TOPOLOGY = topologyId => `${BASE_URL}/stopTopology/${topologyId}`
+const PAUSE_OR_STOP_TOPOLOGY = `${BASE_URL}/updateTopologyStatus`
 const RESET_TOPOLOGY = topologyId => `${BASE_URL}/resetTopology/${topologyId}`
 const VALIDATE_TOPOLOGY = topologyId => `${BASE_URL}/validateTopology/${topologyId}`
 const DELETE_TOPOLOGY = topologyId => `${BASE_URL}/deleteTopology/${topologyId}`
@@ -86,15 +86,20 @@ export const validateTopology = async ({ topologyId }) => {
   }
 }
 
-export const stopTopology = async ({ topologyId }) => {
+export const stopTopology = async ({ topologyId, topologyItems }) => {
   try {
     const res = await axios({
       method: 'post',
-      url: STOP_TOPOLOGY(topologyId)
+      url: PAUSE_OR_STOP_TOPOLOGY,
+      data: {
+        topologyId: topologyId,
+        action: 'STOP',
+        pipelines: topologyItems.map(p => p.pipelineId)
+      }
     }
     ).catch(e => ({ data: {} }))
     const response = res.data
-    console.log(`start topology attempted for topologyId ${topologyId}, response received: ${JSON.stringify(response)}`)
+    console.log(`start topology attempted for topologyId ${topologyId}, response received`)
     return response
   } catch (e) {
     console.error('[TopologyActions.startTopology] error:', e)
@@ -139,11 +144,12 @@ export const deleteTopology = async ({ topologyId }) => {
     // const history = useHistory()
     const res = await axios({
       method: 'delete',
-      url: DELETE_TOPOLOGY()
+      url: DELETE_TOPOLOGY(topologyId)
       // data: {}
     })
       .then(res => {
-        window.location = '/topologies'
+        if (res.status === 200) { window.location = '/topologies' }
+        return res
         // history.push('/topologies')
       })
       .catch(e => { throw (e) })
@@ -154,5 +160,26 @@ export const deleteTopology = async ({ topologyId }) => {
     console.error('[TopologyActions.deleteTopology] error:', e)
     // return {}
     throw e
+  }
+}
+
+export const pauseTopology = async ({ topologyId, topologyItems }) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: PAUSE_OR_STOP_TOPOLOGY,
+      data: {
+        topologyId: topologyId,
+        action: 'PAUSE',
+        pipelines: topologyItems.map(p => p.pipelineId)
+      }
+    }
+    ).catch(e => ({ data: {} }))
+    const response = res.data
+    console.log(`pause topology attempted for topologyId ${topologyId}, response received`)
+    return response
+  } catch (e) {
+    console.error('[TopologyActions.startTopology] error:', e)
+    return {}
   }
 }
