@@ -73,7 +73,7 @@ const loaderColorByPipelineStatus = {
   // undefined: { background: '#b5b5b5' } // grey
 }
 
-const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING']
+const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING', 'PAUSING']
 
 const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
   let statusLabel = p.status || 'TO_START'
@@ -260,7 +260,7 @@ export default function TopolgyRegisterationLayout ({
                   stopTopology={() => stopTopology(topologyData)}
                   validateTopology={() => validateTopology({ topologyId: name })}
                   resetTopology={() => resetTopology({ topologyId: name })}
-                  pauseTopology={() => pauseTopology(topologyData)}
+                  pauseTopology={() => { setTopologyData({ ...topologyData, topologyStatus: 'PAUSING' }); pauseTopology(topologyData) }}
                 />
               </div>
             </Grid>

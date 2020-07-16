@@ -21,7 +21,8 @@ export default function TopologyActionButton ({
   let handleClickAction = () => {}
   let style = { background: HEX_CODES.green }
   let renderSecondaryButton = false
-  const secondaryButtonIcon = <PauseCircleFilledIcon />
+  let renderPrimaryButton = true
+  let secondaryButtonIcon = <PauseCircleFilledIcon />
   let secondaryButtonText = 'PERFORM ACTION'
   let handleSecondaryClickAction = () => {}
   const secondaryButtonStyle = { background: HEX_CODES.blue }
@@ -60,7 +61,7 @@ export default function TopologyActionButton ({
     case 'VALIDATING':
       buttonText = 'VALIDATING'
       style = { background: HEX_CODES.blue }
-      startIcon = <CircularProgress size={15} />
+      startIcon = <CircularProgress color={HEX_CODES.lightGreen} size={15} />
       handleClickAction = () => {}
       renderSecondaryButton = false
       break
@@ -71,6 +72,18 @@ export default function TopologyActionButton ({
       startIcon = <PlayCircleFilledWhiteIcon />
       handleClickAction = startTopology
       renderSecondaryButton = false
+      break
+
+    case 'PAUSING':
+      // buttonText = 'STOP TOPOLOGY'
+      // style = { background: HEX_CODES.red }
+      // startIcon = <HighlightOffIcon />
+      // handleClickAction = () => {}
+      renderPrimaryButton = false
+      renderSecondaryButton = true
+      secondaryButtonText = 'PAUSING TOPOLOGY'
+      handleSecondaryClickAction = () => {}
+      secondaryButtonIcon = <CircularProgress color={HEX_CODES.lightGreen} size={15} />
       break
 
     case 'RUNNING':
@@ -121,20 +134,21 @@ export default function TopologyActionButton ({
             </Button>
           </Grid>
         )}
-        <Grid item xs={12} md={6}>
-          <Button
-            className='full-width'
-            variant='contained'
-            color='primary'
-            disabled={disabled}
-            style={style}
-            size='small'
-            onClick={(e) => handleClickAction()}
-            startIcon={startIcon}
-          >
-            {buttonText}
-          </Button>
-        </Grid>
+        {renderPrimaryButton &&
+          <Grid item xs={12} md={6}>
+            <Button
+              className='full-width'
+              variant='contained'
+              color='primary'
+              disabled={disabled}
+              style={style}
+              size='small'
+              onClick={(e) => handleClickAction()}
+              startIcon={startIcon}
+            >
+              {buttonText}
+            </Button>
+          </Grid>}
       </Grid>
     </div>
   )
