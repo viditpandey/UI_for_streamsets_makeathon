@@ -15,27 +15,52 @@ export default function MyChart ({ topologyData = [], metricsData = [] }) {
     console.log(metricsData)
     const dataRow = {
       name: element.pipelineTitle,
-      YAxisData: totalTime / 1000
+      YAxisData: totalTime
     }
 
     const processedDataRow = {
-      name: metricsData && metricsData.find(i => i.name === element.pipelineId),
+      name: metricsData && element.pipelineTitle,
       YAxisData: metricsData && (metricsData.find(i => i.name === element.pipelineId).res / totalTime)
     }
-    console.log('---oooo-----', processedDataRow)
+
     processedData.push(processedDataRow)
     data.push(dataRow)
   })
+
   return (
     toggle
       ? (
         <div>
-          {MyBarChart({ data })}
-          {MyBarChart({ processedData })}
+          {MyBarChart({ data, yExtra: '20' })}
+          {MyBarChart({ data: processedData, yExtra: '200' })}
 
         </div>
       )
       : MyLineChart({ data })
+  )
+}
+
+function MyBarChart ({ data, yExtra }) {
+  console.log('-------', ('dataMax+' + yExtra))
+  return (
+    <BarChart
+      width={500}
+      height={300}
+      data={data}
+      margin={{
+        top: 5, right: 30, left: 20, bottom: 5
+      }}
+    >
+      <CartesianGrid />
+      <XAxis dataKey='name'>
+        {/* <Label value='Pipelines' position='center' /> */}
+      </XAxis>
+      <YAxis domain={[0, ('dataMax+' + yExtra)]}>
+        <Label value='seconds' position='insideLeft' angle={90} />
+      </YAxis>
+      <Tooltip />
+      <Bar dataKey='YAxisData' fill='#8884d8' />
+    </BarChart>
   )
 }
 
@@ -61,28 +86,5 @@ function MyLineChart ({ data }) {
         </Line>
       </LineChart>
     </div>
-  )
-}
-
-function MyBarChart ({ data }) {
-  return (
-    <BarChart
-      width={500}
-      height={300}
-      data={data}
-      margin={{
-        top: 5, right: 30, left: 20, bottom: 5
-      }}
-    >
-      <CartesianGrid />
-      <XAxis dataKey='name'>
-        {/* <Label value='Pipelines' position='center' /> */}
-      </XAxis>
-      <YAxis domain={[0, 'dataMax+20']}>
-        <Label value='seconds' position='insideLeft' angle={90} />
-      </YAxis>
-      <Tooltip />
-      <Bar dataKey='YAxisData' fill='#8884d8' />
-    </BarChart>
   )
 }
