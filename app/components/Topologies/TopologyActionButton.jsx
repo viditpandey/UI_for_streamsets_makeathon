@@ -42,15 +42,18 @@ export default function TopologyActionButton ({
       handleClickAction = startTopology
       renderSecondaryButton = false
       break
-    case 'FINISHED':
-      buttonText = 'RESET TOPOLOGY'
-      style = { background: HEX_CODES.green }
-      startIcon = <ReplayIcon />
-      handleClickAction = resetTopology
-      renderSecondaryButton = false
-      break
 
+      // case 'FINISHED':
+      //   buttonText = 'RESET TOPOLOGY'
+      //   style = { background: HEX_CODES.green }
+      //   startIcon = <ReplayIcon />
+      //   handleClickAction = resetTopology
+      //   renderSecondaryButton = false
+      //   break
+
+    case 'FINISHED':
     case 'TO_START':
+    case 'FAILED':
       buttonText = 'VALIDATE TOPOLOGY'
       style = { background: HEX_CODES.green }
       startIcon = <CheckCircleOutlineIcon />
