@@ -83,6 +83,14 @@ export default function TopologyActionButton ({
       handleSecondaryClickAction = pauseTopology
       break
 
+    case 'PAUSED':
+      buttonText = 'RESUME TOPOLOGY'
+      style = { background: '#5cb85c' } // green
+      startIcon = <PlayCircleFilledWhiteIcon />
+      handleClickAction = startTopology
+      renderSecondaryButton = false
+      break
+
     case 'ERROR':
       buttonText = 'RETRY VALIDATION'
       startIcon = <ReplayIcon />

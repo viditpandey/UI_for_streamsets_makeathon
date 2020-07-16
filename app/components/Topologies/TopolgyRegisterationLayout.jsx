@@ -35,7 +35,7 @@ const BorderLinearProgress = ({ loaderBackground, backgroundColor }) => withStyl
   },
   bar: {
     borderRadius: 5,
-    backgroundColor: backgroundColor || '#1a90ff'
+    backgroundColor: backgroundColor || HEX_CODES.grey
   }
 }))(LinearProgress)
 
@@ -53,6 +53,8 @@ const getStyleByPipelineStatus = {
   INVALID: { background: HEX_CODES.lightRed },
   VALID: { background: HEX_CODES.lightGreen },
   VALIDATING: { background: HEX_CODES.lightBlue },
+  TO_START: { background: HEX_CODES.grey },
+  PAUSED: { background: HEX_CODES.yellow },
   undefined: { background: HEX_CODES.grey }
 }
 
@@ -73,13 +75,16 @@ const loaderColorByPipelineStatus = {
 
 const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING']
 
-const renderNode = ({ p, handlePipelineClick }) => {
-  const CustomProgressBar = PIPELINES_IN_PROGRESS.indexOf(p.status) !== -1 ? BorderLinearProgress({
-    loaderBackground: loaderColorByPipelineStatus[p.status].background,
-    backgroundColor: getStyleByPipelineStatus[p.status].background
+const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
+  let statusLabel = p.status || 'TO_START'
+  if (topologyStatus === 'PAUSED') statusLabel = 'PAUSED'
+  const CustomProgressBar = PIPELINES_IN_PROGRESS.indexOf(statusLabel) !== -1 ? BorderLinearProgress({
+    loaderBackground: loaderColorByPipelineStatus[statusLabel].background,
+    backgroundColor: getStyleByPipelineStatus[statusLabel].background
   }) : () => null
   const chipLabel = (
-    <div>{p.title || p.pipelineId} ({p.status || '...'})
+
+    <div>{p.title || p.pipelineId} ({statusLabel})
       <div style={{ margin: '0 10px' }}>
         {<CustomProgressBar />}
       </div>
@@ -87,7 +92,7 @@ const renderNode = ({ p, handlePipelineClick }) => {
   return (
     <Chip
       id={p.pipelineId}
-      style={getStyleByPipelineStatus[p.status]}
+      style={getStyleByPipelineStatus[statusLabel]}
       deleteIcon={<SettingsIcon />}
       size='medium'
       label={chipLabel}
@@ -97,11 +102,11 @@ const renderNode = ({ p, handlePipelineClick }) => {
   )
 }
 
-const getTreeCompatibleData = ({ list, handlePipelineClick }) => {
+const getTreeCompatibleData = ({ list, topologyStatus, handlePipelineClick }) => {
   return list.map(p => {
     return {
       ...cloneDeep(p),
-      title: renderNode({ p, handlePipelineClick }),
+      title: renderNode({ p, topologyStatus, handlePipelineClick }),
       pipelineId: p.pipelineId,
       expanded: true,
       children: []
@@ -182,7 +187,7 @@ export default function TopolgyRegisterationLayout ({
   }
 
   useEffect(() => {
-    const data = getTreeCompatibleData({ list: selectedPipelines, handlePipelineClick })
+    const data = getTreeCompatibleData({ list: selectedPipelines, topologyStatus: topologyData.topologyStatus, handlePipelineClick })
     setTreeData(data)
   }, [openDialog])
 
@@ -205,7 +210,7 @@ export default function TopolgyRegisterationLayout ({
   }, [selectedPipelines])
 
   useEffect(() => {
-    const test = getTreeCompatibleData({ list: selectedPipelines, handlePipelineClick })
+    const test = getTreeCompatibleData({ list: selectedPipelines, topologyStatus: topologyData.topologyStatus, handlePipelineClick })
     setTreeData(listToTree(test))
   }, [selectedPipelines])
 
@@ -255,10 +260,10 @@ export default function TopolgyRegisterationLayout ({
                   topology={topologyData}
                   createTopology={createTopologyButtonAction}
                   startTopology={() => startTopology({ topologyId: name })}
-                  stopTopology={() => stopTopology({ topologyId: name })}
+                  stopTopology={() => stopTopology(topologyData)}
                   validateTopology={() => validateTopology({ topologyId: name })}
                   resetTopology={() => resetTopology({ topologyId: name })}
-                  pauseTopology={() => pauseTopology(name)}
+                  pauseTopology={() => pauseTopology(topologyData)}
                 />
               </div>
             </Grid>
