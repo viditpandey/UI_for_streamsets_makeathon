@@ -8,6 +8,7 @@ const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
 const GET_TOPOLOGY_BY_ID = topologyId => `${BASE_URL}/getTopology/${topologyId}`
 const START_TOPOLOGY = topologyId => `${BASE_URL}/startTopology/${topologyId}`
 const PAUSE_OR_STOP_TOPOLOGY = `${BASE_URL}/updateTopologyStatus`
+const RESUME_TOPOLOGY = topologyId => `${BASE_URL}/resumeTopology/${topologyId}`
 const RESET_TOPOLOGY = topologyId => `${BASE_URL}/resetTopology/${topologyId}`
 const VALIDATE_TOPOLOGY = topologyId => `${BASE_URL}/validateTopology/${topologyId}`
 const DELETE_TOPOLOGY = topologyId => `${BASE_URL}/deleteTopology/${topologyId}`
@@ -99,10 +100,10 @@ export const stopTopology = async ({ topologyId, topologyItems }) => {
     }
     ).catch(e => ({ data: {} }))
     const response = res.data
-    console.log(`start topology attempted for topologyId ${topologyId}, response received`)
+    console.log(`stop topology attempted for topologyId ${topologyId}, response received`)
     return response
   } catch (e) {
-    console.error('[TopologyActions.startTopology] error:', e)
+    console.error('[TopologyActions.stopTopology] error:', e)
     return {}
   }
 }
@@ -179,7 +180,23 @@ export const pauseTopology = async ({ topologyId, topologyItems }) => {
     console.log(`pause topology attempted for topologyId ${topologyId}, response received`)
     return response
   } catch (e) {
-    console.error('[TopologyActions.startTopology] error:', e)
+    console.error('[TopologyActions.pauseTopology] error:', e)
+    return {}
+  }
+}
+
+export const resumeTopology = async ({ topologyId }) => {
+  try {
+    const res = await axios({
+      method: 'put',
+      url: RESUME_TOPOLOGY(topologyId)
+    }
+    ).catch(e => ({ data: {} }))
+    const response = res.data
+    console.log(`resume topology attempted for topologyId ${topologyId}, response received`)
+    return response
+  } catch (e) {
+    console.error('[TopologyActions.resumeTopology] error:', e)
     return {}
   }
 }

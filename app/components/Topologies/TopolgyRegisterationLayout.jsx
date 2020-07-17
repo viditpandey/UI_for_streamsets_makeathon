@@ -14,7 +14,7 @@ import TopologyActionButton from './TopologyActionButton'
 import { AppBarContext } from '../Base/Home'
 import { cloneDeep, isEmpty } from 'lodash'
 import {
-  createTopology, startTopology,
+  createTopology, startTopology, resumeTopology,
   stopTopology, validateTopology,
   pauseTopology, resetTopology
 } from '../../actions/TopologyActions'
@@ -241,6 +241,7 @@ export default function TopolgyRegisterationLayout ({
                   topology={topologyData}
                   createTopology={createTopologyButtonAction}
                   startTopology={() => { startTopology({ topologyId: name }); enqueueSnackbar('Topology Start.', { variant: 'success' }) }}
+                  resumeTopology={() => { resumeTopology({ topologyId: name }); enqueueSnackbar('Topology Resume.', { variant: 'success' }) }}
                   stopTopology={() => { stopTopology(topologyData); enqueueSnackbar('Topology Stop.', { variant: 'success' }) }}
                   validateTopology={() => { validateTopology({ topologyId: name }); enqueueSnackbar('Topology Validate.', { variant: 'info' }) }}
                   resetTopology={() => { resetTopology({ topologyId: name }); enqueueSnackbar('Topology Reset Status.', { variant: 'success' }) }}
