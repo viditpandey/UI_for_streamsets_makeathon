@@ -80,10 +80,6 @@ export default function TopologyActionButton ({
       break
 
     case 'PAUSING':
-      // buttonText = 'STOP TOPOLOGY'
-      // style = { background: HEX_CODES.red }
-      // startIcon = <HighlightOffIcon />
-      // handleClickAction = () => {}
       renderPrimaryButton = false
       renderSecondaryButton = true
       secondaryButtonText = 'PAUSING TOPOLOGY'
@@ -103,7 +99,7 @@ export default function TopologyActionButton ({
 
     case 'PAUSED':
       buttonText = 'RESUME TOPOLOGY'
-      style = { background: '#5cb85c' } // green
+      style = { background: HEX_CODES.green }
       startIcon = <PlayCircleFilledWhiteIcon />
       handleClickAction = resumeTopology
       renderSecondaryButton = false

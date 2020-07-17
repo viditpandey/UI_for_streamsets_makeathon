@@ -36,7 +36,7 @@ export const getStyleByPipelineStatus = {
 
 export const mockedTopology = {
   topologyId: 'test2',
-  topologyStatus: 'RUNNING',
+  topologyStatus: 'FINISHED',
   topologyItems: [
     {
       createTimestamp: '12-07-2020 12:29:59',

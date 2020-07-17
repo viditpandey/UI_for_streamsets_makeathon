@@ -315,7 +315,6 @@ export default function TopolgyRegisterationLayout ({
 const CreateTree = ({ treeData, setTreeData, setFinalTreeData, selectedPipelines }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
   const height = (selectedPipelines.length * 70) || 100
-  // const [open, setOpen] = useState(true)
   return (
     <div>
       <AccordianWrapper

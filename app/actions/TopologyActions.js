@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-import { BASE_URL, mockedTopology } from '../configs/constants'
-// import { useHistory } from 'react-router-dom'
+import { BASE_URL } from '../configs/constants'
 
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
 const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
@@ -16,7 +15,6 @@ const DELETE_TOPOLOGY = topologyId => `${BASE_URL}/deleteTopology/${topologyId}`
 export const createTopology = async (formData) => {
   console.log('createTopology, formdata:', formData)
   try {
-    // const history = useHistory()
     const topologyFields = formData.finalTreeData
     const res = await axios({
       method: 'post',
@@ -27,7 +25,6 @@ export const createTopology = async (formData) => {
     }
     ).then(res => {
       window.location = '/topologies'
-      // history.push('/topologies')
     })
       .catch(e => ({ data: {} }))
     const response = res.data
@@ -115,7 +112,6 @@ export const getTopologies = async () => {
       url: GET_ALL_TOPOLOGIES
     }
     ).catch(e => { throw (e) })
-    // ).catch(e => ({ data: [] }))
     const response = res.data
     console.log('get all topologies attempted , response received')
     return response
@@ -128,10 +124,8 @@ export const getTopologies = async () => {
 export const getTopologyById = async ({ topologyId }) => {
   console.log('fetching topology details for topology id: ', topologyId)
   try {
-    const res = await axios.get(GET_TOPOLOGY_BY_ID(topologyId)).catch(e => ({ data: mockedTopology }))
-    // const res = await axios.get(GET_TOPOLOGY_BY_ID(topologyId)).catch(e => ({ data: {} }))
+    const res = await axios.get(GET_TOPOLOGY_BY_ID(topologyId)).catch(e => { throw (e) })
     const response = res.data
-    // console.log(`Fetched topology data for id: ${topologyId}, data received: ${response}`)
     return response
   } catch (error) {
     console.log('fetching topology data by topoligy ID failed -> error', error)
@@ -142,16 +136,13 @@ export const getTopologyById = async ({ topologyId }) => {
 
 export const deleteTopology = async ({ topologyId }) => {
   try {
-    // const history = useHistory()
     const res = await axios({
       method: 'delete',
       url: DELETE_TOPOLOGY(topologyId)
-      // data: {}
     })
       .then(res => {
         if (res.status === 200) { window.location = '/topologies' }
         return res
-        // history.push('/topologies')
       })
       .catch(e => { throw (e) })
     const response = res.data
@@ -159,7 +150,6 @@ export const deleteTopology = async ({ topologyId }) => {
     return response
   } catch (e) {
     console.error('[TopologyActions.deleteTopology] error:', e)
-    // return {}
     throw e
   }
 }

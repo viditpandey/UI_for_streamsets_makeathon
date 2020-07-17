@@ -10,7 +10,6 @@ export function listToTree (list) {
     for (i = 0; i < list.length; i += 1) {
       node = list[i]
       if (node.dependsOn !== 'root') {
-      // if you have dangling branches check that map[node.parentId] exists
         list[map[node.dependsOn]].children.push(node)
       } else {
         roots.push(node)
