@@ -40,6 +40,7 @@ export default function SimpleBottomNavigation () {
     <BottomNavigation
       value={value}
       onChange={(event, newValue) => {
+        if (value === newValue) return
         history.push(naviRoutes[newValue])
         setValue(newValue)
       }}
