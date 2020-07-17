@@ -10,6 +10,8 @@ import ReplayIcon from '@material-ui/icons/Replay'
 import SaveIcon from '@material-ui/icons/Save'
 import { HEX_CODES } from '../../configs/constants'
 
+// const topologyPossibleStatuses = ['FAILED', 'PAUSED', 'VALIDATED', 'FINISHED', 'VALIDATING', 'RUNNING', 'ERROR', 'TO_START', 'STOPPED']
+
 export default function TopologyActionButton ({
   topology, status, disabled,
   disabledSecondary,
