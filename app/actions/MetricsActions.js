@@ -17,7 +17,7 @@ export const getNumberOfRecordsProcessed = async ({ pipelineId }) => {
       var x = a.timeStamp > b.timeStamp ? -1 : 1
       return x
     })
-    const metrics = JSON.parse(sortedResponse && sortedResponse[0].metrics)
+    const metrics = JSON.parse(!isEmpty(sortedResponse) && sortedResponse[0].metrics)
     const numberOfRecordsProcessed = metrics && metrics.counters['pipeline.batchOutputRecords.counter'].count
     console.log('NumberOfRecordsProcessed', numberOfRecordsProcessed)
     console.log(`get pipeline history attempted for pipelineId ${pipelineId}, response received`)
