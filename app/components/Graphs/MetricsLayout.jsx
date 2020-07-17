@@ -1,42 +1,56 @@
-import React from 'react'
-import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, BarChart, Bar, Label } from 'recharts'
 import moment from 'moment'
+import React from 'react'
 import Switch from '@material-ui/core/Switch'
 
-export default function MetricsLayout ({ topologyData = [], metricsData = [] }) {
+import { CircularProgress, Typography } from '@material-ui/core'
+import { isEmpty } from 'lodash'
+import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, BarChart, Bar, Label } from 'recharts'
+
+export default function MetricsLayout ({ topologyPipelinesData = [], metricsData = [] }) {
   const [toggle, setToggle] = React.useState(false)
   const data = []
   const processedData = []
   let dataMax = 0
   let processedDataMax = 0
-  topologyData && topologyData.forEach((element) => {
-    const startTime = moment(element.startTime, 'DD-MM-YYYY hh:mm:ss')
-    const endTime = moment(element.endTime, 'DD-MM-YYYY hh:mm:ss')
-    let totalTime = endTime.diff(startTime) / 1000
+  !isEmpty(topologyPipelinesData) && !isEmpty(metricsData) && topologyPipelinesData.forEach((element) => {
+    try {
+      const startTime = moment(element.startTime, 'DD-MM-YYYY hh:mm:ss')
+      const endTime = moment(element.endTime, 'DD-MM-YYYY hh:mm:ss')
+      let totalTime = endTime.diff(startTime) / 1000
 
-    if (totalTime < 0) totalTime = 0
-    if (totalTime > dataMax) dataMax = totalTime
+      if (totalTime < 0) totalTime = 0
+      if (totalTime > dataMax) dataMax = totalTime
 
-    const dataRow = {
-      name: element.pipelineTitle,
-      YAxisData: totalTime
-    }
-    const rate = (metricsData && (metricsData.find(i => i.name === element.pipelineId)) &&
-    (metricsData.find(i => i.name === element.pipelineId).res / totalTime)).toFixed(2)
+      const dataRow = {
+        name: element.pipelineTitle,
+        YAxisData: totalTime
+      }
+      const matchingPipeline = (metricsData.find(i => i.name === element.pipelineId))
+      const rate = (matchingPipeline.res / totalTime).toFixed(2)
 
-    if (rate > processedDataMax) processedDataMax = rate
+      if (rate > processedDataMax) processedDataMax = rate
 
-    const processedDataRow = {
-      name: metricsData && element.pipelineTitle,
-      YAxisData: rate
-    }
+      const processedDataRow = {
+        name: element.pipelineTitle,
+        YAxisData: rate
+      }
 
-    processedData.push(processedDataRow)
-    data.push(dataRow)
+      processedData.push(processedDataRow)
+      data.push(dataRow)
+    } catch (error) { }
   })
 
+  if (isEmpty(processedData) && isEmpty(data)) {
+    return (
+      <div className='padding-30'>
+        <CircularProgress />
+        <Typography>Loading Metrics</Typography>
+      </div>
+    )
+  }
+
   return (
-    <div>
+    <div className='padding-30'>
       {toggle ? 'Bar Chart' : 'Line Chart'}
       <Switch
         checked={toggle}
