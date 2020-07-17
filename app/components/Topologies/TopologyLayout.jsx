@@ -51,7 +51,7 @@ export default function TopologyLayout ({ id }) {
       if (finsihedCount > MAX_POLL_COUNT) setAutoRefresh(false)
     } else setFinishedCount(0)
 
-    return (finsihedCount > MAX_POLL_COUNT)
+    return (finsihedCount < MAX_POLL_COUNT)
   }
 
   useInterval(async () => {
@@ -125,7 +125,7 @@ export default function TopologyLayout ({ id }) {
                 return (
                   <div className='padding-top-30'>
                     <MetricsLayout
-                      topologyData={topologyData.topologyItems}
+                      topologyPipelinesData={topologyData.topologyItems}
                       metricsData={metricsData}
                     />
                   </div>

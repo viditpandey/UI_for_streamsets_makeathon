@@ -51,15 +51,16 @@ export default function MetricsLayout ({ topologyPipelinesData = [], metricsData
 
   return (
     <div className='padding-30'>
-      {toggle ? 'Bar Chart' : 'Line Chart'}
-      <Switch
-        checked={toggle}
-        onChange={e => {
-          setToggle(!toggle)
-        }}
-        name='graphview'
-        inputProps={{ 'aria-label': 'secondary checkbox' }}
-      />
+      <Typography>{toggle ? 'Bar Chart' : 'Line Chart'}
+        <Switch
+          checked={toggle}
+          onChange={e => {
+            setToggle(!toggle)
+          }}
+          name='graphview'
+          inputProps={{ 'aria-label': 'secondary checkbox' }}
+        />
+      </Typography>
 
       {
         toggle
