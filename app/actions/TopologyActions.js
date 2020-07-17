@@ -128,7 +128,7 @@ export const getTopologyById = async ({ topologyId }) => {
     const response = res.data
     return response
   } catch (error) {
-    console.log('fetching topology data by topoligy ID failed -> error', error)
+    console.log('fetching topology data by topology ID failed -> error', error)
     return {}
     // return mockedTopology
   }

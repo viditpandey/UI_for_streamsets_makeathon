@@ -256,7 +256,9 @@ export default function TopolgyRegisterationLayout ({
                     enqueueSnackbar('Topology Reset Status.', { variant: 'success' })
                   }}
                   pauseTopology={() => {
-                    setTopologyData({ ...topologyData, topologyStatus: 'PAUSING' })
+                    const updatedTopology = cloneDeep(topologyData)
+                    updatedTopology.topologyStatus = 'PAUSING'
+                    setTopologyData(updatedTopology)
                     pauseTopology(topologyData)
                     setAutoRefresh(true)
                     enqueueSnackbar('Topology Pause.', { variant: 'info' })

@@ -5,53 +5,58 @@ import Switch from '@material-ui/core/Switch'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
 import { AppBarContext } from '../Base/Home'
+import { CircularProgress, Typography } from '@material-ui/core'
 import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
-import { Typography } from '@material-ui/core'
+
 import { useInterval } from '../../helper/useInterval'
 import { useSnackbar } from 'notistack'
 
-// const MAX_POLL_COUNT = 50
+const MAX_POLL_COUNT = 5
 
 export default function TopologyLayout ({ id }) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
   const [topologyData, setTopologyData] = useState({})
   const [autoRefresh, setAutoRefresh] = useState(true)
-  // const [shouldPoll, setPolling] = useState(false)
-  // const [pollCount, setPollCount] = useState(0)
   const [fetchMetrics, setFetchMetrics] = useState(false)
   const [metricsData, setMetricsData] = useState([])
+  const [finsihedCount, setFinishedCount] = useState(0)
 
   useEffect(() => {
     async function getTopologyData (id) {
       const res = await getTopologyById({ topologyId: id })
-      setTopologyData(res)
-      setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
-      // res && setPolling(true)
-      res && setFetchMetrics(true)
+      if (!isEmpty(res)) {
+        setTopologyData(res)
+        setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
+        setFetchMetrics(true)
+      }
     }
     getTopologyData(id)
   }, [])
 
+  const isTopologyStatusInactive = () => {
+    // const inactiveStatus = ['TO_START', 'FINISHED', 'EDITED', 'STOPPED', 'ERROR', 'RUN_ERROR', 'INVALID']
+    const inactiveStatus = ['FINISHED']
+    return inactiveStatus.indexOf(topologyData.topologyStatus) !== -1
+  }
+
   const shouldPollContinue = () => {
-    return autoRefresh
-    // if (autoRefresh) return true
-    // // const inactiveStatus = ['TO_START', 'FINISHED', 'EDITED', 'STOPPED', 'ERROR', 'RUN_ERROR', 'INVALID']
-    // const inactiveStatus = ['FINISHED']
-    // const topologyInactive = inactiveStatus.indexOf(topologyData.topologyStatus) !== -1
-    // if (topologyInactive) {
-    //   return true
-    //   // setPollCount(pollCount + 1)
-    //   // if (pollCount > MAX_POLL_COUNT) return false
-    //   // else return true
-    // }
-    // return true
+    if (isEmpty(topologyData)) return false
+    const topologyInactive = isTopologyStatusInactive()
+
+    if (topologyInactive) {
+      setFinishedCount(finsihedCount + 1)
+      if (finsihedCount > MAX_POLL_COUNT) setAutoRefresh(false)
+    } else setFinishedCount(0)
+
+    return (finsihedCount > MAX_POLL_COUNT)
   }
 
   useInterval(async () => {
     if (!shouldPollContinue()) return
+
     const { topologyId } = topologyData
     const latestStatus = await getTopologyById({ topologyId })
     if (!isEmpty(latestStatus)) {
@@ -59,12 +64,18 @@ export default function TopologyLayout ({ id }) {
       setTopologyData(latestStatus)
       setFetchMetrics(true)
     }
-    // else setPolling(false)
-    // if (sameStatus >= MAX_POLL_COUNT) { setPolling(false); setSameStatus(1) }
   }, autoRefresh ? 2000 : null)
 
   useEffect(() => {
-    if (fetchMetrics) { console.log('this is not called'); getProcessedRecordsNumber(topologyData) }
+    if (!isEmpty(topologyData)) enqueueSnackbar(`Topology status auto refresh turned ${autoRefresh ? 'on' : 'off'}`, { variant: 'success' })
+    if (autoRefresh) setFinishedCount(0)
+  }, [autoRefresh])
+
+  useEffect(() => {
+    if (fetchMetrics) {
+      getProcessedRecordsNumber(topologyData)
+      setFetchMetrics(false)
+    }
   }, [fetchMetrics])
 
   async function getProcessedRecordsNumber (topologyData) {
@@ -78,13 +89,22 @@ export default function TopologyLayout ({ id }) {
     }
   }
 
+  if (isEmpty(topologyData)) {
+    return (
+      <div>
+        <CircularProgress />
+        <Typography>Loading topology</Typography>
+      </div>
+    )
+  }
+
   return (
     <div>
       <Typography>{'Auto refresh topology status'}
         <Switch
           checked={autoRefresh}
+          color='primary'
           onChange={e => {
-            enqueueSnackbar(`Topology status auto refresh turned ${!autoRefresh ? 'on' : 'off'}`, { variant: 'success' })
             setAutoRefresh(!autoRefresh)
           }}
           name='topologyAutoRefreshStatus'
@@ -96,7 +116,7 @@ export default function TopologyLayout ({ id }) {
         propsName={topologyData.topologyId}
         propsSelectedPipelines={topologyData.topologyItems}
         propsTopologyData={topologyData}
-        // setPollCount={setPollCount}
+        setAutoRefresh={(val) => setAutoRefresh(!!val)}
         renderMetrics={() => {
           return (
             <AccordianWrapper

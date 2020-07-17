@@ -63,6 +63,7 @@ export default function RenderPipelineConfigs ({
           {!hideToggle &&
             <Typography>{`Run this pipeline at ${dependencyCriteria} of parent pipeline`}
               <Switch
+                color='primary'
                 checked={dependencyCriteria === 'stop'}
                 onChange={e => { !disabled && setDependencyCriteria(dependencyCriteria === 'start' ? 'stop' : 'start') }}
                 name='dependencyCriteria'
