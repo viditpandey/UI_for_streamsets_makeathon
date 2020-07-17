@@ -1,7 +1,4 @@
-import Line from '../components/Graphs/DataProcessRateGraph'
-// import PipelinesLayout from '../components/Pipelines/PipelinesLayout'
 import React from 'react'
-
 import { useParams } from 'react-router-dom'
 import MetricsLayout from '../components/Graphs/MetricsLayout'
 const PipelinesLayout = React.lazy(() => import('../components/Pipelines/PipelinesLayout'))
