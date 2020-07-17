@@ -1,9 +1,6 @@
-import Line from '../components/Graphs/DataProcessRateGraph'
-// import PipelinesLayout from '../components/Pipelines/PipelinesLayout'
 import React from 'react'
-
 import { useParams } from 'react-router-dom'
-
+import MetricsLayout from '../components/Graphs/MetricsLayout'
 const PipelinesLayout = React.lazy(() => import('../components/Pipelines/PipelinesLayout'))
 const PipelineLayout = React.lazy(() => import('../components/Pipelines/PipelineLayout'))
 const TopologiesLayout = React.lazy(() => import('../components/Topologies/TopologiesLayout'))
@@ -38,7 +35,7 @@ const routes = [
   }, {
     path: '/metrics',
     exact: true,
-    component: () => <Line />
+    component: () => <MetricsLayout />
   }
 ]
 

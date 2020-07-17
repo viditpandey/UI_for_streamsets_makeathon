@@ -1,5 +1,5 @@
 import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
-import MetricsLayout from '../Graphs/DataProcessRateGraph'
+import MetricsLayout from '../Graphs/MetricsLayout'
 import React, { useState, useEffect, useContext } from 'react'
 import Switch from '@material-ui/core/Switch'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
