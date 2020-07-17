@@ -21,8 +21,8 @@ export default function MetricsLayout ({ topologyData = [], metricsData = [] }) 
       name: element.pipelineTitle,
       YAxisData: totalTime
     }
-    const rate = metricsData && (metricsData.find(i => i.name === element.pipelineId)) &&
-    (metricsData.find(i => i.name === element.pipelineId).res / totalTime)
+    const rate = (metricsData && (metricsData.find(i => i.name === element.pipelineId)) &&
+    (metricsData.find(i => i.name === element.pipelineId).res / totalTime)).toFixed(2)
 
     if (rate > processedDataMax) processedDataMax = rate
 
@@ -56,10 +56,13 @@ export default function MetricsLayout ({ topologyData = [], metricsData = [] }) 
 
             </div>
           )
-          : <div>
-            {MyLineChart({ data, yExtra: dataMax * 0.1, Xlabel: 'Time Consumption Graph', Ylabel: 'Time Taken', YUnit: 's' })}
-            {MyLineChart({ data: processedData, yExtra: processedDataMax * 0.1, Xlabel: 'Data Processing Rate Graph', Ylabel: 'Records / sec', YUnit: 'rate' })}
-          </div>
+          : (
+            <div>
+              {MyLineChart({ data, yExtra: dataMax * 0.1, Xlabel: 'Time Consumption Graph', Ylabel: 'Time Taken', YUnit: 's' })}
+              {MyLineChart({ data: processedData, yExtra: processedDataMax * 0.1, Xlabel: 'Data Processing Rate Graph', Ylabel: 'Records / sec', YUnit: 'rate' })}
+
+            </div>
+          )
       }
     </div>
   )
