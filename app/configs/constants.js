@@ -28,6 +28,7 @@ export const getStyleByPipelineStatus = {
   INVALID: { background: HEX_CODES.lightRed },
   VALID: { background: HEX_CODES.lightGreen },
   VALIDATING: { background: HEX_CODES.lightBlue },
+  VALIDATED: { background: HEX_CODES.lightGreen },
   TO_START: { background: HEX_CODES.grey },
   PAUSED: { background: HEX_CODES.yellow },
   undefined: { background: HEX_CODES.grey }

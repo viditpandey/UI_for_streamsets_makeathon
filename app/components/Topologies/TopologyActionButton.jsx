@@ -16,7 +16,7 @@ export default function TopologyActionButton ({
   topology, status, disabled,
   disabledSecondary,
   createTopology, startTopology, stopTopology,
-  validateTopology, resetTopology, pauseTopology
+  validateTopology, resetTopology, pauseTopology, resumeTopology
 }) {
   let startIcon = <SaveIcon />
   let buttonText = 'PERFORM ACTION'
@@ -105,7 +105,7 @@ export default function TopologyActionButton ({
       buttonText = 'RESUME TOPOLOGY'
       style = { background: '#5cb85c' } // green
       startIcon = <PlayCircleFilledWhiteIcon />
-      handleClickAction = startTopology
+      handleClickAction = resumeTopology
       renderSecondaryButton = false
       break
 
