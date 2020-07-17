@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 // import TopologiesLayout from '../components/Topologies/TopologiesLayout'
 // import TopolgyRegisterationLayout from '../components/Topologies/TopolgyRegisterationLayout'
 // import TopologyLayout from '../components/Topologies/TopologyLayout'
-import Line from '../components/Graphs/DataProcessRateGraph'
+import MetricsLayout from '../components/Graphs/MetricsLayout'
 const PipelinesLayout = React.lazy(() => import('../components/Pipelines/PipelinesLayout'))
 const PipelineLayout = React.lazy(() => import('../components/Pipelines/PipelineLayout'))
 const TopologiesLayout = React.lazy(() => import('../components/Topologies/TopologiesLayout'))
@@ -41,7 +41,7 @@ const routes = [
   }, {
     path: '/metrics',
     exact: true,
-    component: () => <Line />
+    component: () => <MetricsLayout />
   }
 ]
 

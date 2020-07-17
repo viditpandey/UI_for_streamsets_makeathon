@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, LabelList, BarChart, Legend, Bar, Label } from 'recharts'
+import React from 'react'
+import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, BarChart, Bar, Label } from 'recharts'
 import moment from 'moment'
 import Switch from '@material-ui/core/Switch'
 
-export default function MyChart ({ topologyData = [], metricsData = [] }) {
+export default function MetricsLayout ({ topologyData = [], metricsData = [] }) {
   const [toggle, setToggle] = React.useState(false)
   const data = []
   const processedData = []
@@ -59,7 +59,7 @@ export default function MyChart ({ topologyData = [], metricsData = [] }) {
           : <div>
             {MyLineChart({ data, yExtra: dataMax * 0.1, Xlabel: 'Time Consumption Graph', Ylabel: 'Time Taken', YUnit: 's' })}
             {MyLineChart({ data: processedData, yExtra: processedDataMax * 0.1, Xlabel: 'Data Processing Rate Graph', Ylabel: 'Records / sec', YUnit: 'rate' })}
-            </div>
+          </div>
       }
     </div>
   )
