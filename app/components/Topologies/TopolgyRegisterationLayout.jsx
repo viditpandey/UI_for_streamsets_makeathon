@@ -208,6 +208,57 @@ export default function TopolgyRegisterationLayout ({
     return treeData.map(p => p.pipelineId).indexOf(selectedPipeline.pipelineId) !== -1
   }
 
+  const handleButtonClick = (type) => {
+    let callToAction = () => {}
+    const updatedTopology = cloneDeep(topologyData)
+    let callToActionParams = { topologyId: name }
+    switch (type) {
+      case 'createTopology':
+        callToAction = createTopologyButtonAction
+        break
+
+      case 'startTopology':
+        updatedTopology.topologyStatus = 'STARTING'
+        setTopologyData(updatedTopology)
+        enqueueSnackbar('Topology Start.', { variant: 'success' })
+        callToAction = startTopology
+        break
+
+      case 'resumeTopology':
+        enqueueSnackbar('Topology Resume.', { variant: 'success' })
+        callToAction = resumeTopology
+        break
+
+      case 'stopTopology':
+        callToActionParams = topologyData
+        enqueueSnackbar('Topology Stop.', { variant: 'success' })
+        callToAction = stopTopology
+        break
+
+      case 'validateTopology':
+        enqueueSnackbar('Topology Validate.', { variant: 'info' })
+        callToAction = validateTopology
+        break
+
+      case 'resetTopology':
+        enqueueSnackbar('Topology Reset Status.', { variant: 'success' })
+        callToAction = resetTopology
+        break
+
+      case 'pauseTopology':
+        callToActionParams = topologyData
+        enqueueSnackbar('Topology Pause.', { variant: 'info' })
+        callToAction = pauseTopology
+        break
+
+      default:
+        break
+    }
+    setTopologyData(updatedTopology)
+    setAutoRefresh(true)
+    callToAction(callToActionParams)
+  }
+
   return (
     <Paper>
       <div style={{ padding: '15px' }}>
@@ -229,40 +280,13 @@ export default function TopolgyRegisterationLayout ({
                 <TopologyActionButton
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
-                  createTopology={createTopologyButtonAction}
-                  startTopology={() => {
-                    startTopology({ topologyId: name })
-                    setAutoRefresh(true)
-                    enqueueSnackbar('Topology Start.', { variant: 'success' })
-                  }}
-                  resumeTopology={() => {
-                    resumeTopology({ topologyId: name })
-                    setAutoRefresh(true)
-                    enqueueSnackbar('Topology Resume.', { variant: 'success' })
-                  }}
-                  stopTopology={() => {
-                    stopTopology(topologyData)
-                    setAutoRefresh(true)
-                    enqueueSnackbar('Topology Stop.', { variant: 'success' })
-                  }}
-                  validateTopology={() => {
-                    validateTopology({ topologyId: name })
-                    setAutoRefresh(true)
-                    enqueueSnackbar('Topology Validate.', { variant: 'info' })
-                  }}
-                  resetTopology={() => {
-                    resetTopology({ topologyId: name })
-                    setAutoRefresh(true)
-                    enqueueSnackbar('Topology Reset Status.', { variant: 'success' })
-                  }}
-                  pauseTopology={() => {
-                    const updatedTopology = cloneDeep(topologyData)
-                    updatedTopology.topologyStatus = 'PAUSING'
-                    setTopologyData(updatedTopology)
-                    pauseTopology(topologyData)
-                    setAutoRefresh(true)
-                    enqueueSnackbar('Topology Pause.', { variant: 'info' })
-                  }}
+                  createTopology={() => handleButtonClick('createTopology')}
+                  startTopology={() => handleButtonClick('startTopology')}
+                  resumeTopology={() => handleButtonClick('resumeTopology')}
+                  stopTopology={() => handleButtonClick('stopTopology')}
+                  validateTopology={() => handleButtonClick('startTopology')}
+                  resetTopology={() => handleButtonClick('resetTopology')}
+                  pauseTopology={() => handleButtonClick('pauseTopology')}
                 />
               </div>
             </Grid>

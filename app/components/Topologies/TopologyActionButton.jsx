@@ -79,10 +79,15 @@ export default function TopologyActionButton ({
       renderSecondaryButton = false
       break
 
+      // case 'VALIDATING':
+    case 'STARTING':
+    case 'RESUMING':
+    case 'STOPPING':
+    case 'RESETTING':
     case 'PAUSING':
       renderPrimaryButton = false
       renderSecondaryButton = true
-      secondaryButtonText = 'PAUSING TOPOLOGY'
+      secondaryButtonText = `${topology.topologyStatus} TOPOLOGY` || 'PAUSING TOPOLOGY'
       handleSecondaryClickAction = () => {}
       secondaryButtonIcon = <CircularProgress color='inherit' size={15} />
       break
