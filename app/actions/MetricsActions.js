@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import { BASE_URL } from '../configs/constants'
+import { isEmpty } from 'lodash'
 
 const GET_PIPELINE_HISTORY = pipelineId => `${BASE_URL}/pipelineoperation/${pipelineId}/history`
 
@@ -10,7 +11,8 @@ export const getNumberOfRecordsProcessed = async ({ pipelineId }) => {
       method: 'get',
       url: GET_PIPELINE_HISTORY(pipelineId)
     }
-    ).catch(e => ({ data: {} }))
+    ).catch(e => ({ data: [] }))
+    if (isEmpty(res.data)) return []
     const sortedResponse = res.data.sort(function (a, b) {
       var x = a.timeStamp > b.timeStamp ? -1 : 1
       return x
@@ -22,6 +24,6 @@ export const getNumberOfRecordsProcessed = async ({ pipelineId }) => {
     return numberOfRecordsProcessed
   } catch (e) {
     console.error('[MetricsActions.getPipelineHistory] error:', e)
-    return {}
+    return []
   }
 }

@@ -7,7 +7,6 @@ import React, { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory, useLocation } from 'react-router-dom'
-// import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +39,7 @@ export default function SimpleBottomNavigation () {
     <BottomNavigation
       value={value}
       onChange={(event, newValue) => {
+        if (value === newValue) return
         history.push(naviRoutes[newValue])
         setValue(newValue)
       }}

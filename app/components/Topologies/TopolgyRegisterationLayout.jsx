@@ -42,18 +42,9 @@ const BorderLinearProgress = ({ loaderBackground, backgroundColor }) => withStyl
 // const PIPELINE_STATUS = ['STARTING', 'RETRY', , 'RUNNING', 'FINISHED', 'EDITED', 'STOPPED']
 
 const loaderColorByPipelineStatus = {
-  STARTING: { background: HEX_CODES.blueVariant1 }, // light-blue
-  // RETRY: { background: '#f7a6a6' }, // red
-  RUNNING: { background: HEX_CODES.greenVariant1 }, // light green
-  // FINISHED: { background: '#709c5f' }, // slightly darker than light green
-  // EDITED: { background: '#b5b5b5' }, // grey
-  // STOPPED: { background: '#f7a6a6' }, // red
-  // ERROR: { background: '#f7a6a6' }, // red
-  // RUN_ERROR: { background: '#f7a6a6' }, // red
-  // INVALID: { background: '#f7a6a6' }, // red
-  // VALID: { background: HEX_CODES.lightGreen }, // light green,
-  VALIDATING: { background: HEX_CODES.blueVariant1 } // light-blue
-  // undefined: { background: '#b5b5b5' } // grey
+  STARTING: { background: HEX_CODES.blueVariant1 },
+  RUNNING: { background: HEX_CODES.greenVariant1 },
+  VALIDATING: { background: HEX_CODES.blueVariant1 }
 }
 
 const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING', 'PAUSING']
@@ -100,7 +91,7 @@ const getTreeCompatibleData = ({ list, topologyStatus, handlePipelineClick }) =>
 export default function TopolgyRegisterationLayout ({
   propsTopologyData = {}, propsName = '',
   propsSelectedPipelines = [], renderMetrics = () => {},
-  setPollCount = () => {}
+  setAutoRefresh = () => {}
 }) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
@@ -234,20 +225,40 @@ export default function TopolgyRegisterationLayout ({
             </Grid>
 
             <Grid item md={5} xs={12}>
-              {/* <div className='float-right'> */}
               <div>
                 <TopologyActionButton
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
                   createTopology={createTopologyButtonAction}
-                  startTopology={() => { startTopology({ topologyId: name }); enqueueSnackbar('Topology Start.', { variant: 'success' }) }}
-                  resumeTopology={() => { resumeTopology({ topologyId: name }); enqueueSnackbar('Topology Resume.', { variant: 'success' }) }}
-                  stopTopology={() => { stopTopology(topologyData); enqueueSnackbar('Topology Stop.', { variant: 'success' }) }}
-                  validateTopology={() => { validateTopology({ topologyId: name }); enqueueSnackbar('Topology Validate.', { variant: 'info' }) }}
-                  resetTopology={() => { resetTopology({ topologyId: name }); enqueueSnackbar('Topology Reset Status.', { variant: 'success' }) }}
+                  startTopology={() => {
+                    startTopology({ topologyId: name })
+                    setAutoRefresh(true)
+                    enqueueSnackbar('Topology Start.', { variant: 'success' })
+                  }}
+                  resumeTopology={() => {
+                    resumeTopology({ topologyId: name })
+                    setAutoRefresh(true)
+                    enqueueSnackbar('Topology Resume.', { variant: 'success' })
+                  }}
+                  stopTopology={() => {
+                    stopTopology(topologyData)
+                    setAutoRefresh(true)
+                    enqueueSnackbar('Topology Stop.', { variant: 'success' })
+                  }}
+                  validateTopology={() => {
+                    validateTopology({ topologyId: name })
+                    setAutoRefresh(true)
+                    enqueueSnackbar('Topology Validate.', { variant: 'info' })
+                  }}
+                  resetTopology={() => {
+                    resetTopology({ topologyId: name })
+                    setAutoRefresh(true)
+                    enqueueSnackbar('Topology Reset Status.', { variant: 'success' })
+                  }}
                   pauseTopology={() => {
                     setTopologyData({ ...topologyData, topologyStatus: 'PAUSING' })
                     pauseTopology(topologyData)
+                    setAutoRefresh(true)
                     enqueueSnackbar('Topology Pause.', { variant: 'info' })
                   }}
                 />
@@ -304,7 +315,6 @@ export default function TopolgyRegisterationLayout ({
 const CreateTree = ({ treeData, setTreeData, setFinalTreeData, selectedPipelines }) => {
   if (!treeData || !treeData.length) return <Chip variant='outlined' size='medium' label='NO PIPELINE SELECTED YET' className='margin-bottom-15' />
   const height = (selectedPipelines.length * 70) || 100
-  // const [open, setOpen] = useState(true)
   return (
     <div>
       <AccordianWrapper

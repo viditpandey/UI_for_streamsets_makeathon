@@ -45,7 +45,7 @@ export default function TopologiesLayout () {
     setAppTitle({ text: 'TOPOLOGIES', button: newTopology })
     async function fetchTopologies () {
       const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
-      res && setTopologies(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
+      res && setTopologies(res)
     }
     fetchTopologies()
   }, [])
