@@ -8,6 +8,7 @@ import StopIcon from '@material-ui/icons/Stop'
 
 import { AppBarContext } from '../Base/Home'
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
+import { sortBy } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
@@ -127,7 +128,8 @@ export default function PipelinesLayout () {
     <div>
 
       <ListItemWrapper
-        items={pipelines}
+        // items={pipelines}
+        items={sortBy(pipelines, ['title', 'pipelineId'])}
         getKey={item => item.pipelineId}
         itemClick={item => history.push(`/pipelines/${item.pipelineId}`)}
         collapsedText={item => returnSecondaryText(item)}

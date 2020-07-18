@@ -12,7 +12,7 @@ import TopologyName from './TopologyName'
 import TopologyActionButton from './TopologyActionButton'
 
 import { AppBarContext } from '../Base/Home'
-import { cloneDeep, isEmpty } from 'lodash'
+import { cloneDeep, isEmpty, sortBy } from 'lodash'
 import {
   createTopology, startTopology, resumeTopology,
   stopTopology, validateTopology,
@@ -148,7 +148,8 @@ export default function TopolgyRegisterationLayout ({
 
     async function fetchPipelines () {
       const res = await getPipelines()
-      availablePipelines(res)
+      const sorted = sortBy(res, ['title', 'pipelineTitle', 'pipelineId'])
+      availablePipelines(sorted)
     }
     fetchPipelines()
   }, [])
@@ -168,7 +169,8 @@ export default function TopolgyRegisterationLayout ({
 
   useEffect(() => {
     setName(propsName)
-    addPipelinesToTopology(cloneDeep(propsSelectedPipelines))
+    const sorted = sortBy(cloneDeep(propsSelectedPipelines), ['title', 'pipelineTitle', 'pipelineId'])
+    addPipelinesToTopology(sorted)
     setTopologyData(cloneDeep(propsTopologyData))
     setPageViewOrEditMode(!!propsName)
   }, [propsName, propsSelectedPipelines])
@@ -178,7 +180,8 @@ export default function TopolgyRegisterationLayout ({
     const allPipelinesCloned = cloneDeep(allPipelines)
     const SelectedPipelineIDs = selectedPipelines.map(i => i.pipelineId)
     const filteredPipelinesNotInTopology = allPipelinesCloned.filter(i => SelectedPipelineIDs.indexOf(i.pipelineId) === -1)
-    availablePipelines(filteredPipelinesNotInTopology)
+    const sorted = sortBy(filteredPipelinesNotInTopology, ['title', 'pipelineTitle', 'pipelineId'])
+    availablePipelines(sorted)
   }, [selectedPipelines])
 
   useEffect(() => {
@@ -294,8 +297,10 @@ export default function TopolgyRegisterationLayout ({
             open={openDialog}
             setOpen={setOpenDialog}
             left={allPipelines}
+            // left={allPipelines}
             setLeft={availablePipelines}
             right={selectedPipelines}
+            // right={selectedPipelines}
             setRight={addPipelinesToTopology}
             buttonText={`${selectedPipelines.length}/${allPipelines.length + selectedPipelines.length} pipelines selected`}
           />

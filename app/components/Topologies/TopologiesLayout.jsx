@@ -6,7 +6,7 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import { AppBarContext } from '../Base/Home'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
-import { isEmpty } from 'lodash'
+import { isEmpty, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { IconButton } from '@material-ui/core'
@@ -86,7 +86,8 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler }) => {
   }
   return (
     <ListItemWrapper
-      items={topologies}
+    // items={topologies}
+      items={sortBy(topologies, ['topologyId'])}
       itemClick={item => history.push(`/topologies/${item.topologyId}`)}
       getPrimaryText={item => `${item.topologyId}`}
       getKey={item => item.topologyId}
