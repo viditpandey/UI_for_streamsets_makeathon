@@ -37,13 +37,13 @@ export default function TopologyActionButton ({
       renderSecondaryButton = false
       break
 
-    case 'STOPPED':
-      buttonText = 'START TOPOLOGY'
-      style = { background: HEX_CODES.green }
-      startIcon = <PlayCircleFilledWhiteIcon />
-      handleClickAction = startTopology
-      renderSecondaryButton = false
-      break
+      // case 'STOPPED':
+      //   buttonText = 'START TOPOLOGY'
+      //   style = { background: HEX_CODES.green }
+      //   startIcon = <PlayCircleFilledWhiteIcon />
+      //   handleClickAction = startTopology
+      //   renderSecondaryButton = false
+      //   break
 
       // case 'FINISHED':
       //   buttonText = 'RESET TOPOLOGY'
@@ -55,6 +55,7 @@ export default function TopologyActionButton ({
 
     case 'FINISHED':
     case 'TO_START':
+    case 'STOPPED':
     case 'FAILED':
       buttonText = 'VALIDATE TOPOLOGY'
       style = { background: HEX_CODES.green }
