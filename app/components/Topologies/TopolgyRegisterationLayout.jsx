@@ -109,6 +109,7 @@ export default function TopolgyRegisterationLayout ({
   const [dependencyCriteria, setDependencyCriteria] = useState('stop')
   const [waitTime, setWaitTime] = useState(0)
   const [finalTreeData, setFinalTreeData] = useState([])
+  const [statusToIgnore, setStatusToIgnore] = useState(null)
 
   const formTreeData = nodeInfo => {
     let dependsOn = 'root'
@@ -168,11 +169,14 @@ export default function TopolgyRegisterationLayout ({
   }, [openDialog])
 
   useEffect(() => {
+    const cloneTopologyData = cloneDeep(propsTopologyData)
     setName(propsName)
     const sorted = sortBy(cloneDeep(propsSelectedPipelines), ['title', 'pipelineTitle', 'pipelineId'])
     addPipelinesToTopology(sorted)
-    setTopologyData(cloneDeep(propsTopologyData))
     setPageViewOrEditMode(!!propsName)
+    if (statusToIgnore && statusToIgnore === cloneTopologyData.topologyStatus) cloneTopologyData.topologyStatus = topologyData.topologyStatus
+    else setStatusToIgnore(null)
+    setTopologyData(cloneTopologyData)
   }, [propsName, propsSelectedPipelines])
 
   useEffect(() => {
@@ -214,11 +218,11 @@ export default function TopolgyRegisterationLayout ({
   const handleButtonClick = (type) => {
     let callToAction = () => {}
     const updatedTopology = cloneDeep(topologyData)
+    const prevTopologyStatus = topologyData.topologyStatus
     let callToActionParams = { topologyId: name }
     switch (type) {
       case 'startTopology':
         updatedTopology.topologyStatus = 'STARTING'
-        setTopologyData(updatedTopology)
         enqueueSnackbar('Topology Start.', { variant: 'success' })
         callToAction = startTopology
         break
@@ -258,6 +262,7 @@ export default function TopolgyRegisterationLayout ({
       default:
         break
     }
+    setStatusToIgnore(prevTopologyStatus)
     setTopologyData(updatedTopology)
     setAutoRefresh(true)
     callToAction(callToActionParams)
