@@ -224,27 +224,32 @@ export default function TopolgyRegisterationLayout ({
         break
 
       case 'resumeTopology':
+        updatedTopology.topologyStatus = 'RESUMING'
         enqueueSnackbar('Topology Resume.', { variant: 'success' })
         callToAction = resumeTopology
         break
 
       case 'stopTopology':
         callToActionParams = topologyData
+        updatedTopology.topologyStatus = 'STOPPING'
         enqueueSnackbar('Topology Stop.', { variant: 'success' })
         callToAction = stopTopology
         break
 
       case 'validateTopology':
+        updatedTopology.topologyStatus = 'VALIDATING'
         enqueueSnackbar('Topology Validate.', { variant: 'info' })
         callToAction = validateTopology
         break
 
       case 'resetTopology':
+        updatedTopology.topologyStatus = 'RESETTING'
         enqueueSnackbar('Topology Reset Status.', { variant: 'success' })
         callToAction = resetTopology
         break
 
       case 'pauseTopology':
+        updatedTopology.topologyStatus = 'PAUSING'
         callToActionParams = topologyData
         enqueueSnackbar('Topology Pause.', { variant: 'info' })
         callToAction = pauseTopology
