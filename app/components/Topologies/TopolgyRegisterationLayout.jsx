@@ -213,10 +213,6 @@ export default function TopolgyRegisterationLayout ({
     const updatedTopology = cloneDeep(topologyData)
     let callToActionParams = { topologyId: name }
     switch (type) {
-      case 'createTopology':
-        callToAction = createTopologyButtonAction
-        break
-
       case 'startTopology':
         updatedTopology.topologyStatus = 'STARTING'
         setTopologyData(updatedTopology)
@@ -280,11 +276,11 @@ export default function TopolgyRegisterationLayout ({
                 <TopologyActionButton
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
-                  createTopology={() => handleButtonClick('createTopology')}
+                  createTopology={createTopologyButtonAction}
                   startTopology={() => handleButtonClick('startTopology')}
                   resumeTopology={() => handleButtonClick('resumeTopology')}
                   stopTopology={() => handleButtonClick('stopTopology')}
-                  validateTopology={() => handleButtonClick('startTopology')}
+                  validateTopology={() => handleButtonClick('validateTopology')}
                   resetTopology={() => handleButtonClick('resetTopology')}
                   pauseTopology={() => handleButtonClick('pauseTopology')}
                 />
