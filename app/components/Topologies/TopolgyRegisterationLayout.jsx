@@ -175,7 +175,7 @@ export default function TopolgyRegisterationLayout ({
     addPipelinesToTopology(sorted)
     setPageViewOrEditMode(!!propsName)
     if (statusToIgnore && statusToIgnore === cloneTopologyData.topologyStatus) cloneTopologyData.topologyStatus = topologyData.topologyStatus
-    else setStatusToIgnore(null)
+    else !statusToIgnore && setStatusToIgnore(null)
     setTopologyData(cloneTopologyData)
   }, [propsName, propsSelectedPipelines])
 
