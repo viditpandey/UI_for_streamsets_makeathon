@@ -131,7 +131,7 @@ export default function TopolgyRegisterationLayout ({
   }
 
   const createTopologyButtonAction = () => {
-    if (!isFormValid()) enqueueSnackbar('Name or Selected Pipelines cannot be empty.', { variant: 'error' })
+    if (!isFormValid()) enqueueSnackbar('Topology Name or Selected Pipelines cannot be empty.', { variant: 'error' })
     else {
       walk({
         treeData,
@@ -160,7 +160,7 @@ export default function TopolgyRegisterationLayout ({
   useEffect(() => { updatePipelinesConfigInTree() }, [waitTime, threshold, processAfter])
 
   const isFormValid = () => {
-    const isValidName = name && name.length
+    const isValidName = name && name.length && /\s/.test(name)
     const isValidSelectedPipelines = !isEmpty(selectedPipelines)
     return (isValidName && isValidSelectedPipelines)
   }

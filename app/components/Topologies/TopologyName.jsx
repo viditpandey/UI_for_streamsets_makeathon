@@ -28,6 +28,8 @@ const Name = ({ name, setName, disabled, topologyStatus }) => {
   return (
     <TextField
       id='topology_name'
+      error={/\s/.test(name)}
+      helperText='Topology name cannot contain spaces'
       value={name}
       disabled={disabled}
       onChange={e => setName(e.target.value)}
