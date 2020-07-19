@@ -50,6 +50,8 @@ const loaderColorByPipelineStatus = {
 const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING', 'PAUSING']
 
 const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
+  const title = p.title || p.pipelineTitle || p.pipelineId
+  const errorCount = p.errorCount === 0 ? '' : `(error count: ${p.errorCount})`
   let statusLabel = p.pipelineStatus || 'TO_START'
   if (topologyStatus === 'PAUSED') statusLabel = 'PAUSED'
   const CustomProgressBar = PIPELINES_IN_PROGRESS.indexOf(statusLabel) !== -1 ? BorderLinearProgress({
@@ -58,7 +60,7 @@ const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
   }) : () => null
   const chipLabel = (
 
-    <div>{p.title || p.pipelineTitle || p.pipelineId} ({statusLabel})
+    <div>{title} ({statusLabel}) {errorCount}
       <div style={{ margin: '0 10px' }}>
         {<CustomProgressBar />}
       </div>

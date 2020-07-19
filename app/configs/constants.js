@@ -43,6 +43,7 @@ export const mockedTopology = {
       createTimestamp: '12-07-2020 12:29:59',
       createdBy: 'From UI',
       dependsOn: 'root',
+      pipelineTitle: 'Still_deciding_0',
       endTime: '',
       errorCount: 0,
       pipelineId: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
@@ -52,27 +53,31 @@ export const mockedTopology = {
       updateTimestamp: '',
       updatedBy: '',
       waitTime: 1,
-      processAfter: 'stop'
+      processAfter: 'stop',
+      pipelineStatus: 'FINISHED'
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
       createdBy: 'From UI',
       dependsOn: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
       endTime: '',
-      errorCount: 0,
+      errorCount: 2,
       pipelineId: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
+      pipelineTitle: 'Still_deciding_1',
       startTime: '',
       threshold: 2,
       triggeredBy: '',
       updateTimestamp: '',
       updatedBy: '',
       waitTime: 2,
-      processAfter: 'start'
+      processAfter: 'start',
+      pipelineStatus: 'RUNNING'
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
       createdBy: 'From UI',
       dependsOn: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
+      pipelineTitle: 'Still_deciding_2',
       endTime: '',
       errorCount: 0,
       pipelineId: 'givenf820b18b-effa-4907-8fe6-569477041d14',
@@ -81,7 +86,8 @@ export const mockedTopology = {
       triggeredBy: '',
       updateTimestamp: '',
       updatedBy: '',
-      waitTime: 3
+      waitTime: 3,
+      pipelineStatus: 'VALID'
     }
   ]
 }
