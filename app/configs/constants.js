@@ -26,6 +26,7 @@ export const getStyleByPipelineStatus = {
   ERROR: { background: HEX_CODES.lightRed },
   FAILED: { background: HEX_CODES.lightRed },
   RUN_ERROR: { background: HEX_CODES.lightRed },
+  VALIDATION_ERROR: { background: HEX_CODES.lightRed },
   INVALID: { background: HEX_CODES.lightRed },
   VALID: { background: HEX_CODES.lightGreen },
   VALIDATING: { background: HEX_CODES.lightBlue },
