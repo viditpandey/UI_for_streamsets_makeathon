@@ -106,7 +106,7 @@ export default function TopolgyRegisterationLayout ({
   const [openConfigDialog, setOpenConfigDialog] = useState(false) // Open Dialog to manage time dependency & threshold for each pipeline in treeData
   const [selectedPipeline, setSelectedPipeline] = useState({}) // to save in state, which pipeline chip was clicked
   const [threshold, setThreshold] = useState(0)
-  const [dependencyCriteria, setDependencyCriteria] = useState('stop')
+  const [processAfter, setProcessAfter] = useState('stop')
   const [waitTime, setWaitTime] = useState(0)
   const [finalTreeData, setFinalTreeData] = useState([])
   const [statusToIgnore, setStatusToIgnore] = useState(null)
@@ -115,13 +115,13 @@ export default function TopolgyRegisterationLayout ({
     let dependsOn = 'root'
     if (nodeInfo.parentNode && nodeInfo.parentNode.pipelineId) dependsOn = nodeInfo.parentNode.pipelineId
     const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
-    const { pipelineId, waitTime, threshold, dependencyCriteria } = pipelineInfo
+    const { pipelineId, waitTime, threshold, processAfter } = pipelineInfo
     finalTreeData.push({
       topologyId: name,
       pipelineId: pipelineId,
       waitTime: Number(waitTime || 0),
       threshold: Number(threshold || 0),
-      dependencyCriteria: dependsOn === 'root' ? 'stop' : (dependencyCriteria || 'stop'),
+      processAfter: dependsOn === 'root' ? 'stop' : (processAfter || 'stop'),
       createdBy: 'From UI',
       dependsOn
     })
@@ -155,7 +155,7 @@ export default function TopolgyRegisterationLayout ({
     fetchPipelines()
   }, [])
 
-  useEffect(() => { updatePipelinesConfigInTree() }, [waitTime, threshold, dependencyCriteria])
+  useEffect(() => { updatePipelinesConfigInTree() }, [waitTime, threshold, processAfter])
 
   const isFormValid = () => {
     const isValidName = name && name.length
@@ -198,7 +198,7 @@ export default function TopolgyRegisterationLayout ({
       if (itemNode.pipelineId === selectedPipeline.pipelineId) {
         itemNode.waitTime = waitTime
         itemNode.threshold = threshold
-        itemNode.dependencyCriteria = dependencyCriteria
+        itemNode.processAfter = processAfter
       }
     })
   }
@@ -206,7 +206,7 @@ export default function TopolgyRegisterationLayout ({
   const handlePipelineClick = (val, pipeline) => {
     setThreshold((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).threshold) || 0)
     setWaitTime((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).waitTime) || 0)
-    setDependencyCriteria((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).dependencyCriteria) || 'stop')
+    setProcessAfter((selectedPipelines.find(i => i.pipelineId === pipeline.pipelineId).processAfter) || 'stop')
     setOpenConfigDialog(val)
     setSelectedPipeline(pipeline)
   }
@@ -337,8 +337,8 @@ export default function TopolgyRegisterationLayout ({
             threshold={threshold}
             setWaitTime={setWaitTime}
             waitTime={waitTime}
-            dependencyCriteria={dependencyCriteria}
-            setDependencyCriteria={setDependencyCriteria}
+            processAfter={processAfter}
+            setProcessAfter={setProcessAfter}
             disabled={viewMode}
             hideToggle={hideToggleForRootNode()}
           />

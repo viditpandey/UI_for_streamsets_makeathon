@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { BASE_URL, mockedPipelines } from '../configs/constants'
+import { BASE_URL, mockedPipelines } from '../configs/constants' // eslint-disable-line
 
 const GET_ALL_PIPELINES = BASE_URL + '/getpipelines'
 const PIPELINE_ACTION = BASE_URL + '/pipelineaction'
@@ -11,7 +11,6 @@ export const getPipelines = async () => {
     const res = await axios.get(GET_ALL_PIPELINES)
       .catch(e => { throw (e) })
     const pipelines = res.data
-    console.log('mockedPipelines', mockedPipelines)
     console.log('GET: Here\'s the list of pipelines', pipelines)
     return pipelines
   } catch (e) {

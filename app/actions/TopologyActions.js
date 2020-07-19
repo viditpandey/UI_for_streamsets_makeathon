@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { BASE_URL } from '../configs/constants'
+import { BASE_URL, mockedTopology } from '../configs/constants' // eslint-disable-line
 
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
 const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'

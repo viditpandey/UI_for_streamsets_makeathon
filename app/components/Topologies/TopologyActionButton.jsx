@@ -10,7 +10,8 @@ import ReplayIcon from '@material-ui/icons/Replay'
 import SaveIcon from '@material-ui/icons/Save'
 import { HEX_CODES } from '../../configs/constants'
 
-// const topologyPossibleStatuses = ['FAILED', 'PAUSED', 'VALIDATED', 'FINISHED', 'VALIDATING', 'RUNNING', 'ERROR', 'TO_START', 'STOPPED']
+// const topologyPossibleStatuses = ['FAILED', 'PAUSED', 'VALIDATED', 'FINISHED', 'VALIDATING', 'RUNNING', 'ERROR', 'TO_START', 'STOPPED', 'VALIDATION_ERROR']
+// const indeterminatePossibleStatuses = ['PAUSING', 'STARTING', 'RESUMING', 'STOPPING', 'RESETTING]
 
 export default function TopologyActionButton ({
   topology, status, disabled,
@@ -53,6 +54,7 @@ export default function TopologyActionButton ({
       //   renderSecondaryButton = false
       //   break
 
+    case 'VALIDATION_ERROR':
     case 'FINISHED':
     case 'TO_START':
     case 'STOPPED':
@@ -88,7 +90,6 @@ export default function TopologyActionButton ({
       secondaryButtonIcon = <CircularProgress color='inherit' size={15} />
       break
 
-      // case 'VALIDATING':
     case 'STARTING':
     case 'RESUMING':
     case 'STOPPING':
