@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { useParams } from 'react-router-dom'
+
 const PipelinesLayout = React.lazy(() => import('../components/Pipelines/PipelinesLayout'))
 const PipelineLayout = React.lazy(() => import('../components/Pipelines/PipelineLayout'))
 const TopologiesLayout = React.lazy(() => import('../components/Topologies/TopologiesLayout'))

@@ -1,27 +1,31 @@
 import React, { useState, useEffect, useContext } from 'react'
+import ListItemWrapper from '../Shared/List/ListItemWrapper'
 
 import { AppBarContext } from '../Base/Home'
 import { CircularProgress, Typography } from '@material-ui/core'
-import { isEmpty } from 'lodash'
+import { getTopologyHistory } from '../../actions/TopologyActions'
+import { isEmpty, sortBy, reverse } from 'lodash'
+import { useParams, useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
-const getHistoryByTopologyId = () => {}
-
-export default function TopologyLayout ({ id }) {
+export default function TopologyHistoryLayout () {
+  const { id } = useParams()
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
+  const history = useHistory()
+
   const [topologyHistoryData, setTopologyHistoryData] = useState([])
 
   useEffect(() => {
-    async function getTopologyHistory (id) {
-      const res = await getHistoryByTopologyId({ topologyId: id })
+    setAppTitle({ text: `TOPOLOGY HISTORY: ${id}` })
+    async function topologyHistory (id) {
+      const res = await getTopologyHistory({ topologyId: id })
       if (!isEmpty(res)) {
         setTopologyHistoryData(res)
-        setAppTitle({ text: `TOPOLOGY HISTORY: ${res.topologyId}` })
         enqueueSnackbar('History Fetched')
       }
     }
-    getTopologyHistory(id)
+    topologyHistory(id)
   }, [])
 
   if (isEmpty(topologyHistoryData)) {
@@ -35,9 +39,15 @@ export default function TopologyLayout ({ id }) {
 
   return (
     <div>
-      <Typography>
-        {'Topology History Data...'}
-      </Typography>
+      <ListItemWrapper
+        items={reverse(sortBy(topologyHistoryData, ['topologyStopTime']))}
+        itemClick={item => history.push(`/topologies/${id}/history/${item.historyId}`)}
+        getPrimaryText={item => `${item.historyId}`}
+        getKey={item => item.historyId}
+        secondaryText={item => `topology started: ${new Date(item.topologyStopTime)} and stopped: ${new Date(item.topologyStopTime)}`}
+        collapsedText={item => {}}
+        secondaryActionButton={item => {}}
+      />
     </div>
   )
 }
