@@ -22,7 +22,7 @@ export default function TopologyHistoryLayout () {
       const res = await getTopologyHistory({ topologyId: id })
       if (!isEmpty(res)) {
         setTopologyHistoryData(res)
-        enqueueSnackbar('History Fetched')
+        enqueueSnackbar('History Fetched', { variant: 'success' })
       }
     }
     topologyHistory(id)
@@ -42,7 +42,7 @@ export default function TopologyHistoryLayout () {
       <ListItemWrapper
         items={reverse(sortBy(topologyHistoryData, ['topologyStopTime']))}
         itemClick={item => history.push(`/topologies/${id}/history/${item.historyId}`)}
-        getPrimaryText={item => `${item.historyId}`}
+        getPrimaryText={item => `${item.historyId} (${item.topologyStatus})`}
         getKey={item => item.historyId}
         secondaryText={item => `topology started: ${new Date(item.topologyStopTime)} and stopped: ${new Date(item.topologyStopTime)}`}
         collapsedText={item => {}}
