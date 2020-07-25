@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { BASE_URL, mockedTopology } from '../configs/constants' // eslint-disable-line
+import { BASE_URL, mockedTopology, mockedTopologies } from '../configs/constants' // eslint-disable-line
 
 const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
 const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
@@ -118,6 +118,7 @@ export const getTopologies = async () => {
   } catch (e) {
     console.error('[TopologyActions.getTopologies] error:', e)
     throw e
+    // return mockedTopologies
   }
 }
 
