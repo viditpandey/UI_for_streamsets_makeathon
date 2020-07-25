@@ -51,7 +51,7 @@ const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING', 'PAUSING']
 
 const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
   const title = p.title || p.pipelineTitle || p.pipelineId
-  const errorCount = p.errorCount === 0 ? '' : `(error count: ${p.errorCount})`
+  const errorCount = p.errorCount ? `(error count: ${p.errorCount})` : ''
   let statusLabel = p.pipelineStatus || 'TO_START'
   if (topologyStatus === 'PAUSED') statusLabel = 'PAUSED'
   const CustomProgressBar = PIPELINES_IN_PROGRESS.indexOf(statusLabel) !== -1 ? BorderLinearProgress({
@@ -160,7 +160,7 @@ export default function TopolgyRegisterationLayout ({
   useEffect(() => { updatePipelinesConfigInTree() }, [waitTime, threshold, processAfter])
 
   const isFormValid = () => {
-    const isValidName = name && name.length && /\s/.test(name)
+    const isValidName = name && name.length && !/\s/.test(name)
     const isValidSelectedPipelines = !isEmpty(selectedPipelines)
     return (isValidName && isValidSelectedPipelines)
   }
