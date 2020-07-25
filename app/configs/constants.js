@@ -145,3 +145,9 @@ export const mockedPipelines = [{
   sdcVersion: '3.16.1',
   sdcId: 'ce64a628-c03a-11ea-a1ee-7101ba3522df'
 }]
+
+export const mockedTopologies = [{
+  topologyId: '123',
+  topologyStatus: 'TO_START',
+  topologyItems: []
+}]

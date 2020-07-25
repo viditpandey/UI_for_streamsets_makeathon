@@ -1,6 +1,7 @@
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
+import HistoryIcon from '@material-ui/icons/History'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import React, { useState, useEffect, useContext } from 'react'
 
@@ -84,16 +85,37 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler }) => {
       </IconButton>
     )
   }
+
+  const historyTopologyButton = item => {
+    return (
+      <IconButton
+        aria-label='delete topology'
+        onClick={() => history.push(`/topologies/${item.topologyId}/history`)}
+        component='span'
+      >
+        <HistoryIcon />
+      </IconButton>
+    )
+  }
+
+  const renderHistoryAndDeleteButtons = item => {
+    return (
+      <div>
+        {historyTopologyButton(item)}
+        {deleteTopologyButton(item)}
+      </div>
+    )
+  }
+
   return (
     <ListItemWrapper
-    // items={topologies}
       items={sortBy(topologies, ['topologyId'])}
       itemClick={item => history.push(`/topologies/${item.topologyId}`)}
       getPrimaryText={item => `${item.topologyId}`}
       getKey={item => item.topologyId}
       secondaryText={item => `contains ${item.topologyItems.length} pipeline(s)`}
       collapsedText={item => getTopologyItems(item)}
-      secondaryActionButton={item => deleteTopologyButton(item)}
+      secondaryActionButton={item => renderHistoryAndDeleteButtons(item)}
     />
   )
 }
