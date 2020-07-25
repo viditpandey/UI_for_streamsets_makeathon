@@ -83,7 +83,7 @@ export default function TopologyLayout ({ id }) {
     if ((topologyData.topologyStatus === 'FINISHED') && topologyData.topologyItems) {
       const allPipelineIDs = topologyData.topologyItems.map(p => p.pipelineId)
       const finalRes = await Promise.all(allPipelineIDs.map(i => getNumberOfRecordsProcessed({ pipelineId: i })))
-      if (!isEmpty(finalRes)) setFetchMetrics(false)
+      setFetchMetrics(false)
       const updatedData = allPipelineIDs.map((pipelineId, index) => ({ name: pipelineId, res: finalRes[index] }))
       setMetricsData(updatedData)
     }

@@ -10,16 +10,25 @@ export default function MetricsLayout ({ topologyPipelinesData = [], metricsData
   const [toggle, setToggle] = React.useState(false)
   const data = []
   const processedData = []
+  const errorCountData = []
   let dataMax = 0
   let processedDataMax = 0
+  let errorCountDataMax = 0
   !isEmpty(topologyPipelinesData) && !isEmpty(metricsData) && topologyPipelinesData.forEach((element) => {
     try {
       const startTime = moment(element.startTime, 'DD-MM-YYYY hh:mm:ss')
       const endTime = moment(element.endTime, 'DD-MM-YYYY hh:mm:ss')
       let totalTime = endTime.diff(startTime) / 1000
+      const errorCount = element.errorCount
+      if (errorCount > 0) errorCountDataMax = element.errorCount
 
       if (totalTime < 0) totalTime = 0
       if (totalTime > dataMax) dataMax = totalTime
+
+      const errorCountDataRow = {
+        name: element.pipelineTitle,
+        YAxisData: errorCount
+      }
 
       const dataRow = {
         name: element.pipelineTitle,
@@ -35,19 +44,20 @@ export default function MetricsLayout ({ topologyPipelinesData = [], metricsData
         YAxisData: rate
       }
 
+      errorCountData.push(errorCountDataRow)
       processedData.push(processedDataRow)
       data.push(dataRow)
     } catch (error) { }
   })
 
-  if (isEmpty(processedData) && isEmpty(data)) {
-    return (
-      <div className='padding-30'>
-        <CircularProgress />
-        <Typography>Loading Metrics</Typography>
-      </div>
-    )
-  }
+  // if (isEmpty(processedData) && isEmpty(data)) {
+  //   return (
+  //     <div className='padding-30'>
+  //       <CircularProgress />
+  //       <Typography>Loading Metrics</Typography>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className='padding-30'>
@@ -68,14 +78,14 @@ export default function MetricsLayout ({ topologyPipelinesData = [], metricsData
             <div>
               {MyBarChart({ data, yExtra: dataMax * 0.1, Xlabel: 'Time Consumption Graph', Ylabel: 'Time Taken', YUnit: 's' })}
               {MyBarChart({ data: processedData, yExtra: processedDataMax * 0.1, Xlabel: 'Data Processing Rate Graph', Ylabel: 'Records / sec', YUnit: 'rate' })}
-
+              {MyBarChart({ data: errorCountData, yExtra: errorCountDataMax * 0.1, Xlabel: 'Error Count Graph', Ylabel: 'Number', YUnit: 'count' })}
             </div>
           )
           : (
             <div>
               {MyLineChart({ data, yExtra: dataMax * 0.1, Xlabel: 'Time Consumption Graph', Ylabel: 'Time Taken', YUnit: 's' })}
               {MyLineChart({ data: processedData, yExtra: processedDataMax * 0.1, Xlabel: 'Data Processing Rate Graph', Ylabel: 'Records / sec', YUnit: 'rate' })}
-
+              {MyLineChart({ data: errorCountData, yExtra: errorCountDataMax * 0.1, Xlabel: 'Error Count Graph', Ylabel: 'Number', YUnit: 'count' })}
             </div>
           )
       }
