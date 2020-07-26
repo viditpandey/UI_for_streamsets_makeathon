@@ -68,10 +68,8 @@ export default function ConfigureTopologySchedule ({
               Close
           </Button>
           <Button
-            // disabled={disabled}
             onClick={() => {
-              console.log('------', topology.topologyId, cronConfig, true)
-              createScheduler({ topologyId: topology.topologyId, cronConfig, toRun: true })
+              createScheduler({ topologyId: topology.topologyId, cronConfig, toRun: !cronPause })
               setOpen(false)
             }} color='primary'
           >
