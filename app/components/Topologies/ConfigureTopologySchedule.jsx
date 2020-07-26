@@ -7,13 +7,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Slide from '@material-ui/core/Slide'
 import TextField from '@material-ui/core/TextField'
 
-import { createScheduler } from '../../actions/SchedulerActions'
+import { createScheduler, getSchedulerByTopologyId } from '../../actions/SchedulerActions'
 import { makeStyles } from '@material-ui/core/styles'
-import { Typography, Switch } from '@material-ui/core'
+import { Typography, Switch, CircularProgress } from '@material-ui/core'
 import { isEmpty } from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +37,20 @@ export default function ConfigureTopologySchedule ({
   const [schedulerType, setSchedulerType] = useState('cron')
   const [cronConfig, setCronConfig] = useState('* * * * *')
   const [cronPause, setCronPause] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function getSchedule () {
+      const res = await getSchedulerByTopologyId().catch(e => null)
+      if (res) {
+        console.log(res)
+        setLoading(false)
+      }
+    }
+    open && getSchedule()
+  }, [open])
   const titleDialog = `Schedule Topology ${topology.topologyId}`
+
   return (
     <div>
       <Dialog
@@ -50,16 +63,23 @@ export default function ConfigureTopologySchedule ({
       >
         <DialogTitle id='scroll-dialog-title'>{titleDialog}</DialogTitle>
         <DialogContent>
-          <Typography>Which Scheduler you want to configure?</Typography>
-          <br />
-          <SchedulerType
-            cronConfig={cronConfig}
-            setCronConfig={setCronConfig}
-            cronPause={cronPause}
-            setCronPause={setCronPause}
-            value={schedulerType}
-            handleChange={(e) => setSchedulerType(e.target.value)}
-          />
+          {!loading
+            ? (
+              <div>
+                <Typography>Which Scheduler you want to configure?</Typography>
+                <br />
+                <SchedulerType
+                  cronConfig={cronConfig}
+                  setCronConfig={setCronConfig}
+                  cronPause={cronPause}
+                  setCronPause={setCronPause}
+                  value={schedulerType}
+                  handleChange={(e) => setSchedulerType(e.target.value)}
+                />
+              </div>
+            )
+            : <CircularProgress />}
+
         </DialogContent>
         <DialogActions>
           <Button

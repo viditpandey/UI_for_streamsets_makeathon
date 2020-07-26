@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { BASE_URL } from '../configs/constants' // eslint-disable-line
+import { BASE_URL } from '../configs/constants'
 
 const CREATE_SCHEDULER = BASE_URL + '/createScheduler'
 
