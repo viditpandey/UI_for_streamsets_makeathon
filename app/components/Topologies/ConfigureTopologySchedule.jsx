@@ -13,8 +13,8 @@ import TextField from '@material-ui/core/TextField'
 
 import { createScheduler, getSchedulerByTopologyId } from '../../actions/SchedulerActions'
 import { makeStyles } from '@material-ui/core/styles'
+import moment from 'moment'
 import { Typography, Switch, CircularProgress } from '@material-ui/core'
-import { isEmpty } from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,14 +36,20 @@ export default function ConfigureTopologySchedule ({
 }) {
   const [schedulerType, setSchedulerType] = useState('cron')
   const [cronConfig, setCronConfig] = useState('* * * * *')
-  const [cronPause, setCronPause] = useState(false)
+  const [toRun, setToRun] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getSchedule () {
-      const res = await getSchedulerByTopologyId().catch(e => null)
+      const res = await getSchedulerByTopologyId({ topologyId: topology.topologyId }).catch(e => null)
       if (res) {
-        console.log(res)
+        const { toRun, cronConfig } = res
+        // const typeOfSchedule = Object.prototype.toString.call(new Date(cronConfig)) !== '[object Date]' ? 'cron' : 'datetime'
+        const typeOfSchedule = moment(cronConfig).isValid() ? 'datetime' : 'cron'
+        console.log('getSchedule -> cronConfig', cronConfig)
+        setCronConfig(cronConfig)
+        setToRun(toRun)
+        setSchedulerType(typeOfSchedule)
         setLoading(false)
       }
     }
@@ -71,8 +77,8 @@ export default function ConfigureTopologySchedule ({
                 <SchedulerType
                   cronConfig={cronConfig}
                   setCronConfig={setCronConfig}
-                  cronPause={cronPause}
-                  setCronPause={setCronPause}
+                  toRun={toRun}
+                  setToRun={setToRun}
                   value={schedulerType}
                   handleChange={(e) => setSchedulerType(e.target.value)}
                 />
@@ -89,7 +95,7 @@ export default function ConfigureTopologySchedule ({
           </Button>
           <Button
             onClick={() => {
-              createScheduler({ topologyId: topology.topologyId, cronConfig, toRun: !cronPause })
+              createScheduler({ topologyId: topology.topologyId, cronConfig, toRun: toRun })
               setOpen(false)
             }} color='primary'
           >
@@ -104,7 +110,7 @@ export default function ConfigureTopologySchedule ({
 const SchedulerType = ({
   value, handleChange,
   cronConfig, setCronConfig,
-  cronPause, setCronPause
+  toRun, setToRun
 }) => {
   return (
     <div>
@@ -117,8 +123,8 @@ const SchedulerType = ({
         cronConfig={cronConfig}
         setCronConfig={setCronConfig}
         type={value}
-        cronPause={cronPause}
-        setCronPause={setCronPause}
+        toRun={toRun}
+        setToRun={setToRun}
       />
     </div>
   )
@@ -136,7 +142,7 @@ const SchedulerOptions = ({ value, handleChange }) => {
 }
 
 const SchedulerConfig = ({
-  type, cronPause, setCronPause,
+  type, toRun, setToRun,
   cronConfig, setCronConfig
 }) => {
   const classes = useStyles()
@@ -157,7 +163,8 @@ const SchedulerConfig = ({
                 id='datetime-local'
                 label='Next appointment'
                 type='datetime-local'
-                defaultValue={!isEmpty(new Date(cronConfig)) && new Date(cronConfig).toISOString()}
+                defaultValue={cronConfig}
+                // defaultValue={!isEmpty(new Date(cronConfig)) && new Date(cronConfig).toISOString()}
                 onChange={e => { setCronConfig(e.target.value) }}
                 className={classes.textField}
                 InputLabelProps={{
@@ -171,9 +178,9 @@ const SchedulerConfig = ({
       <div className='margin-bottom-15' />
       <Typography>{'Pause Schedule Temporarily'}
         <Switch
-          checked={cronPause}
+          checked={!toRun}
           color='primary'
-          onChange={e => { setCronPause(!cronPause) }}
+          onChange={e => { setToRun(!toRun) }}
           name='topologySchedulePause'
           inputProps={{ 'aria-label': 'secondary checkbox' }}
         />

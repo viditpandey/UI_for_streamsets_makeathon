@@ -19,7 +19,7 @@ export const createScheduler = async ({ topologyId, cronConfig, toRun }) => {
     }
     ).catch(e => { throw (e) })
     const schedulerCreated = res.data
-    console.log(`scheduler created for topologyId ${topologyId}, response received}`)
+    console.log(`[SchedulerActions.createScheduler] scheduler created for topologyId ${topologyId}, response received}`)
     return schedulerCreated
   } catch (e) {
     console.error('[SchedulerActions.createScheduler] error:', e)
@@ -27,14 +27,14 @@ export const createScheduler = async ({ topologyId, cronConfig, toRun }) => {
   }
 }
 
-export const getScheduler = async ({ topologyId }) => {
-  console.log('fetching schedular details for topology id: ', topologyId)
+export const getSchedulerByTopologyId = async ({ topologyId }) => {
+  console.log('[SchedulerActions.getSchedulerByTopologyId] fetching schedular details for topology id: ', topologyId)
   try {
     const res = await axios.get(GET_SCHEDULER(topologyId)).catch(e => { throw (e) })
     const response = res.data
     return response
   } catch (error) {
-    console.log('fetching scheduler data by topology ID failed -> error', error)
+    console.log('[SchedulerActions.getSchedulerByTopologyId] fetching scheduler data by topology ID failed -> error', error)
     return {}
   }
 }
