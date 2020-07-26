@@ -2,7 +2,7 @@ import moment from 'moment'
 import React from 'react'
 import Switch from '@material-ui/core/Switch'
 
-import { CircularProgress, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { isEmpty } from 'lodash'
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, BarChart, Bar, Label } from 'recharts'
 
