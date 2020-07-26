@@ -12,7 +12,8 @@ import Slide from '@material-ui/core/Slide'
 import TextField from '@material-ui/core/TextField'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { Typography } from '@material-ui/core'
+import { Typography, Switch } from '@material-ui/core'
+import { isEmpty } from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -33,7 +34,8 @@ export default function ConfigureTopologySchedule ({
   open, setOpen, topology
 }) {
   const [schedulerType, setSchedulerType] = useState('cron')
-  const [cronConfig, setCronConfig] = useState('* * * * 6')
+  const [cronConfig, setCronConfig] = useState('* * * * *')
+  const [cronPause, setCronPause] = useState(false)
   const titleDialog = `Schedule Topology ${topology.topologyId}`
   return (
     <div>
@@ -52,6 +54,8 @@ export default function ConfigureTopologySchedule ({
           <SchedulerType
             cronConfig={cronConfig}
             setCronConfig={setCronConfig}
+            cronPause={cronPause}
+            setCronPause={setCronPause}
             value={schedulerType}
             handleChange={(e) => setSchedulerType(e.target.value)}
           />
@@ -74,7 +78,11 @@ export default function ConfigureTopologySchedule ({
   )
 }
 
-const SchedulerType = ({ value, handleChange, cronConfig, setCronConfig }) => {
+const SchedulerType = ({
+  value, handleChange,
+  cronConfig, setCronConfig,
+  cronPause, setCronPause
+}) => {
   return (
     <div>
       <SchedulerOptions
@@ -86,6 +94,8 @@ const SchedulerType = ({ value, handleChange, cronConfig, setCronConfig }) => {
         cronConfig={cronConfig}
         setCronConfig={setCronConfig}
         type={value}
+        cronPause={cronPause}
+        setCronPause={setCronPause}
       />
     </div>
   )
@@ -102,31 +112,49 @@ const SchedulerOptions = ({ value, handleChange }) => {
   )
 }
 
-const SchedulerConfig = ({ type, cronConfig, setCronConfig }) => {
+const SchedulerConfig = ({
+  type, cronPause, setCronPause,
+  cronConfig, setCronConfig
+}) => {
   const classes = useStyles()
   return (
-    type === 'cron'
-      ? (
-        <TextField
-          id='scheduler_cron'
-          value={cronConfig}
-          onChange={e => setCronConfig(e.target.value)}
-          label='Cron Pattern'
+    <div>
+      <div className='margin-bottom-15'>
+        {type === 'cron'
+          ? (
+            <TextField
+              id='scheduler_cron'
+              value={cronConfig}
+              onChange={e => setCronConfig(e.target.value)}
+              label='Cron Pattern'
+            />
+          ) : (
+            <form className={classes.container} noValidate>
+              <TextField
+                id='datetime-local'
+                label='Next appointment'
+                type='datetime-local'
+                defaultValue={!isEmpty(new Date(cronConfig)) && new Date(cronConfig).toISOString()}
+                onChange={e => { setCronConfig(e.target.value) }}
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true
+                }}
+              />
+            </form>
+          )}
+      </div>
+      <hr />
+      <div className='margin-bottom-15' />
+      <Typography>{'Pause Schedule Temporarily'}
+        <Switch
+          checked={cronPause}
+          color='primary'
+          onChange={e => { setCronPause(!cronPause) }}
+          name='topologySchedulePause'
+          inputProps={{ 'aria-label': 'secondary checkbox' }}
         />
-      ) : (
-        <form className={classes.container} noValidate>
-          <TextField
-            id='datetime-local'
-            label='Next appointment'
-            type='datetime-local'
-            defaultValue={new Date(cronConfig).toISOString()}
-            onChange={e => { setCronConfig(e.target.value) }}
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true
-            }}
-          />
-        </form>
-      )
+      </Typography>
+    </div>
   )
 }
