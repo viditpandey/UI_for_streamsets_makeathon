@@ -17,8 +17,10 @@ export default function TopologyActionButton ({
   topology, status, disabled,
   disabledSecondary,
   createTopology, startTopology, stopTopology,
-  validateTopology, resetTopology, pauseTopology, resumeTopology
+  validateTopology, resetTopology,
+  pauseTopology, resumeTopology, hideActionButtons
 }) {
+  if (hideActionButtons) return null
   let startIcon = <SaveIcon />
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}

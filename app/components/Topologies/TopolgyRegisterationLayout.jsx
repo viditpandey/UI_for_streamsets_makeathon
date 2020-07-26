@@ -93,7 +93,7 @@ const getTreeCompatibleData = ({ list, topologyStatus, handlePipelineClick }) =>
 export default function TopolgyRegisterationLayout ({
   propsTopologyData = {}, propsName = '',
   propsSelectedPipelines = [], renderMetrics = () => {},
-  setAutoRefresh = () => {}
+  setAutoRefresh = () => {}, hideActionButtons = false
 }) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
@@ -289,6 +289,7 @@ export default function TopolgyRegisterationLayout ({
             <Grid item md={5} xs={12}>
               <div>
                 <TopologyActionButton
+                  hideActionButtons={hideActionButtons}
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
                   createTopology={createTopologyButtonAction}

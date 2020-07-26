@@ -7,7 +7,7 @@ const PipelineLayout = React.lazy(() => import('../components/Pipelines/Pipeline
 const TopologiesLayout = React.lazy(() => import('../components/Topologies/TopologiesLayout'))
 const TopolgyRegisterationLayout = React.lazy(() => import('../components/Topologies/TopolgyRegisterationLayout'))
 const TopologyLayout = React.lazy(() => import('../components/Topologies/TopologyLayout'))
-const TopologyHistoryLayout = React.lazy(() => import('../components/Topologies/TopologyHistoryLayout'))
+const TopologyHistoriesLayout = React.lazy(() => import('../components/Topologies/TopologyHistoriesLayout'))
 
 const routes = [
   {
@@ -38,7 +38,7 @@ const routes = [
   {
     path: '/topologies/:id/history',
     exact: true,
-    component: () => <TopologyHistoryLayout />
+    component: () => <TopologyHistoriesLayout />
   }
 ]
 

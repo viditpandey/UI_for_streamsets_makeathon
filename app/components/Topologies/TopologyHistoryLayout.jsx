@@ -1,52 +1,100 @@
+import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import MetricsLayout from '../Graphs/MetricsLayout'
 import React, { useState, useEffect, useContext } from 'react'
-import ListItemWrapper from '../Shared/List/ListItemWrapper'
+import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
 import { AppBarContext } from '../Base/Home'
 import { CircularProgress, Typography } from '@material-ui/core'
-import { getTopologyHistory } from '../../actions/TopologyActions'
-import { isEmpty, sortBy, reverse } from 'lodash'
-import { useParams, useHistory } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
+import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
+import { isEmpty } from 'lodash'
+import { useParams } from 'react-router-dom'
+// import { useSnackbar } from 'notistack'
 
-export default function TopologyHistoryLayout () {
-  const { id } = useParams()
-  const { enqueueSnackbar } = useSnackbar()
+export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistoryView }) {
+//   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
-  const history = useHistory()
+  const { id } = useParams()
 
-  const [topologyHistoryData, setTopologyHistoryData] = useState([])
+  const [topologyData, setTopologyData] = useState(propsTopologyData)
+
+  const [fetchMetrics, setFetchMetrics] = useState(false)
+  const [metricsData, setMetricsData] = useState([])
 
   useEffect(() => {
-    setAppTitle({ text: `TOPOLOGY HISTORY: ${id}` })
-    async function topologyHistory (id) {
-      const res = await getTopologyHistory({ topologyId: id })
-      if (!isEmpty(res)) {
-        setTopologyHistoryData(res)
-        enqueueSnackbar('History Fetched', { variant: 'success' })
-      }
-    }
-    topologyHistory(id)
+    setTopologyData(propsTopologyData)
+    setAppTitle({ text: `TOPOLOGY: ${id} (History: ${topologyData.historyId})` })
+    setFetchMetrics(true)
   }, [])
 
-  if (isEmpty(topologyHistoryData)) {
+  useEffect(() => {
+    if (fetchMetrics) {
+      getProcessedRecordsNumber(topologyData)
+      setFetchMetrics(false)
+    }
+  }, [fetchMetrics])
+
+  async function getProcessedRecordsNumber (topologyData) {
+    if (!fetchMetrics) return
+    if ((topologyData.topologyStatus === 'FINISHED') && topologyData.topologyItems) {
+      const allPipelineIDs = topologyData.topologyItems.map(p => p.pipelineId)
+      const finalRes = await Promise.all(allPipelineIDs.map(i => getNumberOfRecordsProcessed({ pipelineId: i })))
+      setFetchMetrics(false)
+      const updatedData = allPipelineIDs.map((pipelineId, index) => ({ name: pipelineId, res: finalRes[index] }))
+      setMetricsData(updatedData)
+    }
+  }
+
+  if (isEmpty(topologyData)) {
     return (
       <div>
         <CircularProgress />
-        <Typography>Topology History will be here in some Future...</Typography>
+        <Typography>Loading topology</Typography>
       </div>
     )
   }
 
   return (
     <div>
-      <ListItemWrapper
-        items={reverse(sortBy(topologyHistoryData, ['topologyStopTime']))}
-        itemClick={item => history.push(`/topologies/${id}/history/${item.historyId}`)}
-        getPrimaryText={item => `${item.historyId} (${item.topologyStatus})`}
-        getKey={item => item.historyId}
-        secondaryText={item => `topology started: ${new Date(item.topologyStopTime)} and stopped: ${new Date(item.topologyStopTime)}`}
-        collapsedText={item => {}}
-        secondaryActionButton={item => {}}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={3}>
+          <Button
+            className='full-width'
+            variant='contained'
+            color='primary'
+            size='small'
+            onClick={() => toggleHistoryView(false)}
+            startIcon={<ArrowBackIosIcon />}
+          >
+        Go Back
+          </Button>
+        </Grid>
+      </Grid>
+      <TopolgyRegisterationLayout
+        propsName={id}
+        propsSelectedPipelines={topologyData.topologyHistoryItems}
+        hideActionButtons
+        propsTopologyData={{ ...topologyData, topologyId: topologyData.historyId }}
+        setAutoRefresh={() => {}}
+        renderMetrics={() => {
+          return (
+            <AccordianWrapper
+              title='View Metrics'
+              renderChildrend={() => {
+                return (
+                  <div className='padding-top-30'>
+                    <MetricsLayout
+                      topologyPipelinesData={topologyData.topologyItems}
+                      metricsData={metricsData}
+                    />
+                  </div>
+                )
+              }}
+            />
+          )
+        }}
       />
     </div>
   )
