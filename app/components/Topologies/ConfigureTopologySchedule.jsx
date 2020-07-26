@@ -11,6 +11,7 @@ import React, { useState } from 'react'
 import Slide from '@material-ui/core/Slide'
 import TextField from '@material-ui/core/TextField'
 
+import { createScheduler } from '../../actions/SchedulerActions'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography, Switch } from '@material-ui/core'
 import { isEmpty } from 'lodash'
@@ -68,7 +69,11 @@ export default function ConfigureTopologySchedule ({
           </Button>
           <Button
             // disabled={disabled}
-            onClick={() => setOpen(false)} color='primary'
+            onClick={() => {
+              console.log('------', topology.topologyId, cronConfig, true)
+              createScheduler({ topologyId: topology.topologyId, cronConfig, toRun: true })
+              setOpen(false)
+            }} color='primary'
           >
               Done
           </Button>
