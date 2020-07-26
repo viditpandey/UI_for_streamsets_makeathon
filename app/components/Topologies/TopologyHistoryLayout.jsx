@@ -86,7 +86,7 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
                 return (
                   <div className='padding-top-30'>
                     <MetricsLayout
-                      topologyPipelinesData={topologyData.topologyItems}
+                      topologyPipelinesData={topologyData.topologyHistoryItems}
                       metricsData={metricsData}
                     />
                   </div>
