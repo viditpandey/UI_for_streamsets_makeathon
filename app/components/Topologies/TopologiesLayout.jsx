@@ -1,9 +1,11 @@
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
+import ConfigureTopologySchedule from './ConfigureTopologySchedule'
 import DeleteIcon from '@material-ui/icons/Delete'
 import HistoryIcon from '@material-ui/icons/History'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import React, { useState, useEffect, useContext } from 'react'
+import ScheduleIcon from '@material-ui/icons/Schedule'
 
 import { AppBarContext } from '../Base/Home'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
@@ -31,6 +33,8 @@ export default function TopologiesLayout () {
   }
 
   const [topologies, setTopologies] = useState([])
+  const [selectedTopology, setSelectedTopology] = useState({})
+  const [openScheduler, setOpenScheduler] = useState(false)
 
   const newTopology = (
     <Button
@@ -55,18 +59,27 @@ export default function TopologiesLayout () {
     <div>
       {isEmpty(topologies) ? null
         : (
-          <Topologies
-            history={history}
-            topologies={topologies}
-            deleteTopology={deleteTopology}
-            axiosHandler={axiosHandler}
-          />
+          <div>
+            <Topologies
+              history={history}
+              topologies={topologies}
+              deleteTopology={deleteTopology}
+              axiosHandler={axiosHandler}
+              // open={openScheduler}
+              setOpenScheduler={(topology) => { setSelectedTopology(topology); setOpenScheduler(!openScheduler) }}
+            />
+            <ConfigureTopologySchedule
+              open={openScheduler}
+              setOpen={setOpenScheduler}
+              topology={selectedTopology}
+            />
+          </div>
         )}
     </div>
   )
 }
 
-const Topologies = ({ topologies, history, deleteTopology, axiosHandler }) => {
+const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpenScheduler }) => {
   const deleteTopologyButton = item => {
     return (
       <IconButton
@@ -98,9 +111,22 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler }) => {
     )
   }
 
+  const scheduleTopologyButton = item => {
+    return (
+      <IconButton
+        aria-label='delete topology'
+        onClick={() => { setOpenScheduler(item) }}
+        component='span'
+      >
+        <ScheduleIcon />
+      </IconButton>
+    )
+  }
+
   const renderHistoryAndDeleteButtons = item => {
     return (
       <div>
+        {scheduleTopologyButton(item)}
         {historyTopologyButton(item)}
         {deleteTopologyButton(item)}
       </div>
