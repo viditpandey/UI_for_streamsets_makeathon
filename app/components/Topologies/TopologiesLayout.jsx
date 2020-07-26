@@ -123,8 +123,11 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler }) => {
 const getTopologyItems = topology => {
   if (isEmpty(topology.topologyItems)) return null
   else {
+    const renderPipelines = (p, i) => <span key={p.pipelineId}>{`${i + 1}) ${p.pipelineId}`}<br /></span>
     return (
-      <>{`pipelines: ${topology.topologyItems.map(y => ' ' + y.pipelineId)}`}</>
+      <>
+        {topology.topologyItems.map(renderPipelines)}
+      </>
     )
   }
 }
