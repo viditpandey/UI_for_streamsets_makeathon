@@ -29,7 +29,7 @@ export default function TopologyLayout ({ id }) {
       const res = await getTopologyById({ topologyId: id })
       if (!isEmpty(res)) {
         setTopologyData(res)
-        setAppTitle({ text: `TOPOLOGY: ${res.topologyId}` })
+        setAppTitle({ text: `TOPOLOGY: ${res.topologyId}`, currentPage: 'TopologyLayout' })
         setFetchMetrics(true)
       }
     }

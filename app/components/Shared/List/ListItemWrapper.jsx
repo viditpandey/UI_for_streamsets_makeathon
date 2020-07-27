@@ -23,7 +23,11 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(4)
   }
 }))
-export default function ListItemWrapper ({ items, itemClick, collapsedText, secondaryText, secondaryActionButton, getPrimaryText, getKey }) {
+export default function ListItemWrapper ({
+  items, itemClick,
+  collapsedText, secondaryText, secondaryActionButton,
+  getPrimaryText, getKey, listId
+}) {
   const classes = useStyles()
 
   return (
@@ -44,6 +48,7 @@ export default function ListItemWrapper ({ items, itemClick, collapsedText, seco
                 collapsedText={collapsedText(item)}
                 getPrimaryText={getPrimaryText}
                 secondaryActionButton={secondaryActionButton(item)}
+                listId={listId}
               />
 
             )
@@ -54,10 +59,10 @@ export default function ListItemWrapper ({ items, itemClick, collapsedText, seco
   )
 }
 
-const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, secondaryText, classes, secondaryActionButton, getKey }) => {
+const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, secondaryText, classes, secondaryActionButton, getKey, listId }) => {
   const [open, setOpen] = useState(false)
   return (
-    <Paper className='clickable'>
+    <Paper className='clickable' id={listId}>
       <ListItem>
         <ListItemAvatar>
           {open ? <ExpandLess onClick={() => setOpen(false)} /> : <ExpandMore onClick={() => setOpen(true)} />}

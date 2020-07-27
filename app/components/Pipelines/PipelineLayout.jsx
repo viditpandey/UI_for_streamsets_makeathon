@@ -3,7 +3,7 @@ import { AppBarContext } from '../Base/Home'
 
 export default function PipelineLayout ({ id }) {
   const { setAppTitle } = useContext(AppBarContext)
-  useEffect(() => { setAppTitle({ text: `PIPELINE: ${id}` }) }, [])
+  useEffect(() => { setAppTitle({ text: `PIPELINE: ${id}`, currentPage: 'PipelineLayout' }) }, [])
 
   return (
     <div>

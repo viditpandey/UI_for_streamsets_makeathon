@@ -18,7 +18,7 @@ export default function TopologyHistoriesLayout () {
   const [topologyHistoryData, setTopologyHistoryData] = useState([])
 
   useEffect(() => {
-    setAppTitle({ text: `TOPOLOGY HISTORY: ${id}` })
+    setAppTitle({ text: `TOPOLOGY HISTORY: ${id}`, currentPage: 'TopologyHistoriesLayout' })
     async function topologyHistory (id) {
       const res = await getTopologyHistory({ topologyId: id })
       if (!isEmpty(res)) {

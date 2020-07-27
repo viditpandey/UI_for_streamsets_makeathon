@@ -147,7 +147,7 @@ export default function TopolgyRegisterationLayout ({
   }
 
   useEffect(() => {
-    !viewMode && setAppTitle({ text: 'NEW TOPOLOGY' })
+    !viewMode && setAppTitle({ text: 'NEW TOPOLOGY', currentPage: 'TopolgyRegisterationLayout' })
 
     async function fetchPipelines () {
       const res = await getPipelines()

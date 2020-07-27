@@ -25,7 +25,7 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
 
   useEffect(() => {
     setTopologyData(propsTopologyData)
-    setAppTitle({ text: `TOPOLOGY: ${id} (History: ${topologyData.historyId})` })
+    setAppTitle({ text: `TOPOLOGY: ${id} (History: ${topologyData.historyId})`, currentPage: 'TopologyHistoryLayout' })
     setFetchMetrics(true)
   }, [])
 

@@ -5,19 +5,18 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import React, { useState, useEffect, useContext } from 'react'
 import ReplayIcon from '@material-ui/icons/Replay'
 import StopIcon from '@material-ui/icons/Stop'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
 import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
 import { sortBy } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
-import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
 export default function PipelinesLayout () {
   const { setAppTitle } = useContext(AppBarContext)
 
   const { enqueueSnackbar } = useSnackbar()
-  const history = useHistory()
 
   const axiosHandler = async ({ method = () => {}, methodParams, errorMessage = 'Action failed', successMessage, infoMessage }) => {
     let failed = false
@@ -35,7 +34,7 @@ export default function PipelinesLayout () {
   const [pipelines, setPipelines] = useState([])
 
   useEffect(() => {
-    setAppTitle({ text: 'PIPELINES' })
+    setAppTitle({ text: 'PIPELINES', currentPage: 'PipelinesLayout' })
     async function fetchPipelines () {
       const res = await axiosHandler({ method: getPipelines, errorMessage: 'pipelines fetch failed', infoMessage: 'pipelines fetched succesfully' })
       res && setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
@@ -94,48 +93,58 @@ export default function PipelinesLayout () {
 
   const getPipelineActionButton = item => {
     let button = <PlayArrowIcon style={{ color: '#077d40' }} />
+    let tooltip = 'Perform action'
     switch (item.status) {
       case 'STARTING':
       case 'RETRY':
         button = <CircularProgress />
+        tooltip = 'pipeline in progress'
         break
       case 'RUNNING':
         button = <StopIcon style={{ color: '#CF142B' }} />
+        tooltip = 'stop pipeline'
         break
       case 'FINISHED':
         button = <ReplayIcon />
+        tooltip = 'restart pipeline'
         break
       case 'EDITED':
       case 'STOPPED':
         button = <PlayArrowIcon style={{ color: '#077d40' }} />
+        tooltip = 'start pipeline'
         break
 
       default:
         break
     }
     return (
-      <IconButton
-        aria-label='start/stop pipeline'
-        onClick={handlePipelineActionButtonClick(item.pipelineId)}
-        component='span'
-      >
-        {button}
-      </IconButton>
+      <Tooltip title={tooltip}>
+        <IconButton
+          aria-label='start/stop pipeline'
+          id='pipeline-action-button'
+          onClick={handlePipelineActionButtonClick(item.pipelineId)}
+          component='span'
+        >
+          {button}
+        </IconButton>
+      </Tooltip>
     )
   }
 
   return (
-    <div>
+    <div id='pipelines-layout'>
 
       <ListItemWrapper
         // items={pipelines}
         items={sortBy(pipelines, ['title', 'pipelineId'])}
         getKey={item => item.pipelineId}
-        itemClick={item => history.push(`/pipelines/${item.pipelineId}`)}
+        itemClick={() => {}}
+        // itemClick={item => history.push(`/pipelines/${item.pipelineId}`)}
         collapsedText={item => returnSecondaryText(item)}
         getPrimaryText={item => `${item.title} (${item.pipelineId})`}
         secondaryText={item => <>{`status: ${item.status || '...'}`}</>}
         secondaryActionButton={getPipelineActionButton}
+        listId='pipelines-layout-children'
       />
     </div>
   )

@@ -7,17 +7,31 @@ import routes from '../../configs/routes'
 import AppTitleBar from './AppTitleBar'
 
 import { Route } from 'react-router-dom'
+import ToursLayout from '../Tours/ToursLayout'
 export const AppBarContext = React.createContext({ text: '' })
 
 const Home = (props) => {
   const [appBar, setAppBar] = useState({ text: '' })
+  const [isTourOpen, becomeAGuide] = useState(false)
+
   const setAppTitle = appBar => setAppBar(appBar)
+
   return (
     <div>
       <div className='app-bar'>
-        <AppTitleBar text={appBar.text} button={appBar.button} />
+        <AppTitleBar
+          becomeAGuide={(isTourOpen) => becomeAGuide(isTourOpen)}
+          text={appBar.text}
+          button={appBar.button}
+        />
       </div>
       <div className='app-body'>
+        <ToursLayout
+          isTourOpen={isTourOpen}
+          tourPage={appBar.currentPage}
+          closeTour={() => { becomeAGuide(!isTourOpen) }}
+        />
+
         <Suspense fallback={<CircularProgress />}>
           <AppBarContext.Provider value={{
             setAppTitle: setAppTitle

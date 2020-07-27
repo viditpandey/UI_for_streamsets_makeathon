@@ -27,7 +27,9 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-sortable-tree": "^2.7.1",
-    "recharts": "^1.8.5"
+    "reactour": "^1.18.0",
+    "recharts": "^1.8.5",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",

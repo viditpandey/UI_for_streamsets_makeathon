@@ -6,6 +6,7 @@ import HistoryIcon from '@material-ui/icons/History'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import React, { useState, useEffect, useContext } from 'react'
 import ScheduleIcon from '@material-ui/icons/Schedule'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
@@ -47,7 +48,7 @@ export default function TopologiesLayout () {
     </Button>)
 
   useEffect(() => {
-    setAppTitle({ text: 'TOPOLOGIES', button: newTopology })
+    setAppTitle({ text: 'TOPOLOGIES', button: newTopology, currentPage: 'TopologiesLayout' })
     async function fetchTopologies () {
       const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
       res && setTopologies(res)
@@ -59,7 +60,7 @@ export default function TopologiesLayout () {
     <div>
       {isEmpty(topologies) ? null
         : (
-          <div>
+          <div id='topologies-layout'>
             <Topologies
               history={history}
               topologies={topologies}
@@ -82,50 +83,60 @@ export default function TopologiesLayout () {
 const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpenScheduler }) => {
   const deleteTopologyButton = item => {
     return (
-      <IconButton
-        aria-label='delete topology'
-        onClick={async (e) => {
-          await axiosHandler({
-            method: deleteTopology,
-            methodParams: { topologyId: item.topologyId },
-            errorMessage: 'Something went wring while deleting the topology',
-            successMessage: 'Topology deleted successfuly.'
-          })
-        }}
-        component='span'
-      >
-        <DeleteIcon />
-      </IconButton>
+      <Tooltip title='Delete Topology'>
+        <IconButton
+          aria-label='delete topology'
+          onClick={async (e) => {
+            await axiosHandler({
+              method: deleteTopology,
+              methodParams: { topologyId: item.topologyId },
+              errorMessage: 'Something went wring while deleting the topology',
+              successMessage: 'Topology deleted successfuly.'
+            })
+          }}
+          id='topology-delete-button'
+          component='span'
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     )
   }
 
   const historyTopologyButton = item => {
     return (
-      <IconButton
-        aria-label='delete topology'
-        onClick={() => history.push(`/topologies/${item.topologyId}/history`)}
-        component='span'
-      >
-        <HistoryIcon />
-      </IconButton>
+      <Tooltip title='View Topology History'>
+        <IconButton
+          aria-label='delete topology'
+          onClick={() => history.push(`/topologies/${item.topologyId}/history`)}
+          id='topology-history-button'
+          component='span'
+        >
+          <HistoryIcon />
+        </IconButton>
+      </Tooltip>
     )
   }
 
   const scheduleTopologyButton = item => {
     return (
-      <IconButton
-        aria-label='delete topology'
-        onClick={() => { setOpenScheduler(item) }}
-        component='span'
-      >
-        <ScheduleIcon />
-      </IconButton>
+      <Tooltip title='Schedule Topology'>
+        <IconButton
+          aria-label='delete topology'
+          onClick={() => { setOpenScheduler(item) }}
+          id='topology-schedule-button'
+          component='span'
+          title='schedule topology'
+        >
+          <ScheduleIcon />
+        </IconButton>
+      </Tooltip>
     )
   }
 
   const renderHistoryAndDeleteButtons = item => {
     return (
-      <div>
+      <div id='topologies-action-buttons'>
         {scheduleTopologyButton(item)}
         {historyTopologyButton(item)}
         {deleteTopologyButton(item)}
@@ -142,6 +153,7 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
       secondaryText={item => `contains ${item.topologyItems.length} pipeline(s)`}
       collapsedText={item => getTopologyItems(item)}
       secondaryActionButton={item => renderHistoryAndDeleteButtons(item)}
+      listId='topologies-layout-children'
     />
   )
 }
