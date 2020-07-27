@@ -1,12 +1,13 @@
 import 'regenerator-runtime/runtime.js'
 
+import AppTitleBar from './AppTitleBar'
 import React, { useState, Suspense } from 'react'
 import BottomNavi from './BottomNavi'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import routes from '../../configs/routes'
-import AppTitleBar from './AppTitleBar'
+import NotFound from '../Shared/NotFound'
 
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import ToursLayout from '../Tours/ToursLayout'
 export const AppBarContext = React.createContext({ text: '' })
 
@@ -37,16 +38,19 @@ const Home = (props) => {
             setAppTitle: setAppTitle
           }}
           >
-            {routes.map((route, i) => {
-              return (
-                <Route
-                  key={i}
-                  path={route.path}
-                  exact={route.exact}
-                  children={<route.component />}
-                />
-              )
-            })}
+            <Switch>
+              {routes.map((route, i) => {
+                return (
+                  <Route
+                    key={i}
+                    path={route.path}
+                    exact={route.exact}
+                    children={<route.component />}
+                  />
+                )
+              })}
+              <Route component={() => <NotFound />} />
+            </Switch>
           </AppBarContext.Provider>
         </Suspense>
       </div>
