@@ -1,21 +1,24 @@
 import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
 import MetricsLayout from '../Graphs/MetricsLayout'
+import Grid from '@material-ui/core/Grid'
+import HistoryIcon from '@material-ui/icons/History'
 import React, { useState, useEffect, useContext } from 'react'
 import Switch from '@material-ui/core/Switch'
 import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 
 import { AppBarContext } from '../Base/Home'
-import { CircularProgress, Typography } from '@material-ui/core'
+import { CircularProgress, Typography, Button } from '@material-ui/core'
 import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 import { getTopologyById } from '../../actions/TopologyActions'
 import { isEmpty } from 'lodash'
-
+import { useHistory } from 'react-router-dom'
 import { useInterval } from '../../helper/useInterval'
 import { useSnackbar } from 'notistack'
 
 const MAX_POLL_COUNT = 5
 
 export default function TopologyLayout ({ id }) {
+  const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
   const [topologyData, setTopologyData] = useState({})
@@ -100,17 +103,34 @@ export default function TopologyLayout ({ id }) {
 
   return (
     <div>
-      <Typography>{'Auto refresh topology status'}
-        <Switch
-          checked={autoRefresh}
-          color='primary'
-          onChange={e => {
-            setAutoRefresh(!autoRefresh)
-          }}
-          name='topologyAutoRefreshStatus'
-          inputProps={{ 'aria-label': 'secondary checkbox' }}
-        />
-      </Typography>
+      <Grid container spacing={3} justify='flex-end'>
+        <Grid item xs={12} md={9}>
+          <Typography>{'Auto refresh topology status'}
+            <Switch
+              checked={autoRefresh}
+              color='primary'
+              onChange={e => {
+                setAutoRefresh(!autoRefresh)
+              }}
+              name='topologyAutoRefreshStatus'
+              inputProps={{ 'aria-label': 'secondary checkbox' }}
+            />
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Button
+            className='full-width'
+            variant='contained'
+            color='primary'
+            size='small'
+            onClick={(e) => history.push(`/topologies/${topologyData.topologyId}/history`)}
+            startIcon={<HistoryIcon />}
+          >
+            View Topology History
+          </Button>
+        </Grid>
+
+      </Grid>
 
       <TopolgyRegisterationLayout
         propsName={topologyData.topologyId}

@@ -36,22 +36,20 @@ export default function ConfigureTopologySchedule ({
 }) {
   const [schedulerType, setSchedulerType] = useState('cron')
   const [cronConfig, setCronConfig] = useState('* * * * *')
-  const [toRun, setToRun] = useState(false)
+  const [toRun, setToRun] = useState(true)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getSchedule () {
       const res = await getSchedulerByTopologyId({ topologyId: topology.topologyId }).catch(e => null)
-      if (res) {
-        const { toRun, cronConfig } = res
-        // const typeOfSchedule = Object.prototype.toString.call(new Date(cronConfig)) !== '[object Date]' ? 'cron' : 'datetime'
-        const typeOfSchedule = moment(cronConfig).isValid() ? 'datetime' : 'cron'
-        console.log('getSchedule -> cronConfig', cronConfig)
-        setCronConfig(cronConfig)
-        setToRun(toRun)
-        setSchedulerType(typeOfSchedule)
-        setLoading(false)
-      }
+      // if (res) {
+      const { toRun, cronConfig } = res || {}
+      const typeOfSchedule = (cronConfig && moment(cronConfig).isValid()) ? 'datetime' : 'cron'
+      setCronConfig(cronConfig || '* * * * *')
+      setToRun(toRun || true)
+      setSchedulerType(typeOfSchedule)
+      setLoading(false)
+      // }
     }
     open && getSchedule()
   }, [open])
