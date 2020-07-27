@@ -118,8 +118,8 @@ export const getTopologies = async () => {
     return response
   } catch (e) {
     console.error('[TopologyActions.getTopologies] error:', e)
-    // throw e
-    return mockedTopologies
+    throw e
+    // return mockedTopologies
   }
 }
 

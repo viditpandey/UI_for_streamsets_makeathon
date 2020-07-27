@@ -15,8 +15,8 @@ export const getPipelines = async () => {
     return pipelines
   } catch (e) {
     console.error('[PipelineActions.getPipelines] error:', e)
-    return mockedPipelines
-    // throw e
+    // return mockedPipelines
+    throw e
   }
 }
 
