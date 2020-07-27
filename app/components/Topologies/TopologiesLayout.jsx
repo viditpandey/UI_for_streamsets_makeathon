@@ -126,7 +126,6 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
           onClick={() => { setOpenScheduler(item) }}
           id='topology-schedule-button'
           component='span'
-          title='schedule topology'
         >
           <ScheduleIcon />
         </IconButton>

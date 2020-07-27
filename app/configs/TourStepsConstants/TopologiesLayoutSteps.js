@@ -8,6 +8,10 @@ const Steps = [
     content: 'Showing help/to-do for: '
   },
   {
+    selector: '#current-page-menu-button',
+    content: 'Self explanatory.'
+  },
+  {
     selector: '#topologies-layout',
     content: 'Here is a list of topologies created till now.'
   },

@@ -33,7 +33,7 @@ export default function AppTitleBar ({ text, button, becomeAGuide }) {
           <Typography id='current-page-title' variant='h6' className={classes.title}>
             {text || <CircularProgress color='inherit' />}
           </Typography>
-          {button}
+          <div id='current-page-menu-button'>{button}</div>
         </Toolbar>
       </AppBar>
     </div>

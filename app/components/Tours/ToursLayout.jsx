@@ -4,12 +4,16 @@ import Steps from '../../configs/TourStepsConstants'
 
 export default function ToursLayout (props) {
   const { isTourOpen, closeTour, tourPage } = props
-  console.log('ToursLayout -> isTourOpen', tourPage, Steps[tourPage])
+
   return (
     <Tour
-      steps={Steps[tourPage]}
+      steps={Steps[tourPage] || defaultSteps}
       isOpen={!!isTourOpen}
       onRequestClose={closeTour}
     />
   )
 }
+const defaultSteps = [{
+  selector: '#help-icon',
+  content: 'Please ask the developer(s) to not be lazy and provide you a tour for this page. Maybe they missed but atleast provided a fallback ;)'
+}]
