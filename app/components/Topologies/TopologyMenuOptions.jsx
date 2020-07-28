@@ -39,7 +39,7 @@ export default function TopologyMenuOption ({ topologyData, autoRefresh, setAuto
         topology={topologyData}
       />
       <Grid container spacing={3} justify='space-between'>
-        <Grid item xs={12} md={9}>
+        <Grid id='set-page-autorefresh' item xs={12} md={9}>
 
           <Typography>{'Auto refresh topology status'}
             <Switch
@@ -53,7 +53,7 @@ export default function TopologyMenuOption ({ topologyData, autoRefresh, setAuto
             />
           </Typography>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid id='topology-menu-options' item xs={12} md={3}>
           <Button
             className='float-right'
             aria-controls='simple-menu'
