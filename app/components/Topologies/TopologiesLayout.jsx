@@ -10,6 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
+import { HEX_CODES } from '../../configs/constants'
 import { isEmpty, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
@@ -89,6 +90,7 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
       <Tooltip title='Delete Topology'>
         <IconButton
           aria-label='delete topology'
+          style={{ color: HEX_CODES.red }}
           onClick={async (e) => {
             await axiosHandler({
               method: deleteTopology,
@@ -111,6 +113,7 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
       <Tooltip title='View Topology History'>
         <IconButton
           aria-label='delete topology'
+          style={{ color: HEX_CODES.blue }}
           onClick={() => history.push(`/topologies/${item.topologyId}/history`)}
           id='topology-history-button'
           component='span'
@@ -125,6 +128,7 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
     return (
       <Tooltip title='Schedule Topology'>
         <IconButton
+          style={{ color: HEX_CODES.green }}
           aria-label='delete topology'
           onClick={() => { setOpenScheduler(item) }}
           id='topology-schedule-button'

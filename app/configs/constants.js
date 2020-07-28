@@ -1,5 +1,4 @@
-// export const BASE_URL = 'http://localhost:8081'
-export const BASE_URL = 'http://punitp008124lt:18631'
+export const BASE_URL = 'http://localhost:8081'
 
 export const HEX_CODES = {
   green: '#5cb85c',
@@ -168,12 +167,12 @@ export const mockedTopologyHistory = [{
   topologyHistoryItems: [{ createTimestamp: 1595665546921, createdBy: 'From UI', dependsOn: 'PipelineSh8ae839dc-a037-4162-8e0f-f0bac0f8de17', endTime: 1595687496067, errorCount: 0, pipelineId: 'PipelineSh0e39bb14-0fd7-4ff7-994c-5dcf6fb5ffb6', pipelineStatus: 'VALID', pipelineTitle: 'PipelineShweta3', processAfter: 'stop', startTime: 1595687489996, threshold: 0, topologyStatus: '', triggeredBy: 'admin', updateTimestamp: 1595687508331, updatedBy: 'VALIDATE_ACTOR', waitTime: 0 }, { createTimestamp: 1595665546921, createdBy: 'From UI', dependsOn: 'PipelineShd30052ef-3a88-4c3d-81ec-20ef2b36d1ac', endTime: 1595687489887, errorCount: 0, pipelineId: 'PipelineSh8ae839dc-a037-4162-8e0f-f0bac0f8de17', pipelineStatus: 'VALID', pipelineTitle: 'PipelineShweta2', processAfter: 'stop', startTime: 1595687483806, threshold: 0, topologyStatus: '', triggeredBy: 'admin', updateTimestamp: 1595687508332, updatedBy: 'VALIDATE_ACTOR', waitTime: 0 }, { createTimestamp: 1595665546921, createdBy: 'From UI', dependsOn: 'root', endTime: 1595687483522, errorCount: 0, pipelineId: 'PipelineShd30052ef-3a88-4c3d-81ec-20ef2b36d1ac', pipelineStatus: 'VALID', pipelineTitle: 'PipelineShweta1', processAfter: 'stop', startTime: 1595687477370, threshold: 0, topologyStatus: '', triggeredBy: 'admin', updateTimestamp: 1595687508332, updatedBy: 'VALIDATE_ACTOR', waitTime: 0 }],
   topologyStatus: 'VALIDATED',
   topologyStartTime: 1594210800000,
-  topologyStopTime: 1594211100000
+  topologyEndTime: 1594211100000
 },
 {
   historyId: 'Shweta_history_2',
   topologyHistoryItems: [{ createTimestamp: 1595665546921, createdBy: 'From UI', dependsOn: 'PipelineSh8ae839dc-a037-4162-8e0f-f0bac0f8de17', endTime: 1595687496067, errorCount: 0, pipelineId: 'PipelineSh0e39bb14-0fd7-4ff7-994c-5dcf6fb5ffb6', pipelineStatus: 'VALID', pipelineTitle: 'PipelineShweta3', processAfter: 'stop', startTime: 1595687489996, threshold: 0, topologyStatus: '', triggeredBy: 'admin', updateTimestamp: 1595687508331, updatedBy: 'VALIDATE_ACTOR', waitTime: 0 }, { createTimestamp: 1595665546921, createdBy: 'From UI', dependsOn: 'PipelineShd30052ef-3a88-4c3d-81ec-20ef2b36d1ac', endTime: 1595687489887, errorCount: 0, pipelineId: 'PipelineSh8ae839dc-a037-4162-8e0f-f0bac0f8de17', pipelineStatus: 'VALID', pipelineTitle: 'PipelineShweta2', processAfter: 'stop', startTime: 1595687483806, threshold: 0, topologyStatus: '', triggeredBy: 'admin', updateTimestamp: 1595687508332, updatedBy: 'VALIDATE_ACTOR', waitTime: 0 }, { createTimestamp: 1595665546921, createdBy: 'From UI', dependsOn: 'root', endTime: 1595687483522, errorCount: 0, pipelineId: 'PipelineShd30052ef-3a88-4c3d-81ec-20ef2b36d1ac', pipelineStatus: 'VALID', pipelineTitle: 'PipelineShweta1', processAfter: 'stop', startTime: 1595687477370, threshold: 0, topologyStatus: '', triggeredBy: 'admin', updateTimestamp: 1595687508332, updatedBy: 'VALIDATE_ACTOR', waitTime: 0 }],
   topologyStatus: 'VALIDATED',
   topologyStartTime: 1594556700000,
-  topologyStopTime: 1594557900000
+  topologyEndTime: 1594557900000
 }]
