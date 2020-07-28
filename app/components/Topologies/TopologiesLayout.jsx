@@ -70,7 +70,6 @@ export default function TopologiesLayout () {
               topologies={topologies}
               deleteTopology={deleteTopology}
               axiosHandler={axiosHandler}
-              // open={openScheduler}
               setOpenScheduler={(topology) => { setSelectedTopology(topology); setOpenScheduler(!openScheduler) }}
             />
             <ConfigureTopologySchedule
