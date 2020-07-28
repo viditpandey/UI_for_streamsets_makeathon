@@ -21,7 +21,7 @@ export default function RenderPipelineConfigs ({
 }) {
   let titleDialog = 'No pipeline Selected'
   if (!pipeline) return null
-  else titleDialog = `Pipeline: ${pipeline.title || pipeline.pipelineId}`
+  else titleDialog = `Pipeline: ${pipeline.title || pipeline.pipelineTitle || pipeline.pipelineId}`
   return (
     <div>
       <Dialog

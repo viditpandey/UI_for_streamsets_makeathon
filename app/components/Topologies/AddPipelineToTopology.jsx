@@ -14,7 +14,7 @@ export const Transition = React.forwardRef(function Transition (props, ref) {
 
 const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled, buttonText }) => {
   return (
-    <div>
+    <div id='topology-add-pipelines'>
       <Button
         variant='contained'
         color='primary'

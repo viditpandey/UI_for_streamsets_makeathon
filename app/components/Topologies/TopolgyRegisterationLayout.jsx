@@ -214,6 +214,7 @@ export default function TopolgyRegisterationLayout ({
   }
 
   const hideToggleForRootNode = () => {
+    if (!selectedPipeline) return false
     return treeData.map(p => p.pipelineId).indexOf(selectedPipeline.pipelineId) !== -1
   }
 
@@ -277,7 +278,7 @@ export default function TopolgyRegisterationLayout ({
         <form noValidate autoComplete='off'>
           <Grid container justify='center' spacing={3} alignItems='center'>
 
-            <Grid item xs={12} md={7}>
+            <Grid id='topology-name' item xs={12} md={7}>
               <TopologyName
                 disabled={viewMode}
                 name={name}
@@ -286,7 +287,7 @@ export default function TopolgyRegisterationLayout ({
               />
             </Grid>
 
-            <Grid item md={5} xs={12}>
+            <Grid id='topology-action-buttons' item md={5} xs={12}>
               <div>
                 <TopologyActionButton
                   hideActionButtons={hideActionButtons}
@@ -318,16 +319,17 @@ export default function TopolgyRegisterationLayout ({
             buttonText={`${selectedPipelines.length}/${allPipelines.length + selectedPipelines.length} pipelines selected`}
           />
           <br />
-
-          <CreateTree
-            treeData={treeData}
-            setTreeData={viewMode ? () => { enqueueSnackbar('Editing the topology not allowed.', { variant: 'info' }) } : setTreeData}
-            setFinalTreeData={setFinalTreeData}
-            selectedPipelines={selectedPipelines}
-            setOpen={setOpenConfigDialog}
-          />
+          <div id='topology-tree'>
+            <CreateTree
+              treeData={treeData}
+              setTreeData={viewMode ? () => { enqueueSnackbar('Editing the topology not allowed.', { variant: 'info' }) } : setTreeData}
+              setFinalTreeData={setFinalTreeData}
+              selectedPipelines={selectedPipelines}
+              setOpen={setOpenConfigDialog}
+            />
+          </div>
           <br />
-          <div>
+          <div id='topology-metrics'>
             {renderMetrics(topologyData)}
           </div>
 

@@ -44,15 +44,21 @@ export default function TopologyHistoriesLayout () {
         ? <TopologyHistoryLayout propsTopologyData={singleHistoryView} toggleHistoryView={toggleHistoryView} />
         : (
           <ListItemWrapper
-            items={reverse(sortBy(topologyHistoryData, ['topologyStopTime']))}
+            items={reverse(sortBy(topologyHistoryData, ['topologyEndTime']))}
             itemClick={item => toggleHistoryView(item)}
-            getPrimaryText={item => `${item.historyId} (${item.topologyStatus})`}
+            getPrimaryText={item => `${item.historyId}`}
             getKey={item => item.historyId}
-            secondaryText={item => `topology started: ${new Date(item.topologyStartTime)} and stopped: ${new Date(item.topologyEndTime)}`}
-            collapsedText={item => {}}
+            secondaryText={item => `status: ${item.topologyStatus}`}
+            collapsedText={collapsedText}
             secondaryActionButton={item => {}}
           />
         )}
     </div>
   )
 }
+const collapsedText = historyItem => (
+  <>
+    {`start time: ${new Date(historyItem.topologyStartTime)}`} <br />
+    {`end time: ${new Date(historyItem.topologyEndTime)}`} <br />
+  </>
+)
