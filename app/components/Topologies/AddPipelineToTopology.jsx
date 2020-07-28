@@ -18,12 +18,11 @@ const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled,
       <Button
         variant='contained'
         color='primary'
-        size='small'
+        size='medium'
         disabled={disabled}
         onClick={(e) => { setOpen(true) }}
         startIcon={<AddCircleIcon />}
       >
-        {/* Add Pipelines to this topology */}
         {buttonText}
       </Button>
       <Dialog

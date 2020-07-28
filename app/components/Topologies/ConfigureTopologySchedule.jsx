@@ -35,7 +35,7 @@ export default function ConfigureTopologySchedule ({
   open, setOpen, topology
 }) {
   const [schedulerType, setSchedulerType] = useState('cron')
-  const [cronConfig, setCronConfig] = useState('* * * * *')
+  const [cronConfig, setCronConfig] = useState('')
   const [toRun, setToRun] = useState(true)
   const [loading, setLoading] = useState(true)
 
@@ -45,7 +45,7 @@ export default function ConfigureTopologySchedule ({
       // if (res) {
       const { toRun, cronConfig } = res || {}
       const typeOfSchedule = (cronConfig && moment(cronConfig).isValid()) ? 'datetime' : 'cron'
-      setCronConfig(cronConfig || '* * * * *')
+      setCronConfig(cronConfig || '')
       setToRun(toRun || true)
       setSchedulerType(typeOfSchedule)
       setLoading(false)
@@ -153,7 +153,7 @@ const SchedulerConfig = ({
               id='scheduler_cron'
               value={cronConfig}
               onChange={e => setCronConfig(e.target.value)}
-              label='Cron Pattern'
+              label='Cron Pattern (* * * * *)'
             />
           ) : (
             <form className={classes.container} noValidate>

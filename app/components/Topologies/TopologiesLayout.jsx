@@ -48,7 +48,11 @@ export default function TopologiesLayout () {
     </Button>)
 
   useEffect(() => {
-    setAppTitle({ text: 'TOPOLOGIES', button: newTopology, currentPage: 'TopologiesLayout' })
+    setAppTitle({
+      text: 'TOPOLOGIES',
+      button: newTopology,
+      currentPage: 'TopologiesLayout'
+    })
     async function fetchTopologies () {
       const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
       res && setTopologies(res)
@@ -66,7 +70,6 @@ export default function TopologiesLayout () {
               topologies={topologies}
               deleteTopology={deleteTopology}
               axiosHandler={axiosHandler}
-              // open={openScheduler}
               setOpenScheduler={(topology) => { setSelectedTopology(topology); setOpenScheduler(!openScheduler) }}
             />
             <ConfigureTopologySchedule

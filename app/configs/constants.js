@@ -148,7 +148,17 @@ export const mockedPipelines = [{
 }]
 
 export const mockedTopologies = [{
-  topologyId: '123',
+  topologyId: '001',
+  topologyStatus: 'TO_START',
+  topologyItems: []
+},
+{
+  topologyId: '002',
+  topologyStatus: 'TO_START',
+  topologyItems: []
+},
+{
+  topologyId: '003',
   topologyStatus: 'TO_START',
   topologyItems: []
 }]
