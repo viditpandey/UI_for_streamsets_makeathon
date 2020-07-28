@@ -70,7 +70,7 @@ export default function TopologyMenuOption ({ topologyData, autoRefresh, setAuto
             onClose={handleClose}
           >
             <MenuItem onClick={() => { history.push(`/topologies/${topologyData.topologyId}/history`) }}><HistoryIcon />&nbsp;History</MenuItem>
-            <MenuItem onClick={() => { setOpenScheduler(true) }}><ScheduleIcon />&nbsp;Schedule</MenuItem>
+            <MenuItem onClick={() => { setOpenScheduler(true); handleClose() }}><ScheduleIcon />&nbsp;Schedule</MenuItem>
             <MenuItem onClick={() => { deleteTopologyHandler() }}><DeleteIcon />&nbsp;Delete</MenuItem>
           </Menu>
         </Grid>
