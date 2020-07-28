@@ -1,5 +1,4 @@
-// export const BASE_URL = 'http://localhost:8081'
-export const BASE_URL = 'http://192.168.1.236:18631'
+export const BASE_URL = 'http://localhost:8081'
 
 export const HEX_CODES = {
   green: '#5cb85c',
@@ -148,7 +147,17 @@ export const mockedPipelines = [{
 }]
 
 export const mockedTopologies = [{
-  topologyId: '123',
+  topologyId: '001',
+  topologyStatus: 'TO_START',
+  topologyItems: []
+},
+{
+  topologyId: '002',
+  topologyStatus: 'TO_START',
+  topologyItems: []
+},
+{
+  topologyId: '003',
   topologyStatus: 'TO_START',
   topologyItems: []
 }]

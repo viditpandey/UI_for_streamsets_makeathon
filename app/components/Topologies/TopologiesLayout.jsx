@@ -1,7 +1,9 @@
-import AddCircleIcon from '@material-ui/icons/AddCircle'
-import Button from '@material-ui/core/Button'
+// import AddCircleIcon from '@material-ui/icons/AddCircle'
+import AddIcon from '@material-ui/icons/Add'
+// import Button from '@material-ui/core/Button'
 import ConfigureTopologySchedule from './ConfigureTopologySchedule'
 import DeleteIcon from '@material-ui/icons/Delete'
+import Fab from '@material-ui/core/Fab'
 import HistoryIcon from '@material-ui/icons/History'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import React, { useState, useEffect, useContext } from 'react'
@@ -11,11 +13,26 @@ import Tooltip from '@material-ui/core/Tooltip'
 import { AppBarContext } from '../Base/Home'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
 import { isEmpty, sortBy } from 'lodash'
+import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { IconButton } from '@material-ui/core'
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1)
+    }
+  },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(10),
+    right: theme.spacing(2)
+  }
+}))
+
 export default function TopologiesLayout () {
+  const classes = useStyles()
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
@@ -37,18 +54,22 @@ export default function TopologiesLayout () {
   const [selectedTopology, setSelectedTopology] = useState({})
   const [openScheduler, setOpenScheduler] = useState(false)
 
-  const newTopology = (
-    <Button
-      onClick={() => history.push('/topologies/create')}
-      variant='contained'
-      color='primary'
-      startIcon={<AddCircleIcon />}
-    >
-    new topology
-    </Button>)
+  // const newTopology = (
+  //   <Button
+  //     onClick={() => history.push('/topologies/create')}
+  //     variant='contained'
+  //     color='primary'
+  //     startIcon={<AddCircleIcon />}
+  //   >
+  //   new topology
+  //   </Button>)
 
   useEffect(() => {
-    setAppTitle({ text: 'TOPOLOGIES', button: newTopology, currentPage: 'TopologiesLayout' })
+    setAppTitle({
+      text: 'TOPOLOGIES',
+      // button: newTopology,
+      currentPage: 'TopologiesLayout'
+    })
     async function fetchTopologies () {
       const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
       res && setTopologies(res)
@@ -74,6 +95,13 @@ export default function TopologiesLayout () {
               setOpen={setOpenScheduler}
               topology={selectedTopology}
             />
+            <div className={classes.root}>
+              <Tooltip title='Create new topology'>
+                <Fab color='primary' onClick={() => history.push('/topologies/create')} className={classes.fab} aria-label='add'>
+                  <AddIcon />
+                </Fab>
+              </Tooltip>
+            </div>
           </div>
         )}
     </div>
