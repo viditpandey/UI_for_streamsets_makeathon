@@ -6,6 +6,8 @@ import HistoryIcon from '@material-ui/icons/History'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import NotificationsOffIcon from '@material-ui/icons/NotificationsOff'
+import NotificationsIcon from '@material-ui/icons/Notifications'
 import React, { useState } from 'react'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import Switch from '@material-ui/core/Switch'
@@ -72,6 +74,7 @@ export default function TopologyMenuOption ({ topologyData, autoRefresh, setAuto
             <MenuItem onClick={() => { history.push(`/topologies/${topologyData.topologyId}/history`) }}><HistoryIcon />&nbsp;History</MenuItem>
             <MenuItem onClick={() => { setOpenScheduler(true); handleClose() }}><ScheduleIcon />&nbsp;Schedule</MenuItem>
             <MenuItem onClick={() => { deleteTopologyHandler() }}><DeleteIcon />&nbsp;Delete</MenuItem>
+            <MenuItem onClick={() => {}}>{topologyData.alertStatus ? <NotificationsIcon /> : <NotificationsOffIcon />}&nbsp;Toggle {topologyData.alertStatus ? 'off' : 'on'} topology alerts</MenuItem>
           </Menu>
         </Grid>
       </Grid>
