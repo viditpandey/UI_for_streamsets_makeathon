@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { flatten } from 'lodash'
+
 import { BASE_URL, mockedPipelines } from '../configs/constants' // eslint-disable-line
+import { parsePipelineResponse, parsePipelinesStatusResponse } from '../helper/PipelineHelpers'
 
 const GET_ALL_PIPELINES = BASE_URL + '/getpipelines'
 const PIPELINE_ACTION = BASE_URL + '/pipelineaction'
@@ -10,19 +11,8 @@ export const getPipelines = async () => {
   try {
     const res = await axios.get(GET_ALL_PIPELINES)
       .catch(e => { throw (e) })
-    const pipelines = []
-    const instancePipelines = res.data
-
-    instancePipelines.forEach(item => {
-      const instanceId = Object.keys(item)[0]
-      const instancePipelines = flatten(Object.values(item))
-      instancePipelines.forEach(pipeline => {
-        pipelines.push({ ...pipeline, instanceId })
-      })
-    })
-
+    const pipelines = parsePipelineResponse(res.data)
     console.log('GET: Here\'s the list of pipelines', pipelines)
-
     return pipelines
   } catch (e) {
     console.error('[PipelineActions.getPipelines] error:', e)
@@ -70,7 +60,7 @@ export const stopPipeline = async ({ pipelineId }) => {
 export const getPipelinesStatus = async () => {
   try {
     const res = await axios.get(PIPELINES_STATUS).catch(e => ({ data: [] }))
-    const pipelinesStatus = Object.values(res.data)
+    const pipelinesStatus = parsePipelinesStatusResponse(res.data)
     console.log(`fetched latest status for ${pipelinesStatus.length} pipelines`)
     return pipelinesStatus
   } catch (error) {
