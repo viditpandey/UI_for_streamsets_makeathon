@@ -310,11 +310,9 @@ export default function TopolgyRegisterationLayout ({
             disabled={viewMode}
             open={openDialog}
             setOpen={setOpenDialog}
-            left={allPipelines}
-            // left={allPipelines}
+            left={sortBy(allPipelines, ['title', 'pipelineId', 'instanceId'])}
             setLeft={availablePipelines}
-            right={selectedPipelines}
-            // right={selectedPipelines}
+            right={sortBy(selectedPipelines, ['title', 'pipelineId', 'instanceId'])}
             setRight={addPipelinesToTopology}
             buttonText={`${selectedPipelines.length}/${allPipelines.length + selectedPipelines.length} pipelines selected`}
           />

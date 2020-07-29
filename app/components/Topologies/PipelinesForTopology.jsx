@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 2)
   },
   list: {
-    width: 200,
+    width: 300,
     height: 430,
     backgroundColor: theme.palette.background.paper,
     overflow: 'auto'
@@ -42,7 +42,7 @@ function union (a, b) {
   return [...a, ...not(b, a)]
 }
 
-export default function TransferList ({ left, setLeft, right, setRight }) {
+export default function TransferList ({ left, setLeft, right, setRight, instanceIdsWithColor }) {
   const classes = useStyles()
   const [checked, setChecked] = React.useState([])
 
@@ -102,11 +102,16 @@ export default function TransferList ({ left, setLeft, right, setRight }) {
       />
       <Divider />
       <List className={classes.list} dense component='div' role='list'>
-        {items.map((value) => {
+        {items.map((value, index) => {
           const labelId = `transfer-list-all-item-${value.pipelineId}-label`
 
           return (
-            <ListItem key={value.pipelineId} role='listitem' button onClick={handleToggle(value)}>
+            <ListItem
+              key={`${value.pipelineId}_${index}`}
+              role='listitem'
+              button
+              onClick={handleToggle(value)}
+            >
               <ListItemIcon>
                 <Checkbox
                   checked={checked.indexOf(value) !== -1}
@@ -115,7 +120,10 @@ export default function TransferList ({ left, setLeft, right, setRight }) {
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value.title} />
+              <ListItemText
+                style={{ color: instanceIdsWithColor[value.instanceId] }}
+                id={labelId} primary={`${value.title} (${value.instanceId})`}
+              />
             </ListItem>
           )
         })}

@@ -8,14 +8,17 @@ import StopIcon from '@material-ui/icons/Stop'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
-import { getPipelines, startPipeline, stopPipeline, getPipelinesStatus } from '../../actions/PipelineActions'
-import { sortBy } from 'lodash'
+import {
+  getPipelines, startPipeline,
+  stopPipeline, getPipelinesStatus
+} from '../../actions/PipelineActions'
+import { generateRandomColor } from '../../helper/PipelineHelpers'
+import { sortBy, uniq } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
 import { useSnackbar } from 'notistack'
 
 export default function PipelinesLayout () {
   const { setAppTitle } = useContext(AppBarContext)
-
   const { enqueueSnackbar } = useSnackbar()
 
   const axiosHandler = async ({ method = () => {}, methodParams, errorMessage = 'Action failed', successMessage, infoMessage }) => {
@@ -32,11 +35,14 @@ export default function PipelinesLayout () {
   }
 
   const [pipelines, setPipelines] = useState([])
+  const [instanceIdsWithColor, setInstanceIds] = useState({})
 
   useEffect(() => {
     setAppTitle({ text: 'PIPELINES', currentPage: 'PipelinesLayout' })
     async function fetchPipelines () {
       const res = await axiosHandler({ method: getPipelines, errorMessage: 'pipelines fetch failed', infoMessage: 'pipelines fetched succesfully' })
+      const allInstanceIds = uniq(res.map(i => i.instanceId))
+      setInstanceIds(generateRandomColor(allInstanceIds))
       res && setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
     }
     fetchPipelines()
@@ -46,16 +52,16 @@ export default function PipelinesLayout () {
     const latestStatus = await getPipelinesStatus()
     const updatedPipelines = []
     latestStatus.length && latestStatus.forEach(p => {
-      const { status, pipelineId } = p
-      updatedPipelines.push(updatePipeline({ pipelineId, property: 'status', newVal: status }))
+      const { status, pipelineId, instanceId } = p
+      updatedPipelines.push(updatePipeline({ pipelineId, property: 'status', newVal: status, instanceId }))
     })
     latestStatus.length && setPipelines(updatedPipelines)
   }, pipelines.length ? 3000 : null)
 
-  const updatePipeline = ({ pipelineId, property, newVal }) => {
+  const updatePipeline = ({ pipelineId, property, newVal, instanceId }) => {
     let updatedPipeline = []
     pipelines.forEach(prevPipeline => {
-      if (prevPipeline.pipelineId === pipelineId) {
+      if (prevPipeline.pipelineId === pipelineId && prevPipeline.instanceId === instanceId) {
         prevPipeline[property] = newVal
         updatedPipeline = prevPipeline
       }
@@ -135,14 +141,13 @@ export default function PipelinesLayout () {
     <div id='pipelines-layout'>
 
       <ListItemWrapper
-        // items={pipelines}
         items={sortBy(pipelines, ['title', 'pipelineId'])}
         getKey={item => item.pipelineId}
         itemClick={() => {}}
-        // itemClick={item => history.push(`/pipelines/${item.pipelineId}`)}
         collapsedText={item => returnSecondaryText(item)}
-        getPrimaryText={item => `${item.title} (${item.pipelineId})`}
-        secondaryText={item => <>{`status: ${item.status || '...'}`}</>}
+        // getPrimaryText={item => `${item.title} (${item.pipelineId})`}
+        getPrimaryText={item => <div style={{ color: instanceIdsWithColor[item.instanceId] }}>{`${item.title} (${item.pipelineId})`}</div>}
+        secondaryText={item => getSecondaryText(item, instanceIdsWithColor)}
         secondaryActionButton={getPipelineActionButton}
         listId='pipelines-layout-children'
       />
@@ -157,6 +162,16 @@ const returnSecondaryText = item => {
       {`created: ${new Date(created)}`} <br />
       {`description: ${description}`} <br />
       {status ? `status: ${status}` : null}
+    </>
+  )
+}
+
+const getSecondaryText = (item, instanceIdsWithColor) => {
+  const { status, instanceId } = item
+  return (
+    <>
+      <span style={{ color: instanceIdsWithColor[instanceId] }}>{`Streamset instance: ${instanceId}`} </span><br />
+      {status ? `status: ${status}` : '...'}
     </>
   )
 }

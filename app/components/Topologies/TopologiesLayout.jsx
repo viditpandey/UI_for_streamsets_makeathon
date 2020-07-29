@@ -186,7 +186,11 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
 const getTopologyItems = topology => {
   if (isEmpty(topology.topologyItems)) return null
   else {
-    const renderPipelines = (p, i) => <span key={p.pipelineId}>{`${i + 1}) ${p.pipelineId}`}<br /></span>
+    const renderPipelines = (p, i) => (
+      <span key={p.pipelineId}>
+        {`${i + 1}) ${p.pipelineId}. Streamset instance: ${p.instanceId}`}<br />
+      </span>
+    )
     return (
       <>
         {topology.topologyItems.map(renderPipelines)}
