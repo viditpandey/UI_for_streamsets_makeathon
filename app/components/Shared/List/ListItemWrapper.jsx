@@ -35,11 +35,11 @@ export default function ListItemWrapper ({
       <Grid item xs={1} />
       <Grid item xs={10}>
         <List className={classes.root}>
-          {items.map(item => {
+          {items.map((item, index) => {
             return (
 
               <ListItemRenderer
-                key={getKey(item)}
+                key={`${getKey(item)}_${index}`}
                 item={item}
                 itemClick={itemClick}
                 secondaryText={secondaryText}
