@@ -39,7 +39,7 @@ const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled,
       </Button>
       <Dialog
         open={open}
-        maxWidth='800px'
+        maxWidth='lg'
         TransitionComponent={Transition}
         scroll='body'
         aria-labelledby='scroll-dialog-title'

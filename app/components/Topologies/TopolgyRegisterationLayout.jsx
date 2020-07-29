@@ -116,9 +116,11 @@ export default function TopolgyRegisterationLayout ({
   const formTreeData = nodeInfo => {
     let dependsOn = 'root'
     if (nodeInfo.parentNode && nodeInfo.parentNode.pipelineId) dependsOn = nodeInfo.parentNode.pipelineId
-    const pipelineInfo = selectedPipelines.find(p => p.pipelineId === nodeInfo.node.pipelineId)
-    const { pipelineId, waitTime, threshold, processAfter } = pipelineInfo
+    const pipelineInfo = selectedPipelines.find(p => (p.pipelineId === nodeInfo.node.pipelineId && p.instanceId === nodeInfo.node.instanceId)) || {}
+    const { pipelineId, waitTime, threshold, processAfter, instanceId } = pipelineInfo
+
     finalTreeData.push({
+      instanceId,
       topologyId: name,
       pipelineId: pipelineId,
       waitTime: Number(waitTime || 0),
@@ -127,6 +129,7 @@ export default function TopolgyRegisterationLayout ({
       createdBy: 'From UI',
       dependsOn
     })
+
     setFinalTreeData(finalTreeData)
   }
 
@@ -365,7 +368,7 @@ const CreateTree = ({ treeData, setTreeData, setFinalTreeData, selectedPipelines
             <div className='graph-area-style padding-top-30' style={{ height: height }}>
               <SortableTree
                 treeData={treeData}
-                getNodeKey={({ node }) => { return node.pipelineId }}
+                getNodeKey={({ node }) => { return `${node.pipelineId}_${node.instanceId}` }}
                 onChange={treeData => { setTreeData(treeData); setFinalTreeData([]) }}
               />
             </div>)
