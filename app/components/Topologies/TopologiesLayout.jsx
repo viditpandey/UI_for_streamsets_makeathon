@@ -4,12 +4,15 @@ import ConfigureTopologySchedule from './ConfigureTopologySchedule'
 import DeleteIcon from '@material-ui/icons/Delete'
 import HistoryIcon from '@material-ui/icons/History'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
+import NotificationsOffIcon from '@material-ui/icons/NotificationsOff'
+import NotificationsIcon from '@material-ui/icons/Notifications'
 import React, { useState, useEffect, useContext } from 'react'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
+import { HEX_CODES } from '../../configs/constants'
 import { isEmpty, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
@@ -89,6 +92,7 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
       <Tooltip title='Delete Topology'>
         <IconButton
           aria-label='delete topology'
+          style={{ color: HEX_CODES.red }}
           onClick={async (e) => {
             await axiosHandler({
               method: deleteTopology,
@@ -110,7 +114,8 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
     return (
       <Tooltip title='View Topology History'>
         <IconButton
-          aria-label='delete topology'
+          aria-label='topology history'
+          style={{ color: HEX_CODES.blue }}
           onClick={() => history.push(`/topologies/${item.topologyId}/history`)}
           id='topology-history-button'
           component='span'
@@ -125,7 +130,8 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
     return (
       <Tooltip title='Schedule Topology'>
         <IconButton
-          aria-label='delete topology'
+          style={{ color: HEX_CODES.green }}
+          aria-label='schedule topology'
           onClick={() => { setOpenScheduler(item) }}
           id='topology-schedule-button'
           component='span'
@@ -136,9 +142,26 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
     )
   }
 
+  const toggleTopologyAlerts = item => {
+    return (
+      <Tooltip title={`Toggle ${item.alertStatus ? 'off' : 'on'} topology alerts`}>
+        <IconButton
+          style={{ color: item.alertStatus ? HEX_CODES.green : HEX_CODES.grey }}
+          aria-label='topology alerts'
+          onClick={() => {}}
+          id='topology-schedule-button'
+          component='span'
+        >
+          {item.alertStatus ? <NotificationsIcon /> : <NotificationsOffIcon />}
+        </IconButton>
+      </Tooltip>
+    )
+  }
+
   const renderHistoryAndDeleteButtons = item => {
     return (
       <div id='topologies-action-buttons'>
+        {toggleTopologyAlerts(item)}
         {scheduleTopologyButton(item)}
         {historyTopologyButton(item)}
         {deleteTopologyButton(item)}
