@@ -15,8 +15,23 @@ export const Transition = React.forwardRef(function Transition (props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 })
 
+function filterSearchedPipelines (pipelines, searchTerm) {
+  try {
+    if (searchTerm.trim() === '') return pipelines
+    const filteredPipelines = pipelines.filter(p => {
+      const isNameMatched = p.title.toLowerCase().search(searchTerm.toLowerCase()) !== -1
+      const isInstanceMatched = p.instanceId.toLowerCase().search(searchTerm.toLowerCase()) !== -1
+      return (isNameMatched || isInstanceMatched)
+    })
+    return filteredPipelines
+  } catch (error) {
+    return pipelines
+  }
+}
+
 const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled, buttonText }) => {
   const [instanceIdsWithColor, setInstanceIds] = React.useState({})
+  const [searchCriteria, setSearchCriteria] = React.useState()
 
   React.useEffect(() => {
     if (open) {
@@ -48,11 +63,13 @@ const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled,
         <DialogTitle id='scroll-dialog-title'>Select Pipelines</DialogTitle>
         <DialogContent />
         <PipelinesForTopology
-          left={left}
+          left={filterSearchedPipelines(left, searchCriteria)}
           setLeft={setLeft}
           right={right}
           setRight={setRight}
           instanceIdsWithColor={instanceIdsWithColor}
+          searchCriteria={searchCriteria}
+          setSearchCriteria={setSearchCriteria}
         />
         <DialogActions>
           <Button onClick={() => setOpen(false)} color='primary'>

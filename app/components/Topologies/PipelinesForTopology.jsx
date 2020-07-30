@@ -8,7 +8,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import React from 'react'
+import React, { useState } from 'react'
+import TextField from '@material-ui/core/TextField'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -42,9 +43,13 @@ function union (a, b) {
   return [...a, ...not(b, a)]
 }
 
-export default function TransferList ({ left, setLeft, right, setRight, instanceIdsWithColor }) {
+export default function TransferList ({
+  left, setLeft, right,
+  setRight, instanceIdsWithColor,
+  searchCriteria, setSearchCriteria
+}) {
   const classes = useStyles()
-  const [checked, setChecked] = React.useState([])
+  const [checked, setChecked] = useState([])
 
   const leftChecked = intersection(checked, left)
   const rightChecked = intersection(checked, right)
@@ -134,6 +139,18 @@ export default function TransferList ({ left, setLeft, right, setRight, instance
 
   return (
     <Grid container spacing={2} justify='center' alignItems='center' className={classes.root}>
+
+      <Grid container justify='center' alignItems='center'>
+        <Grid item>
+          <TextField
+            id='search_pipelines'
+            value={searchCriteria || ''}
+            onChange={e => { setSearchCriteria(e.target.value) }}
+            label='Search Pipelines'
+          />
+        </Grid>
+      </Grid>
+
       <Grid item>{customList('Choices', left)}</Grid>
       <Grid item>
         <Grid container direction='column' alignItems='center'>
