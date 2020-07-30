@@ -50,7 +50,10 @@ export default function ConfigureTopologySchedule ({
       setLoading(false)
     }
     open && getSchedule()
-    updateTopologyProperty && updateTopologyProperty(topology.topologyId, 'cronConfig', cronConfig)
+    if (!open) {
+      updateTopologyProperty && updateTopologyProperty(topology.topologyId, 'cronConfig', cronConfig)
+      if (!toRun) updateTopologyProperty && updateTopologyProperty(topology.topologyId, 'toRun', toRun)
+    }
   }, [open])
   const titleDialog = `Schedule Topology ${topology.topologyId}`
 

@@ -239,6 +239,7 @@ function getNextInvocation (topology) {
   const defaultTime = <span>'No next schedule'</span>
   try {
     if (!topology.cronConfig) return <span>Open Scheduler to view next schedule...</span>
+    else if (topology.toRun !== undefined && topology.toRun.toString() === 'false') return <span style={{ color: HEX_CODES.yellow }}>Topology scheduled run paused.</span>
     const job = nodeSchedule.scheduleJob(topology.cronConfig || '* * * * *', () => {})
     const nextInvocation = job.nextInvocation()
     job.cancel()
