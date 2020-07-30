@@ -13,6 +13,7 @@ import {
   stopPipeline, getPipelinesStatus
 } from '../../actions/PipelineActions'
 import { generateRandomColor } from '../../helper/PipelineHelpers'
+import { getViewableDateTime } from '../../helper/commonHelper'
 import { sortBy, uniq } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
 import { useSnackbar } from 'notistack'
@@ -145,7 +146,6 @@ export default function PipelinesLayout () {
         getKey={item => item.pipelineId}
         itemClick={() => {}}
         collapsedText={item => returnSecondaryText(item)}
-        // getPrimaryText={item => `${item.title} (${item.pipelineId})`}
         getPrimaryText={item => <div style={{ color: instanceIdsWithColor[item.instanceId] }}>{`${item.title} (${item.pipelineId})`}</div>}
         secondaryText={item => getSecondaryText(item, instanceIdsWithColor)}
         secondaryActionButton={getPipelineActionButton}
@@ -159,7 +159,7 @@ const returnSecondaryText = item => {
   const { created, description, status } = item
   return (
     <>
-      {`created: ${new Date(created)}`} <br />
+      {`created: ${getViewableDateTime(created)}`} <br />
       {`description: ${description}`} <br />
       {status ? `status: ${status}` : null}
     </>

@@ -11,12 +11,15 @@ import ScheduleIcon from '@material-ui/icons/Schedule'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
+import { generateRandomColor } from '../../helper/PipelineHelpers'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
+import { getViewableDateTime } from '../../helper/commonHelper'
 import { HEX_CODES } from '../../configs/constants'
-import { isEmpty, sortBy } from 'lodash'
+import { isEmpty, sortBy, flatten, uniq, cloneDeep } from 'lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { IconButton } from '@material-ui/core'
+import nodeSchedule from 'node-schedule'
 
 export default function TopologiesLayout () {
   const history = useHistory()
@@ -39,6 +42,15 @@ export default function TopologiesLayout () {
   const [topologies, setTopologies] = useState([])
   const [selectedTopology, setSelectedTopology] = useState({})
   const [openScheduler, setOpenScheduler] = useState(false)
+  const [instanceIdsWithColor, setInstanceIds] = useState({})
+
+  const updateTopologyProperty = function (topologyId, property, value) {
+    const temp = cloneDeep(topologies)
+    temp.forEach(t => {
+      if (t.topologyId === topologyId) t[property] = value
+    })
+    setTopologies(temp)
+  }
 
   const newTopology = (
     <Button
@@ -58,7 +70,16 @@ export default function TopologiesLayout () {
     })
     async function fetchTopologies () {
       const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
-      res && setTopologies(res)
+      if (!isEmpty(res)) {
+        const allInstanceIds = []
+        setTopologies(res)
+        res.forEach(topology => {
+          if (isEmpty(topology.topologyItems)) return
+          const ids = topology.topologyItems.map(i => i.instanceId)
+          allInstanceIds.push(ids)
+          setInstanceIds(generateRandomColor(uniq(flatten(allInstanceIds))))
+        })
+      }
     }
     fetchTopologies()
   }, [])
@@ -74,11 +95,14 @@ export default function TopologiesLayout () {
               deleteTopology={deleteTopology}
               axiosHandler={axiosHandler}
               setOpenScheduler={(topology) => { setSelectedTopology(topology); setOpenScheduler(!openScheduler) }}
+              instanceIdsWithColor={instanceIdsWithColor}
             />
+
             <ConfigureTopologySchedule
               open={openScheduler}
               setOpen={setOpenScheduler}
               topology={selectedTopology}
+              updateTopologyProperty={updateTopologyProperty}
             />
           </div>
         )}
@@ -86,7 +110,10 @@ export default function TopologiesLayout () {
   )
 }
 
-const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpenScheduler }) => {
+const Topologies = ({
+  topologies, history, deleteTopology,
+  instanceIdsWithColor, axiosHandler, setOpenScheduler
+}) => {
   const deleteTopologyButton = item => {
     return (
       <Tooltip title='Delete Topology'>
@@ -175,20 +202,29 @@ const Topologies = ({ topologies, history, deleteTopology, axiosHandler, setOpen
       itemClick={item => history.push(`/topologies/${item.topologyId}`)}
       getPrimaryText={item => `${item.topologyId}`}
       getKey={item => item.topologyId}
-      secondaryText={item => `contains ${item.topologyItems.length} pipeline(s)`}
-      collapsedText={item => getTopologyItems(item)}
+      secondaryText={secondaryTextTopology}
+      collapsedText={item => getTopologyItems(item, instanceIdsWithColor)}
       secondaryActionButton={item => renderHistoryAndDeleteButtons(item)}
       listId='topologies-layout-children'
     />
   )
 }
 
-const getTopologyItems = topology => {
+const secondaryTextTopology = topology => {
+  return (
+    <>
+      {getNextInvocation(topology)}<br />
+      <span>{`contains ${topology.topologyItems.length} pipeline(s)`}</span>
+    </>
+  )
+}
+
+const getTopologyItems = (topology, instanceIdsWithColor) => {
   if (isEmpty(topology.topologyItems)) return null
   else {
     const renderPipelines = (p, i) => (
-      <span key={p.pipelineId}>
-        {`${i + 1}) ${p.pipelineId}. Streamset instance: ${p.instanceId}`}<br />
+      <span key={p.pipelineId} style={{ color: instanceIdsWithColor[p.instanceId] }}>
+        {`${i + 1}) ${p.pipelineTitle || p.pipelineId}. (${p.instanceId})`}<br />
       </span>
     )
     return (
@@ -196,5 +232,18 @@ const getTopologyItems = topology => {
         {topology.topologyItems.map(renderPipelines)}
       </>
     )
+  }
+}
+
+function getNextInvocation (topology) {
+  const defaultTime = <span>'No next schedule'</span>
+  try {
+    if (!topology.cronConfig) return <span>Open Scheduler to view next schedule...</span>
+    const job = nodeSchedule.scheduleJob(topology.cronConfig || '* * * * *', () => {})
+    const nextInvocation = job.nextInvocation()
+    job.cancel()
+    return <span style={{ color: HEX_CODES.green }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
+  } catch (error) {
+    return defaultTime
   }
 }

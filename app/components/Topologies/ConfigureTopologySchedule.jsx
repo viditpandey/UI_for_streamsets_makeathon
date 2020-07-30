@@ -32,7 +32,7 @@ export const Transition = React.forwardRef(function Transition (props, ref) {
 })
 
 export default function ConfigureTopologySchedule ({
-  open, setOpen, topology
+  open, setOpen, topology, updateTopologyProperty
 }) {
   const [schedulerType, setSchedulerType] = useState('cron')
   const [cronConfig, setCronConfig] = useState('')
@@ -42,16 +42,15 @@ export default function ConfigureTopologySchedule ({
   useEffect(() => {
     async function getSchedule () {
       const res = await getSchedulerByTopologyId({ topologyId: topology.topologyId }).catch(e => null)
-      // if (res) {
       const { toRun, cronConfig } = res || {}
       const typeOfSchedule = (cronConfig && moment(cronConfig).isValid()) ? 'datetime' : 'cron'
       setCronConfig(cronConfig || '')
-      setToRun(toRun || true)
+      res && setToRun(toRun)
       setSchedulerType(typeOfSchedule)
       setLoading(false)
-      // }
     }
     open && getSchedule()
+    updateTopologyProperty && updateTopologyProperty(topology.topologyId, 'cronConfig', cronConfig)
   }, [open])
   const titleDialog = `Schedule Topology ${topology.topologyId}`
 
@@ -162,7 +161,6 @@ const SchedulerConfig = ({
                 label='Next appointment'
                 type='datetime-local'
                 defaultValue={cronConfig}
-                // defaultValue={!isEmpty(new Date(cronConfig)) && new Date(cronConfig).toISOString()}
                 onChange={e => { setCronConfig(e.target.value) }}
                 className={classes.textField}
                 InputLabelProps={{

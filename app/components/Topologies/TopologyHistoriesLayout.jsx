@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
+import TopologyHistoryLayout from './TopologyHistoryLayout'
 
 import { AppBarContext } from '../Base/Home'
 import { CircularProgress, Typography } from '@material-ui/core'
 import { getTopologyHistory } from '../../actions/TopologyActions'
+import { getViewableDateTime } from '../../helper/commonHelper'
 import { isEmpty, sortBy, reverse } from 'lodash'
 import { useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import TopologyHistoryLayout from './TopologyHistoryLayout'
 
 export default function TopologyHistoriesLayout () {
   const { id } = useParams()
@@ -58,7 +59,7 @@ export default function TopologyHistoriesLayout () {
 }
 const collapsedText = historyItem => (
   <>
-    {`start time: ${new Date(historyItem.topologyStartTime)}`} <br />
-    {`end time: ${new Date(historyItem.topologyEndTime)}`} <br />
+    {`start time: ${getViewableDateTime(historyItem.topologyStartTime)}`} <br />
+    {`end time: ${getViewableDateTime(historyItem.topologyEndTime)}`} <br />
   </>
 )
