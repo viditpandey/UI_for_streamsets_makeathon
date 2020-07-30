@@ -20,14 +20,15 @@ export const getPipelines = async () => {
   }
 }
 
-export const startPipeline = async ({ pipelineId }) => {
+export const startPipeline = async ({ pipelineId, instanceId }) => {
   try {
     const res = await axios({
       method: 'post',
       url: PIPELINE_ACTION,
       data: {
-        pipelineId: pipelineId,
+        pipelineId,
         action: 'start',
+        instanceId,
         rev: 0
       }
     }
@@ -41,11 +42,12 @@ export const startPipeline = async ({ pipelineId }) => {
   }
 }
 
-export const stopPipeline = async ({ pipelineId }) => {
+export const stopPipeline = async ({ pipelineId, instanceId }) => {
   try {
     const res = await axios.post(PIPELINE_ACTION, {
       pipelineId,
       action: 'stop',
+      instanceId,
       rev: 0
     }).catch(e => { throw e })
     const pipelineStatus = res.data

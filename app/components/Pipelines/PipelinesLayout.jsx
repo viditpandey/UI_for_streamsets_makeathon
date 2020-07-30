@@ -77,11 +77,11 @@ export default function PipelinesLayout () {
     } else return false
   }
 
-  const handlePipelineActionButtonClick = (pipelineId) => async () => {
+  const handlePipelineActionButtonClick = ({ pipelineId, instanceId }) => async () => {
     if (shouldStartPipeline(pipelineId)) {
       const res = await axiosHandler({
         method: startPipeline,
-        methodParams: { pipelineId },
+        methodParams: { pipelineId, instanceId },
         errorMessage: 'Pipeline start failed',
         successMessage: 'pipeline started succesfully'
       })
@@ -89,7 +89,7 @@ export default function PipelinesLayout () {
     } else {
       const res = await axiosHandler({
         method: stopPipeline,
-        methodParams: { pipelineId },
+        methodParams: { pipelineId, instanceId },
         errorMessage: 'Pipeline stop failed',
         successMessage: 'Pipeline stopped succesfully'
       })
@@ -128,7 +128,7 @@ export default function PipelinesLayout () {
         <IconButton
           aria-label='start/stop pipeline'
           id='pipeline-action-button'
-          onClick={handlePipelineActionButtonClick(item.pipelineId)}
+          onClick={() => handlePipelineActionButtonClick(item)}
           component='span'
         >
           {button}
