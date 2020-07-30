@@ -11,7 +11,23 @@ import ListItemText from '@material-ui/core/ListItemText'
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 
+import { isEmpty } from 'lodash'
 import { makeStyles } from '@material-ui/core/styles'
+
+function filterSearchedPipelines (pipelines, searchTerm) {
+  try {
+    if (searchTerm.trim() === '' || searchTerm.length <= 2) return pipelines
+    else if (isEmpty(pipelines)) return []
+    const filteredPipelines = pipelines.filter(p => {
+      const isNameMatched = p.title.toLowerCase().search(searchTerm.toLowerCase()) !== -1
+      const isInstanceMatched = p.instanceId.toLowerCase().search(searchTerm.toLowerCase()) !== -1
+      return (isNameMatched || isInstanceMatched)
+    })
+    return filteredPipelines
+  } catch (error) {
+    return pipelines
+  }
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,11 +61,11 @@ function union (a, b) {
 
 export default function TransferList ({
   left, setLeft, right,
-  setRight, instanceIdsWithColor,
-  searchCriteria, setSearchCriteria
+  setRight, instanceIdsWithColor
 }) {
   const classes = useStyles()
   const [checked, setChecked] = useState([])
+  const [searchCriteria, setSearchCriteria] = React.useState()
 
   const leftChecked = intersection(checked, left)
   const rightChecked = intersection(checked, right)
@@ -151,7 +167,7 @@ export default function TransferList ({
         </Grid>
       </Grid>
 
-      <Grid item>{customList('Choices', left)}</Grid>
+      <Grid item>{customList('Choices', filterSearchedPipelines(left, searchCriteria))}</Grid>
       <Grid item>
         <Grid container direction='column' alignItems='center'>
           <Button
