@@ -25,6 +25,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
+import { Tooltip } from '@material-ui/core'
 
 const BorderLinearProgress = ({ loaderBackground, backgroundColor }) => withStyles((theme) => ({
   root: {
@@ -60,21 +61,24 @@ const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
   }) : () => null
   const chipLabel = (
 
-    <div>{title} ({statusLabel}) {errorCount}
+    <div>{title} ({p.instanceId}) ({statusLabel}) {errorCount}
       <div style={{ margin: '0 10px' }}>
         {<CustomProgressBar />}
       </div>
     </div>)
+
   return (
-    <Chip
-      id={p.pipelineId}
-      style={getStyleByPipelineStatus[statusLabel]}
-      deleteIcon={<SettingsIcon />}
-      size='medium'
-      label={chipLabel}
-      onDelete={(e) => handlePipelineClick(true, p)}
-      onClick={(e) => handlePipelineClick(true, p)}
-    />
+    <Tooltip title={`Runs at ${p.processAfter || 'stop'} of parent pipeline. Retry Count: ${p.threshold || 0}. Wait Time: ${p.waitTime || 0}s.`}>
+      <Chip
+        id={p.pipelineId}
+        style={getStyleByPipelineStatus[statusLabel]}
+        deleteIcon={<SettingsIcon />}
+        size='medium'
+        label={chipLabel}
+        onDelete={(e) => handlePipelineClick(true, p)}
+        onClick={(e) => handlePipelineClick(true, p)}
+      />
+    </Tooltip>
   )
 }
 
