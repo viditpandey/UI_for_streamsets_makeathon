@@ -4,6 +4,7 @@ import { BASE_URL, mockedPipelines } from '../configs/constants' // eslint-disab
 import { parsePipelineResponse, parsePipelinesStatusResponse } from '../helper/PipelineHelpers'
 
 const GET_ALL_PIPELINES = BASE_URL + '/getpipelines'
+const GET_AVAILABLE_PIPELINES = BASE_URL + '/getAvailablePipelines'
 const PIPELINE_ACTION = BASE_URL + '/pipelineaction'
 const PIPELINES_STATUS = BASE_URL + '/getpipelinestatus'
 
@@ -16,6 +17,19 @@ export const getPipelines = async () => {
     return pipelines
   } catch (e) {
     console.error('[PipelineActions.getPipelines] error:', e)
+    throw e
+  }
+}
+
+export const getAvailablePipelines = async () => {
+  try {
+    const res = await axios.get(GET_AVAILABLE_PIPELINES)
+      .catch(e => { throw (e) })
+    const pipelines = parsePipelineResponse(res.data)
+    console.log('GET: Here\'s the list of available pipelines (not part of any topology yet)', pipelines)
+    return pipelines
+  } catch (e) {
+    console.error('[PipelineActions.getAvailablePipelines] error:', e)
     throw e
   }
 }

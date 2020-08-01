@@ -12,9 +12,11 @@ import Slide from '@material-ui/core/Slide'
 import TextField from '@material-ui/core/TextField'
 
 import { createScheduler, getSchedulerByTopologyId } from '../../actions/SchedulerActions'
+import { isEmpty } from 'lodash'
 import { makeStyles } from '@material-ui/core/styles'
-import moment from 'moment'
 import { Typography, Switch, CircularProgress } from '@material-ui/core'
+
+const cronValidator = require('cron-validator')
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,7 +34,7 @@ export const Transition = React.forwardRef(function Transition (props, ref) {
 })
 
 export default function ConfigureTopologySchedule ({
-  open, setOpen, topology, updateTopologyProperty
+  open, setOpen, topology, updateTopologyProperties
 }) {
   const [schedulerType, setSchedulerType] = useState('cron')
   const [cronConfig, setCronConfig] = useState('')
@@ -43,16 +45,16 @@ export default function ConfigureTopologySchedule ({
     async function getSchedule () {
       const res = await getSchedulerByTopologyId({ topologyId: topology.topologyId }).catch(e => null)
       const { toRun, cronConfig } = res || {}
-      const typeOfSchedule = (cronConfig && moment(cronConfig).isValid()) ? 'datetime' : 'cron'
+      const typeOfSchedule = cronValidator.isValidCron(cronConfig || '* * * * *') ? 'cron' : 'datetime'
       setCronConfig(cronConfig || '')
       res && setToRun(toRun)
       setSchedulerType(typeOfSchedule)
       setLoading(false)
     }
     open && getSchedule()
-    if (!open) {
-      updateTopologyProperty && updateTopologyProperty(topology.topologyId, 'cronConfig', cronConfig)
-      if (!toRun) updateTopologyProperty && updateTopologyProperty(topology.topologyId, 'toRun', toRun)
+    if (!open && !isEmpty(topology)) {
+      const properties = { cronConfig, toRun }
+      updateTopologyProperties && updateTopologyProperties(topology.topologyId, properties)
     }
   }, [open])
   const titleDialog = `Schedule Topology ${topology.topologyId}`
