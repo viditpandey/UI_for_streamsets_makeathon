@@ -2,11 +2,12 @@ var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  // entry: path.resolve(__dirname, 'app/index.js'),
   entry: './app/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'index_bundle.js',
+    // filename: 'index_bundle.js',
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js',
     publicPath: '/'
   },
   module: {
