@@ -18,7 +18,7 @@ import {
   stopTopology, validateTopology,
   pauseTopology, resetTopology
 } from '../../actions/TopologyActions'
-import { getPipelines } from '../../actions/PipelineActions'
+import { getAvailablePipelines } from '../../actions/PipelineActions'
 import { HEX_CODES, getStyleByPipelineStatus } from '../../configs/constants'
 import { listToTree } from '../../helper/tree_util_functions'
 import { withStyles } from '@material-ui/core/styles'
@@ -61,7 +61,7 @@ const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
   }) : () => null
   const chipLabel = (
 
-    <div>{title} ({p.instanceId}) ({statusLabel}) {errorCount}
+    <div>{title} (instance of {p.instanceId}) ({statusLabel}) {errorCount}
       <div style={{ margin: '0 10px' }}>
         {<CustomProgressBar />}
       </div>
@@ -157,7 +157,7 @@ export default function TopolgyRegisterationLayout ({
     !viewMode && setAppTitle({ text: 'NEW TOPOLOGY', currentPage: 'TopolgyRegisterationLayout' })
 
     async function fetchPipelines () {
-      const res = await getPipelines()
+      const res = await getAvailablePipelines()
       const sorted = sortBy(res, ['title', 'pipelineTitle', 'pipelineId'])
       availablePipelines(sorted)
     }
@@ -321,7 +321,7 @@ export default function TopolgyRegisterationLayout ({
             setLeft={availablePipelines}
             right={sortBy(selectedPipelines, ['title', 'pipelineId', 'instanceId'])}
             setRight={addPipelinesToTopology}
-            buttonText={`${selectedPipelines.length}/${allPipelines.length + selectedPipelines.length} pipelines selected`}
+            buttonText={`${selectedPipelines.length} pipelines selected`}
           />
           <br />
           <div id='topology-tree'>

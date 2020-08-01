@@ -14,7 +14,7 @@ import {
 } from '../../actions/PipelineActions'
 import { generateRandomColor } from '../../helper/PipelineHelpers'
 import { getViewableDateTime } from '../../helper/commonHelper'
-import { sortBy, uniq } from 'lodash'
+import { sortBy, uniq, isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
 import { useSnackbar } from 'notistack'
 
@@ -39,9 +39,10 @@ export default function PipelinesLayout () {
   const [instanceIdsWithColor, setInstanceIds] = useState({})
 
   useEffect(() => {
-    setAppTitle({ text: 'PIPELINES', currentPage: 'PipelinesLayout' })
     async function fetchPipelines () {
       const res = await axiosHandler({ method: getPipelines, errorMessage: 'pipelines fetch failed', infoMessage: 'pipelines fetched succesfully' })
+      const pipelinesLength = !isEmpty(res) ? `(${res.length})` : ''
+      setAppTitle({ text: `PIPELINES ${pipelinesLength}`, currentPage: 'PipelinesLayout' })
       const allInstanceIds = uniq(res.map(i => i.instanceId))
       setInstanceIds(generateRandomColor(allInstanceIds))
       res && setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var

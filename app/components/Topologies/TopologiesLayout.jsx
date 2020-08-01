@@ -2,7 +2,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle'
 import Button from '@material-ui/core/Button'
 import ConfigureTopologySchedule from './ConfigureTopologySchedule'
 import DeleteIcon from '@material-ui/icons/Delete'
-import HistoryIcon from '@material-ui/icons/History'
+import NotesIcon from '@material-ui/icons/Notes'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff'
 import NotificationsIcon from '@material-ui/icons/Notifications'
@@ -15,7 +15,7 @@ import { generateRandomColor } from '../../helper/PipelineHelpers'
 import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
 import { getViewableDateTime } from '../../helper/commonHelper'
 import { HEX_CODES } from '../../configs/constants'
-import { isEmpty, sortBy, flatten, uniq, cloneDeep } from 'lodash'
+import { isEmpty, sortBy, flatten, uniq, cloneDeep, merge } from 'lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { IconButton } from '@material-ui/core'
@@ -44,10 +44,10 @@ export default function TopologiesLayout () {
   const [openScheduler, setOpenScheduler] = useState(false)
   const [instanceIdsWithColor, setInstanceIds] = useState({})
 
-  const updateTopologyProperty = function (topologyId, property, value) {
+  const updateTopologyProperties = function (topologyId, updatedProperties) {
     const temp = cloneDeep(topologies)
     temp.forEach(t => {
-      if (t.topologyId === topologyId) t[property] = value
+      if (t.topologyId === topologyId) t = merge(t, updatedProperties)
     })
     setTopologies(temp)
   }
@@ -63,14 +63,11 @@ export default function TopologiesLayout () {
     </Button>)
 
   useEffect(() => {
-    setAppTitle({
-      text: 'TOPOLOGIES',
-      button: newTopology,
-      currentPage: 'TopologiesLayout'
-    })
     async function fetchTopologies () {
       const res = await axiosHandler({ method: getTopologies, errorMessage: 'Topologies fetch failed', infoMessage: 'Topologies fetched succesfully' })
+      let topologiesCount = ''
       if (!isEmpty(res)) {
+        topologiesCount = `(${res.length})`
         const allInstanceIds = []
         setTopologies(res)
         res.forEach(topology => {
@@ -80,6 +77,11 @@ export default function TopologiesLayout () {
           setInstanceIds(generateRandomColor(uniq(flatten(allInstanceIds))))
         })
       }
+      setAppTitle({
+        text: `TOPOLOGIES ${topologiesCount}`,
+        button: newTopology,
+        currentPage: 'TopologiesLayout'
+      })
     }
     fetchTopologies()
   }, [])
@@ -102,7 +104,7 @@ export default function TopologiesLayout () {
               open={openScheduler}
               setOpen={setOpenScheduler}
               topology={selectedTopology}
-              updateTopologyProperty={updateTopologyProperty}
+              updateTopologyProperties={updateTopologyProperties}
             />
           </div>
         )}
@@ -147,7 +149,7 @@ const Topologies = ({
           id='topology-history-button'
           component='span'
         >
-          <HistoryIcon />
+          <NotesIcon />
         </IconButton>
       </Tooltip>
     )
@@ -239,7 +241,10 @@ function getNextInvocation (topology) {
   const defaultTime = <span>'No next schedule'</span>
   try {
     if (!topology.cronConfig) return <span>Open Scheduler to view next schedule...</span>
-    else if (topology.toRun !== undefined && topology.toRun.toString() === 'false') return <span style={{ color: HEX_CODES.yellow }}>Topology scheduled run paused.</span>
+    else if (topology.toRun !== undefined && topology.toRun.toString() === 'false') {
+      return <span style={{ color: HEX_CODES.lightBlue }}>Topology automatic schedule paused.</span>
+    }
+
     const job = nodeSchedule.scheduleJob(topology.cronConfig || '* * * * *', () => {})
     const nextInvocation = job.nextInvocation()
     job.cancel()
