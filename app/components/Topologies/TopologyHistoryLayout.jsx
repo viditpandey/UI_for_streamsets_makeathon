@@ -11,10 +11,8 @@ import { CircularProgress, Typography } from '@material-ui/core'
 import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
 import { isEmpty } from 'lodash'
 import { useParams } from 'react-router-dom'
-// import { useSnackbar } from 'notistack'
 
 export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistoryView }) {
-//   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
   const { id } = useParams()
 
@@ -39,8 +37,9 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
   async function getProcessedRecordsNumber (topologyData) {
     if (!fetchMetrics) return
     if ((topologyData.topologyStatus === 'FINISHED') && topologyData.topologyItems) {
-      const allPipelineIDs = topologyData.topologyItems.map(p => p.pipelineId)
-      const finalRes = await Promise.all(allPipelineIDs.map(i => getNumberOfRecordsProcessed({ pipelineId: i })))
+      const allPipelineIDs = topologyData.topologyItems.map(p => ({ pipelineId: p.pipelineId, instanceId: p.instanceId }))
+      const allPipelinesMetrics = allPipelineIDs.map(i => getNumberOfRecordsProcessed({ pipelineId: i.pipelineId, instanceId: i.instanceId }))
+      const finalRes = await Promise.all(allPipelinesMetrics)
       setFetchMetrics(false)
       const updatedData = allPipelineIDs.map((pipelineId, index) => ({ name: pipelineId, res: finalRes[index] }))
       setMetricsData(updatedData)

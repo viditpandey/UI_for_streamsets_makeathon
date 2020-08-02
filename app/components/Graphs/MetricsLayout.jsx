@@ -21,33 +21,31 @@ export default function MetricsLayout ({ topologyPipelinesData = [], metricsData
       let totalTime = (endTime - startTime) / 1000
       const errorCount = element.errorCount
       if (errorCount > 0) errorCountDataMax = element.errorCount
-
       if (totalTime < 0) totalTime = 0
       if (totalTime > dataMax) dataMax = totalTime
-
       const errorCountDataRow = {
         name: element.pipelineTitle,
         YAxisData: errorCount
       }
-
+      errorCountData.push(errorCountDataRow)
       const dataRow = {
         name: element.pipelineTitle,
         YAxisData: totalTime
       }
 
-      errorCountData.push(errorCountDataRow)
-      if (!isEmpty(metricsData)) {
-        const { data, maxRate } = getProcessedData(metricsData, element, totalTime, processedDataMax)
-        processedDataMax = maxRate
-        processedData.push(data)
-      }
       data.push(dataRow)
-    } catch (error) { }
+
+      if (!isEmpty(metricsData)) {
+        const { processedDataRow, maxRate } = getProcessedData(metricsData, element, totalTime, processedDataMax)
+        processedDataMax = maxRate
+        processedData.push(processedDataRow)
+      }
+    } catch (error) { console.log('metrics calculation error', error) }
   })
 
   return (
     <div className='padding-30'>
-      <Typography>{toggle ? 'Bar Chart' : 'Line Chart'}
+      <Typography>{toggle ? 'Line Chart' : 'Bar Chart'}
         <Switch
           checked={toggle}
           onChange={e => {
