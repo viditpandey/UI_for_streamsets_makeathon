@@ -49,7 +49,7 @@ export default function TopologyHistoriesLayout () {
             itemClick={item => toggleHistoryView(item)}
             getPrimaryText={item => `${item.historyId}`}
             getKey={item => item.historyId}
-            secondaryText={item => `status: ${item.topologyStatus}`}
+            secondaryText={getSecondaryText}
             collapsedText={collapsedText}
             secondaryActionButton={item => {}}
           />
@@ -57,6 +57,14 @@ export default function TopologyHistoriesLayout () {
     </div>
   )
 }
+
+const getSecondaryText = historyItem => (
+  <>
+    {`status: ${historyItem.topologyStatus}`} <br />
+    {`end time: ${getViewableDateTime(historyItem.topologyEndTime)}`} <br />
+  </>
+)
+
 const collapsedText = historyItem => (
   <>
     {`start time: ${getViewableDateTime(historyItem.topologyStartTime)}`} <br />

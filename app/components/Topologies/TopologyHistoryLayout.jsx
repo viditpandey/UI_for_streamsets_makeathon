@@ -23,7 +23,7 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
 
   useEffect(() => {
     setTopologyData(propsTopologyData)
-    setAppTitle({ text: `TOPOLOGY: ${id} (History: ${topologyData.historyId})`, currentPage: 'TopologyHistoryLayout' })
+    setAppTitle({ text: `${id} History (${topologyData.historyId})`, currentPage: 'TopologyHistoryLayout' })
     setFetchMetrics(true)
   }, [])
 
@@ -60,7 +60,7 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
       <Grid container spacing={3}>
         <Grid item xs={12} md={3}>
           <Button
-            className='full-width'
+            className='margin-bottom-15 full-width'
             variant='contained'
             color='primary'
             size='small'
@@ -71,6 +71,9 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
           </Button>
         </Grid>
       </Grid>
+
+      <div className='margin-bottom-15' />
+
       <TopolgyRegisterationLayout
         propsName={id}
         propsSelectedPipelines={topologyData.topologyHistoryItems}
