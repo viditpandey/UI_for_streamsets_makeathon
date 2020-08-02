@@ -79,7 +79,7 @@ export default function PipelinesLayout () {
     } else return false
   }
 
-  const handlePipelineActionButtonClick = ({ pipelineId, instanceId }) => async () => {
+  async function handlePipelineActionButtonClick ({ pipelineId, instanceId }) {
     if (shouldStartPipeline(pipelineId)) {
       const res = await axiosHandler({
         method: startPipeline,
@@ -130,7 +130,7 @@ export default function PipelinesLayout () {
         <IconButton
           aria-label='start/stop pipeline'
           id='pipeline-action-button'
-          onClick={() => handlePipelineActionButtonClick(item)}
+          onClick={() => { handlePipelineActionButtonClick(item) }}
           component='span'
         >
           {button}
