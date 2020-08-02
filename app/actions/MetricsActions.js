@@ -3,13 +3,13 @@ import axios from 'axios'
 import { BASE_URL } from '../configs/constants'
 import { isEmpty } from 'lodash'
 
-const GET_PIPELINE_HISTORY = pipelineId => `${BASE_URL}/pipelineoperation/${pipelineId}/history`
+const GET_PIPELINE_HISTORY = (pipelineId, instanceId) => `${BASE_URL}/pipelineoperation/${instanceId}/${pipelineId}/history`
 
-export const getNumberOfRecordsProcessed = async ({ pipelineId }) => {
+export const getNumberOfRecordsProcessed = async ({ pipelineId, instanceId }) => {
   try {
     const res = await axios({
       method: 'get',
-      url: GET_PIPELINE_HISTORY(pipelineId)
+      url: GET_PIPELINE_HISTORY(pipelineId, instanceId)
     }
     ).catch(e => ({ data: [] }))
     if (isEmpty(res.data)) return []
