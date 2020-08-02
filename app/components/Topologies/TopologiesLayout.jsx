@@ -98,6 +98,7 @@ export default function TopologiesLayout () {
               axiosHandler={axiosHandler}
               setOpenScheduler={(topology) => { setSelectedTopology(topology); setOpenScheduler(!openScheduler) }}
               instanceIdsWithColor={instanceIdsWithColor}
+              updateTopologyProperties={updateTopologyProperties}
             />
 
             <ConfigureTopologySchedule
@@ -114,7 +115,8 @@ export default function TopologiesLayout () {
 
 const Topologies = ({
   topologies, history, deleteTopology,
-  instanceIdsWithColor, axiosHandler, setOpenScheduler
+  instanceIdsWithColor, axiosHandler,
+  setOpenScheduler, updateTopologyProperties
 }) => {
   const { enqueueSnackbar } = useSnackbar()
   const deleteTopologyButton = item => {
@@ -181,7 +183,10 @@ const Topologies = ({
           aria-label='topology alerts'
           onClick={() => {
             toggleTopologyAlert({ topologyId, topologyItems, alertStatus: !alertStatus })
-              .then(() => { enqueueSnackbar('Topology alert updated', { variant: 'success' }) })
+              .then(() => {
+                updateTopologyProperties(topologyId, { alertStatus: !alertStatus })
+                enqueueSnackbar('Topology alert updated', { variant: 'success' })
+              })
               .catch(() => { enqueueSnackbar('Something went wring while updating topology alerts.', { variant: 'error' }) })
           }}
           id='topology-schedule-button'
