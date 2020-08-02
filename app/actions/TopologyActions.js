@@ -6,7 +6,7 @@ const CREATE_TOPOLOGY = BASE_URL + '/createTopology'
 const DELETE_TOPOLOGY = topologyId => `${BASE_URL}/deleteTopology/${topologyId}`
 const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
 const GET_TOPOLOGY_BY_ID = topologyId => `${BASE_URL}/getTopology/${topologyId}`
-const PAUSE_OR_STOP_TOPOLOGY = `${BASE_URL}/updateTopologyStatus`
+const UPDATE_TOPOLOGY_ACTION = `${BASE_URL}/updateTopologyStatus`
 const RESUME_TOPOLOGY = topologyId => `${BASE_URL}/resumeTopology/${topologyId}`
 const RESET_TOPOLOGY = topologyId => `${BASE_URL}/resetTopology/${topologyId}`
 const START_TOPOLOGY = topologyId => `${BASE_URL}/startTopology/${topologyId}`
@@ -89,7 +89,7 @@ export const stopTopology = async ({ topologyId, topologyItems }) => {
   try {
     const res = await axios({
       method: 'post',
-      url: PAUSE_OR_STOP_TOPOLOGY,
+      url: UPDATE_TOPOLOGY_ACTION,
       data: {
         topologyId: topologyId,
         action: 'STOP',
@@ -160,7 +160,7 @@ export const pauseTopology = async ({ topologyId, topologyItems }) => {
   try {
     const res = await axios({
       method: 'post',
-      url: PAUSE_OR_STOP_TOPOLOGY,
+      url: UPDATE_TOPOLOGY_ACTION,
       data: {
         topologyId: topologyId,
         action: 'PAUSE',
@@ -173,6 +173,27 @@ export const pauseTopology = async ({ topologyId, topologyItems }) => {
     return response
   } catch (e) {
     console.error('[TopologyActions.pauseTopology] error:', e)
+    return {}
+  }
+}
+
+export const toggleTopologyAlert = async ({ topologyId, topologyItems, alertStatus = 'ALERT_ON' }) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: UPDATE_TOPOLOGY_ACTION,
+      data: {
+        topologyId: topologyId,
+        action: alertStatus,
+        pipelines: topologyItems.map(p => p.pipelineId)
+      }
+    })
+      .catch(e => ({ data: {} }))
+    const response = res.data
+    console.log(`Toggle topology ${topologyId} alert to ${alertStatus}, response received`)
+    return response
+  } catch (e) {
+    console.error('[TopologyActions.toggleTopologyAlert] error:', e)
     return {}
   }
 }
