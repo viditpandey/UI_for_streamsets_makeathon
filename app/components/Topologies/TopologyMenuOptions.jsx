@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import Switch from '@material-ui/core/Switch'
 
-import { deleteTopology } from '../../actions/TopologyActions'
+import { deleteTopology, toggleTopologyAlert } from '../../actions/TopologyActions'
 import { Typography } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
@@ -31,6 +31,13 @@ export default function TopologyMenuOption ({ topologyData, autoRefresh, setAuto
     deleteTopology({ topologyId: topologyData.topologyId })
       .then(() => { history.push(`/topologies/${topologyData.topologyId}/history`) })
       .catch(() => { enqueueSnackbar('Something went wring while deleting the topology', { variant: 'error' }) })
+  }
+
+  const toggleTopologyAlertHandler = () => {
+    const { topologyId, topologyItems, alertStatus } = topologyData
+    toggleTopologyAlert({ topologyId, topologyItems, alertStatus: !alertStatus })
+      .then(() => { enqueueSnackbar('Topology alert updated', { variant: 'success' }) })
+      .catch(() => { enqueueSnackbar('Something went wring while updating topology alerts.', { variant: 'error' }) })
   }
 
   return (
@@ -74,7 +81,7 @@ export default function TopologyMenuOption ({ topologyData, autoRefresh, setAuto
             <MenuItem onClick={() => { history.push(`/topologies/${topologyData.topologyId}/history`) }}><HistoryIcon />&nbsp;History</MenuItem>
             <MenuItem onClick={() => { setOpenScheduler(true); handleClose() }}><ScheduleIcon />&nbsp;Schedule</MenuItem>
             <MenuItem onClick={() => { deleteTopologyHandler() }}><DeleteIcon />&nbsp;Delete</MenuItem>
-            <MenuItem onClick={() => {}}>{topologyData.alertStatus ? <NotificationsIcon /> : <NotificationsOffIcon />}&nbsp;Toggle {topologyData.alertStatus ? 'off' : 'on'} topology alerts</MenuItem>
+            <MenuItem onClick={() => { toggleTopologyAlertHandler() }}>{topologyData.alertStatus ? <NotificationsIcon /> : <NotificationsOffIcon />}&nbsp;Toggle {topologyData.alertStatus ? 'off' : 'on'} topology alerts</MenuItem>
           </Menu>
         </Grid>
       </Grid>
