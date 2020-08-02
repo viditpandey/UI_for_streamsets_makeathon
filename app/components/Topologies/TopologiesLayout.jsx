@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
 import { generateRandomColor } from '../../helper/PipelineHelpers'
-import { getTopologies, deleteTopology } from '../../actions/TopologyActions'
+import { getTopologies, deleteTopology, toggleTopologyAlert } from '../../actions/TopologyActions'
 import { getViewableDateTime } from '../../helper/commonHelper'
 import { HEX_CODES } from '../../configs/constants'
 import { isEmpty, sortBy, flatten, uniq, cloneDeep, merge } from 'lodash'
@@ -116,6 +116,7 @@ const Topologies = ({
   topologies, history, deleteTopology,
   instanceIdsWithColor, axiosHandler, setOpenScheduler
 }) => {
+  const { enqueueSnackbar } = useSnackbar()
   const deleteTopologyButton = item => {
     return (
       <Tooltip title='Delete Topology'>
@@ -172,12 +173,17 @@ const Topologies = ({
   }
 
   const toggleTopologyAlerts = item => {
+    const { topologyId, topologyItems, alertStatus } = item
     return (
-      <Tooltip title={`Toggle ${item.alertStatus ? 'off' : 'on'} topology alerts`}>
+      <Tooltip title={`Toggle ${alertStatus ? 'off' : 'on'} topology alerts`}>
         <IconButton
-          style={{ color: item.alertStatus ? HEX_CODES.green : HEX_CODES.grey }}
+          style={{ color: alertStatus ? HEX_CODES.green : HEX_CODES.grey }}
           aria-label='topology alerts'
-          onClick={() => {}}
+          onClick={() => {
+            toggleTopologyAlert({ topologyId, topologyItems, alertStatus: !alertStatus })
+              .then(() => { enqueueSnackbar('Topology alert updated', { variant: 'success' }) })
+              .catch(() => { enqueueSnackbar('Something went wring while updating topology alerts.', { variant: 'error' }) })
+          }}
           id='topology-schedule-button'
           component='span'
         >

@@ -25,7 +25,7 @@ export default function TopologyLayout ({ id }) {
 
   useEffect(() => {
     async function getTopologyData (id) {
-      const res = await getTopologyById({ topologyId: id })
+      const res = await getTopologyById({ topologyId: id }).catch(() => { enqueueSnackbar('Something went wrong while fetching topology details.', { variant: 'error' }) })
       if (!isEmpty(res)) {
         setTopologyData(res)
         setAppTitle({ text: `TOPOLOGY: ${res.topologyId}`, currentPage: 'TopologyLayout' })
@@ -57,7 +57,7 @@ export default function TopologyLayout ({ id }) {
     if (!shouldPollContinue()) return
 
     const { topologyId } = topologyData
-    const latestStatus = await getTopologyById({ topologyId })
+    const latestStatus = await getTopologyById({ topologyId }).catch(() => { enqueueSnackbar('Something went wrong while fetching topology details.', { variant: 'error' }) })
     if (!isEmpty(latestStatus)) {
       if (latestStatus.topologyStatus !== topologyData.topologyStatus) enqueueSnackbar(`Topology Status changed from ${topologyData.topologyStatus} to ${latestStatus.topologyStatus || '...'}.`, { variant: 'info' })
       setTopologyData(latestStatus)
