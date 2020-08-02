@@ -149,7 +149,8 @@ export default function TopolgyRegisterationLayout ({
       console.log('This is sent to backend: ', finalTreeData)
 
       createTopology({ finalTreeData })
-      enqueueSnackbar('Topology created succesfully', { variant: 'success' })
+        .then(res => { enqueueSnackbar('Topology created succesfully', { variant: 'success' }) })
+        .catch(() => { enqueueSnackbar('Error while creating topology, please refresh and retry.', { variant: 'error' }) })
     }
   }
 
@@ -276,6 +277,8 @@ export default function TopolgyRegisterationLayout ({
     setTopologyData(updatedTopology)
     setAutoRefresh(true)
     callToAction(callToActionParams)
+      .then(res => { })
+      .catch(() => { enqueueSnackbar(`Something went wrong while ${type}`, { variant: 'error' }) })
   }
 
   return (

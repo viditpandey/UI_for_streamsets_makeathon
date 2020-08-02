@@ -21,7 +21,7 @@ export default function TopologyHistoriesLayout () {
   useEffect(() => {
     setAppTitle({ text: `TOPOLOGY HISTORY: ${id}`, currentPage: 'TopologyHistoriesLayout' })
     async function topologyHistory (id) {
-      const res = await getTopologyHistory({ topologyId: id })
+      const res = await getTopologyHistory({ topologyId: id }).catch(e => { enqueueSnackbar('Something went wrong while fetching History for topology.', { variant: 'error' }) })
       if (!isEmpty(res)) {
         setTopologyHistoryData(res)
         enqueueSnackbar('History Fetched', { variant: 'success' })

@@ -116,6 +116,7 @@ const Topologies = ({
   topologies, history, deleteTopology,
   instanceIdsWithColor, axiosHandler, setOpenScheduler
 }) => {
+  const { enqueueSnackbar } = useSnackbar()
   const deleteTopologyButton = item => {
     return (
       <Tooltip title='Delete Topology'>
@@ -178,7 +179,11 @@ const Topologies = ({
         <IconButton
           style={{ color: alertStatus ? HEX_CODES.green : HEX_CODES.grey }}
           aria-label='topology alerts'
-          onClick={() => { toggleTopologyAlert({ topologyId, topologyItems, alertStatus: !alertStatus }) }}
+          onClick={() => {
+            toggleTopologyAlert({ topologyId, topologyItems, alertStatus: !alertStatus })
+              .then(() => { enqueueSnackbar('Topology alert updated', { variant: 'success' }) })
+              .catch(() => { enqueueSnackbar('Something went wring while updating topology alerts.', { variant: 'error' }) })
+          }}
           id='topology-schedule-button'
           component='span'
         >
