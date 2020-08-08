@@ -98,6 +98,7 @@ export default function TopologiesLayout () {
               axiosHandler={axiosHandler}
               setOpenScheduler={(topology) => { setSelectedTopology(topology); setOpenScheduler(!openScheduler) }}
               instanceIdsWithColor={instanceIdsWithColor}
+              updateTopologyProperties={updateTopologyProperties}
             />
 
             <ConfigureTopologySchedule
@@ -114,7 +115,8 @@ export default function TopologiesLayout () {
 
 const Topologies = ({
   topologies, history, deleteTopology,
-  instanceIdsWithColor, axiosHandler, setOpenScheduler
+  instanceIdsWithColor, axiosHandler,
+  setOpenScheduler, updateTopologyProperties
 }) => {
   const { enqueueSnackbar } = useSnackbar()
   const deleteTopologyButton = item => {
@@ -181,7 +183,10 @@ const Topologies = ({
           aria-label='topology alerts'
           onClick={() => {
             toggleTopologyAlert({ topologyId, topologyItems, alertStatus: !alertStatus })
-              .then(() => { enqueueSnackbar('Topology alert updated', { variant: 'success' }) })
+              .then(() => {
+                updateTopologyProperties(topologyId, { alertStatus: !alertStatus })
+                enqueueSnackbar('Topology alert updated', { variant: 'success' })
+              })
               .catch(() => { enqueueSnackbar('Something went wring while updating topology alerts.', { variant: 'error' }) })
           }}
           id='topology-schedule-button'
@@ -244,11 +249,11 @@ const getTopologyItems = (topology, instanceIdsWithColor) => {
 }
 
 function getNextInvocation (topology) {
-  const defaultTime = <span>'No next schedule'</span>
+  const defaultTime = <span style={{ color: HEX_CODES.blue }}>No next schedule</span>
   try {
     if (!topology.cronConfig) return <span>Open Scheduler to view next schedule...</span>
     else if (topology.toRun !== undefined && topology.toRun.toString() === 'false') {
-      return <span style={{ color: HEX_CODES.lightBlue }}>Topology automatic schedule paused.</span>
+      return <span style={{ color: HEX_CODES.blue }}>Topology automatic schedule paused.</span>
     }
 
     const job = nodeSchedule.scheduleJob(topology.cronConfig || '* * * * *', () => {})
