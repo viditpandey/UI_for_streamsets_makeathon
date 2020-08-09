@@ -27,13 +27,13 @@ export function parsePipelinesStatusResponse (response) {
   }
 }
 
-export function generateRandomColor (items) {
+export function generateRandomColorByStrings (items) {
   const obj = {}
   items.forEach(i => { obj[i] = stringToColour(i) })
   return obj
 }
 
-export function stringToColour (str) {
+function stringToColour (str) {
   try {
     var hash = 0
     for (let i = 0; i < str.length; i++) {
@@ -46,4 +46,13 @@ export function stringToColour (str) {
     }
     return colour
   } catch (error) { return '#000000' }
+}
+
+export function getRandomColor () {
+  var letters = '0123456789ABCDEF'
+  var color = '#'
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)]
+  }
+  return color
 }

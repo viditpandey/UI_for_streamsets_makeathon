@@ -12,7 +12,7 @@ import {
   getPipelines, startPipeline,
   stopPipeline, getPipelinesStatus
 } from '../../actions/PipelineActions'
-import { generateRandomColor } from '../../helper/PipelineHelpers'
+import { generateRandomColorByStrings } from '../../helper/PipelineHelpers'
 import { getViewableDateTime } from '../../helper/commonHelper'
 import { sortBy, uniq, isEmpty } from 'lodash'
 import { useInterval } from '../../helper/useInterval'
@@ -44,7 +44,7 @@ export default function PipelinesLayout () {
       const pipelinesLength = !isEmpty(res) ? `(${res.length})` : ''
       setAppTitle({ text: `PIPELINES ${pipelinesLength}`, currentPage: 'PipelinesLayout' })
       const allInstanceIds = uniq(res.map(i => i.instanceId))
-      setInstanceIds(generateRandomColor(allInstanceIds))
+      setInstanceIds(generateRandomColorByStrings(allInstanceIds))
       res && setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
     }
     fetchPipelines()
