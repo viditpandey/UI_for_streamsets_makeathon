@@ -257,12 +257,13 @@ function getNextInvocation (topology) {
     if (!schedulerConfig) return defaultTime
     else if (schedulerConfig.toRun !== undefined && schedulerConfig.toRun.toString() === 'false') {
       return <span style={{ color: HEX_CODES.blue }}>Automatic scheduling is PAUSED at the moment.</span>
-    } else if (cronValidator.isValidCron(schedulerConfig.cronConfig)) {
-      const job = nodeSchedule.scheduleJob(schedulerConfig.cronConfig || '* * * * *', () => {})
-      const nextInvocation = job.nextInvocation()
-      job.cancel()
-      return <span style={{ color: HEX_CODES.blue }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
-    } else return defaultTime
+    }
+    // } else if (cronValidator.isValidCron(schedulerConfig.cronConfig)) {
+    const job = nodeSchedule.scheduleJob(schedulerConfig.cronConfig || '* * * * *', () => {})
+    const nextInvocation = job.nextInvocation()
+    job.cancel()
+    return <span style={{ color: HEX_CODES.blue }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
+    // } else return defaultTime
   } catch (error) {
     console.log('getNextInvocation -> error', error, topology)
     return defaultTime
