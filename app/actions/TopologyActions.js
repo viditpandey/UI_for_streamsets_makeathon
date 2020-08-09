@@ -8,7 +8,6 @@ const GET_ALL_TOPOLOGIES = BASE_URL + '/getTopologies'
 const GET_TOPOLOGY_BY_ID = topologyId => `${BASE_URL}/getTopology/${topologyId}`
 const UPDATE_TOPOLOGY_ACTION = `${BASE_URL}/updateTopologyStatus`
 const RESUME_TOPOLOGY = topologyId => `${BASE_URL}/resumeTopology/${topologyId}`
-// const RESET_TOPOLOGY = topologyId => `${BASE_URL}/resetTopology/${topologyId}`
 const START_TOPOLOGY = topologyId => `${BASE_URL}/startTopology/${topologyId}`
 const VALIDATE_TOPOLOGY = topologyId => `${BASE_URL}/validateTopology/${topologyId}`
 const GET_TOPOLOGY_HISTORY = topologyId => `${BASE_URL}/getTopologyHistory/${topologyId}`
@@ -17,18 +16,17 @@ export const createTopology = async (formData) => {
   console.log('createTopology, formdata:', formData)
   try {
     const topologyFields = formData.finalTreeData
-    const res = await axios({
+    const response = await axios({
       method: 'post',
       url: CREATE_TOPOLOGY,
       data: {
         topologyFields
       }
     }
-    ).then(res => {
+    ).then(response => {
       window.location = '/topologies'
     })
       .catch(e => { throw e })
-    const response = res.data
     console.log(`create topology attempted for topologyId ${formData.topologyId}, response received: ${JSON.stringify(response)}`)
     return response
   } catch (e) {
@@ -36,22 +34,6 @@ export const createTopology = async (formData) => {
     throw e
   }
 }
-
-// export const resetTopology = async ({ topologyId }) => {
-//   try {
-//     const res = await axios({
-//       method: 'get',
-//       url: RESET_TOPOLOGY(topologyId)
-//     }
-//     ).catch(e => { throw e })
-//     const response = res.data
-//     console.log(`reset topology attempted for topologyId ${topologyId}, response received: ${JSON.stringify(response)}`)
-//     return response
-//   } catch (e) {
-//     console.error('[TopologyActions.resetTopology] error:', e)
-//     return {}
-//   }
-// }
 
 export const startTopology = async ({ topologyId }) => {
   try {

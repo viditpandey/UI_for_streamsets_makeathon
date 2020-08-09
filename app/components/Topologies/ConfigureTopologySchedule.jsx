@@ -59,6 +59,16 @@ export default function ConfigureTopologySchedule ({
   }, [open])
   const titleDialog = `Schedule Topology ${topology.topologyId}`
 
+  function allowSubmit () {
+    try {
+      if (schedulerType === 'cron') return cronValidator.isValidCron(cronConfig)
+      else if (schedulerType === 'datetime') return !isNaN(Date.parse(cronConfig))
+      return false
+    } catch (error) {
+      return false
+    }
+  }
+
   return (
     <div>
       <Dialog
@@ -96,6 +106,7 @@ export default function ConfigureTopologySchedule ({
               Close
           </Button>
           <Button
+            disabled={!allowSubmit()}
             onClick={() => {
               createScheduler({ topologyId: topology.topologyId, cronConfig, toRun: toRun })
               setOpen(false)
@@ -158,6 +169,8 @@ const SchedulerConfig = ({
               value={cronConfig}
               onChange={e => setCronConfig(e.target.value)}
               label='Cron Pattern (* * * * *)'
+              error={!cronValidator.isValidCron(cronConfig)}
+              helperText='Please input a valid Cron pattern.'
             />
           ) : (
             <form className={classes.container} noValidate>
@@ -165,6 +178,8 @@ const SchedulerConfig = ({
                 id='datetime-local'
                 label='Next appointment'
                 type='datetime-local'
+                error={isNaN(Date.parse(cronConfig))}
+                helperText='Please select a valid date time.'
                 defaultValue={cronConfig}
                 onChange={e => { setCronConfig(e.target.value) }}
                 className={classes.textField}
