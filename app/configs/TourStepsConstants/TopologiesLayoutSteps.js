@@ -28,6 +28,10 @@ const Steps = [
     content: 'These are the action buttons for a Topology. Each button will be demonstrated one by one in next steps.'
   },
   {
+    selector: '#topology-alert-button',
+    content: 'Alert Toggle Button. We send Alerts on Microsoft Teams, use this to toggle on/off them for a topology.'
+  },
+  {
     selector: '#topology-schedule-button',
     content: 'Schedule Button. We thought a clock icon would be sufficient. However, this button allows you to configure an automatic schedule for this topology. You can configure a date-time or even  CRON job. Click to view the options. Also you can pause momentarily a schedule already in place.'
   },

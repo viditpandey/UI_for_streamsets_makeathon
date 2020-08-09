@@ -191,7 +191,7 @@ const Topologies = ({
               })
               .catch(() => { enqueueSnackbar('Something went wring while updating topology alerts.', { variant: 'error' }) })
           }}
-          id='topology-schedule-button'
+          id='topology-alert-button'
           component='span'
         >
           {item.alertStatus ? <NotificationsIcon /> : <NotificationsOffIcon />}
