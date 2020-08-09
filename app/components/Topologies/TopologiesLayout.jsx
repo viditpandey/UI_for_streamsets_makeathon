@@ -263,7 +263,6 @@ function getNextInvocation (topology) {
     return <span style={{ color: HEX_CODES.blue }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
     // } else return defaultTime
   } catch (error) {
-    console.log('getNextInvocation -> error', error, topology)
     return defaultTime
   }
 }

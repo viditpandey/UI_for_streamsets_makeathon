@@ -47,7 +47,7 @@ export default function ConfigureTopologySchedule ({
       const res = await getSchedulerByTopologyId({ topologyId: topology.topologyId }).catch(e => null)
       const { toRun, cronConfig } = res || {}
       const typeOfSchedule = cronValidator.isValidCron(cronConfig || '* * * * *') ? 'cron' : 'datetime'
-      const parsedCron = typeOfSchedule === 'datetime' ? moment.format(cronConfig) : cronConfig
+      const parsedCron = typeOfSchedule === 'datetime' ? moment(cronConfig).format('YYYY-MM-DDThh:mm') : cronConfig
       setCronConfig(parsedCron || '')
       res && setToRun(toRun)
       setSchedulerType(typeOfSchedule)
