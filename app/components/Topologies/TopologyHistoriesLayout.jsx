@@ -14,6 +14,7 @@ import { useSnackbar } from 'notistack'
 
 export default function TopologyHistoriesLayout () {
   const { id } = useParams()
+  const [loading, setLoading] = useState(true)
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
 
@@ -24,6 +25,7 @@ export default function TopologyHistoriesLayout () {
     setAppTitle({ text: `${id} HISTORY`, currentPage: 'TopologyHistoriesLayout' })
     async function topologyHistory (id) {
       const res = await getTopologyHistory({ topologyId: id }).catch(e => { enqueueSnackbar('Something went wrong while fetching History for topology.', { variant: 'error' }) })
+      setLoading(false)
       if (!isEmpty(res)) {
         setTopologyHistoryData(res)
         enqueueSnackbar('History Fetched', { variant: 'success' })
@@ -32,14 +34,14 @@ export default function TopologyHistoriesLayout () {
     topologyHistory(id)
   }, [])
 
-  if (isEmpty(topologyHistoryData)) {
+  if (loading) {
     return (
       <div>
         <CircularProgress />
-        <Typography>Topology History will be here in some Future...</Typography>
+        <Typography>History in future</Typography>
       </div>
     )
-  }
+  } else if (isEmpty(topologyHistoryData)) return <Typography>No History.</Typography>
 
   return (
     <div>
