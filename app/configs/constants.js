@@ -12,7 +12,8 @@ export const HEX_CODES = {
   lightGreen: '#dff0d8',
 
   greenVariant1: '#b3d6a5',
-  blueVariant1: '#509ade'
+  blueVariant1: '#509ade',
+  darkYellow: '#E69900'
 
 }
 
