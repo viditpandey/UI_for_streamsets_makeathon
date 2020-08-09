@@ -149,7 +149,7 @@ const Topologies = ({
       <Tooltip title='View Topology History'>
         <IconButton
           aria-label='topology history'
-          style={{ color: HEX_CODES.blue }}
+          style={{ color: HEX_CODES.darkYellow }}
           onClick={() => history.push(`/topologies/${item.topologyId}/history`)}
           id='topology-history-button'
           component='span'
@@ -164,7 +164,7 @@ const Topologies = ({
     return (
       <Tooltip title='Schedule Topology'>
         <IconButton
-          style={{ color: HEX_CODES.green }}
+          style={{ color: HEX_CODES.blue }}
           aria-label='schedule topology'
           onClick={() => { setOpenScheduler(item) }}
           id='topology-schedule-button'
@@ -256,12 +256,12 @@ function getNextInvocation (topology) {
   try {
     if (!schedulerConfig) return defaultTime
     else if (schedulerConfig.toRun !== undefined && schedulerConfig.toRun.toString() === 'false') {
-      return <span style={{ color: HEX_CODES.blue }}>Topology automatic schedule paused.</span>
+      return <span style={{ color: HEX_CODES.blue }}>Automatic scheduling is PAUSED at the moment.</span>
     } else if (cronValidator.isValidCron(schedulerConfig.cronConfig)) {
       const job = nodeSchedule.scheduleJob(schedulerConfig.cronConfig || '* * * * *', () => {})
       const nextInvocation = job.nextInvocation()
       job.cancel()
-      return <span style={{ color: HEX_CODES.green }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
+      return <span style={{ color: HEX_CODES.blue }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
     } else return defaultTime
   } catch (error) {
     console.log('getNextInvocation -> error', error, topology)
