@@ -7,6 +7,10 @@ const app = express()
 app.use(express.static(path.join(__dirname, 'dist')))
 // app.use(express.static(path.join(__dirname, 'dist'), { fallthrough: false }))
 
+app.get('/backend_base_url', (req, res) => {
+  res.status(200).json({ data: process.env.STREAMSETS_BACKEND_URL })
+})
+
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'))
 })
