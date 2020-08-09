@@ -29,7 +29,7 @@ const Steps = [
   },
   {
     selector: '#topology-alert-button',
-    content: 'Alert Toggle Button. We send Alerts on Microsoft Teams, use this to toggle on/off them for a topology.'
+    content: 'Alert Toggle Button. We send Alerts on Microsoft Teams, use this to toggle them on/off for a topology.'
   },
   {
     selector: '#topology-schedule-button',
