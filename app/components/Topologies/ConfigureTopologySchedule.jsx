@@ -8,6 +8,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import React, { useState, useEffect } from 'react'
+import moment from 'moment'
 import Slide from '@material-ui/core/Slide'
 import TextField from '@material-ui/core/TextField'
 
@@ -46,7 +47,8 @@ export default function ConfigureTopologySchedule ({
       const res = await getSchedulerByTopologyId({ topologyId: topology.topologyId }).catch(e => null)
       const { toRun, cronConfig } = res || {}
       const typeOfSchedule = cronValidator.isValidCron(cronConfig || '* * * * *') ? 'cron' : 'datetime'
-      setCronConfig(cronConfig || '')
+      const parsedCron = typeOfSchedule === 'datetime' ? moment.format(cronConfig) : cronConfig
+      setCronConfig(parsedCron || '')
       res && setToRun(toRun)
       setSchedulerType(typeOfSchedule)
       setLoading(false)
@@ -108,7 +110,8 @@ export default function ConfigureTopologySchedule ({
           <Button
             disabled={!allowSubmit()}
             onClick={() => {
-              createScheduler({ topologyId: topology.topologyId, cronConfig, toRun: toRun })
+              const parsedCron = schedulerType === 'datetime' ? new Date(cronConfig).toUTCString() : cronConfig
+              createScheduler({ topologyId: topology.topologyId, cronConfig: parsedCron, toRun: toRun })
               setOpen(false)
             }} color='primary'
           >

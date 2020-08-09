@@ -21,8 +21,6 @@ import { useSnackbar } from 'notistack'
 import { IconButton } from '@material-ui/core'
 import nodeSchedule from 'node-schedule'
 
-const cronValidator = require('cron-validator')
-
 export default function TopologiesLayout () {
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
