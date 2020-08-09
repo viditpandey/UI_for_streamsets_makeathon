@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:8082'
+export const BASE_URL = global.BASE_URL || 'http://localhost:8082'
 
 export const HEX_CODES = {
   green: '#5cb85c',
@@ -55,7 +55,10 @@ export const mockedTopology = {
       updatedBy: '',
       waitTime: 1,
       processAfter: 'stop',
-      pipelineStatus: 'FINISHED'
+      pipelineStatus: 'FINISHED',
+      instanceId: 'Finance',
+      cronConfig: '* * * * *',
+      toRun: false
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
@@ -72,7 +75,10 @@ export const mockedTopology = {
       updatedBy: '',
       waitTime: 2,
       processAfter: 'start',
-      pipelineStatus: 'RUNNING'
+      pipelineStatus: 'RUNNING',
+      instanceId: 'Retail',
+      cronConfig: '* * * * *',
+      toRun: true
     },
     {
       createTimestamp: '12-07-2020 12:29:59',
@@ -88,13 +94,17 @@ export const mockedTopology = {
       updateTimestamp: '',
       updatedBy: '',
       waitTime: 3,
-      pipelineStatus: 'VALID'
+      pipelineStatus: 'VALID',
+      instanceId: 'Finance',
+      cronConfig: '* * * * *',
+      toRun: true
     }
   ]
 }
 
 export const mockedPipelines = [{
   pipelineId: 'givenf820b18b-effa-4907-8fe6-569477041d14',
+  instanceId: 'Finance',
   title: 'Demo given pipeline',
   description: 'This is a demo pipeline.',
   created: 1594131949158,
@@ -113,6 +123,7 @@ export const mockedPipelines = [{
 }, {
   pipelineId: 'Pipeline3a6761a94-08de-495f-8870-8221af870fbc',
   title: 'Pipeline 1',
+  instanceId: 'Retail',
   description: 'This is the first pipeline which reads from API and dumps in JSON file',
   created: 1594122021469,
   lastModified: 1594126769974,
@@ -130,6 +141,7 @@ export const mockedPipelines = [{
 }, {
   pipelineId: 'Pipeline2153e399f-ef15-4f39-8a26-351617c09bf4',
   title: 'Pipeline 3',
+  instanceId: 'Finance',
   description: 'reads from a file and dumps in csv',
   created: 1594128056693,
   lastModified: 1594131920517,
