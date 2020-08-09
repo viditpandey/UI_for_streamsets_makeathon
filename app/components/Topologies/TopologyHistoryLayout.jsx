@@ -9,6 +9,7 @@ import TopolgyRegisterationLayout from './TopolgyRegisterationLayout'
 import { AppBarContext } from '../Base/Home'
 import { CircularProgress, Typography } from '@material-ui/core'
 import { getNumberOfRecordsProcessed } from '../../actions/MetricsActions'
+import { getViewableDateTime } from '../../helper/commonHelper'
 import { isEmpty } from 'lodash'
 import { useParams } from 'react-router-dom'
 
@@ -77,9 +78,10 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
       <TopolgyRegisterationLayout
         propsName={id}
         propsSelectedPipelines={topologyData.topologyHistoryItems}
-        hideActionButtons
+        // hideActionButtons
         propsTopologyData={{ ...topologyData, topologyId: topologyData.historyId }}
         setAutoRefresh={() => {}}
+        startEndTime={collapsedText(topologyData)}
         renderMetrics={() => {
           return (
             <AccordianWrapper
@@ -101,3 +103,10 @@ export default function TopologyHistoryLayout ({ propsTopologyData, toggleHistor
     </div>
   )
 }
+
+const collapsedText = historyItem => (
+  <>
+    {`start time: ${getViewableDateTime(historyItem.topologyStartTime)}`} <br />
+    {`end time: ${getViewableDateTime(historyItem.topologyEndTime)}`} <br />
+  </>
+)

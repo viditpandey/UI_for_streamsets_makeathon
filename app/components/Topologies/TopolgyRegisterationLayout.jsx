@@ -14,7 +14,7 @@ import { cloneDeep, isEmpty, sortBy } from 'lodash'
 import {
   createTopology, startTopology, resumeTopology,
   stopTopology, validateTopology,
-  pauseTopology, resetTopology
+  pauseTopology
 } from '../../actions/TopologyActions'
 import { getAvailablePipelines } from '../../actions/PipelineActions'
 import { listToTree, getTreeCompatibleData } from '../../helper/tree_util_functions'
@@ -25,7 +25,8 @@ import 'react-sortable-tree/style.css'
 export default function TopolgyRegisterationLayout ({
   propsTopologyData = {}, propsName = '',
   propsSelectedPipelines = [], renderMetrics = () => {},
-  setAutoRefresh = () => {}, hideActionButtons = false
+  setAutoRefresh = () => {}, hideActionButtons = false,
+  startEndTime
 }) {
   const { enqueueSnackbar } = useSnackbar()
   const { setAppTitle } = useContext(AppBarContext)
@@ -185,12 +186,6 @@ export default function TopolgyRegisterationLayout ({
         callToAction = validateTopology
         break
 
-      case 'resetTopology':
-        updatedTopology.topologyStatus = 'RESETTING'
-        enqueueSnackbar('Topology Reset Status.', { variant: 'success' })
-        callToAction = resetTopology
-        break
-
       case 'pauseTopology':
         updatedTopology.topologyStatus = 'PAUSING'
         callToActionParams = topologyData
@@ -228,6 +223,7 @@ export default function TopolgyRegisterationLayout ({
             <Grid id='topology-action-buttons' item md={5} xs={12}>
               <div>
                 <TopologyActionButton
+                  startEndTime={startEndTime}
                   hideActionButtons={hideActionButtons}
                   status={!viewMode && 'EMPTY'}
                   topology={topologyData}
@@ -236,7 +232,6 @@ export default function TopolgyRegisterationLayout ({
                   resumeTopology={() => handleButtonClick('resumeTopology')}
                   stopTopology={() => handleButtonClick('stopTopology')}
                   validateTopology={() => handleButtonClick('validateTopology')}
-                  resetTopology={() => handleButtonClick('resetTopology')}
                   pauseTopology={() => handleButtonClick('pauseTopology')}
                 />
               </div>

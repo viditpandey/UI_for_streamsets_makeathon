@@ -17,10 +17,11 @@ export default function TopologyActionButton ({
   topology, status, disabled,
   disabledSecondary,
   createTopology, startTopology, stopTopology,
-  validateTopology, resetTopology,
-  pauseTopology, resumeTopology, hideActionButtons
+  validateTopology, pauseTopology,
+  resumeTopology, hideActionButtons, startEndTime
 }) {
   if (hideActionButtons) return null
+  else if (startEndTime) return startEndTime
   let startIcon = <SaveIcon />
   let buttonText = 'PERFORM ACTION'
   let handleClickAction = () => {}
@@ -39,22 +40,6 @@ export default function TopologyActionButton ({
       handleClickAction = createTopology
       renderSecondaryButton = false
       break
-
-      // case 'STOPPED':
-      //   buttonText = 'START TOPOLOGY'
-      //   style = { background: HEX_CODES.green }
-      //   startIcon = <PlayCircleFilledWhiteIcon />
-      //   handleClickAction = startTopology
-      //   renderSecondaryButton = false
-      //   break
-
-      // case 'FINISHED':
-      //   buttonText = 'RESET TOPOLOGY'
-      //   style = { background: HEX_CODES.green }
-      //   startIcon = <ReplayIcon />
-      //   handleClickAction = resetTopology
-      //   renderSecondaryButton = false
-      //   break
 
     case 'VALIDATION_ERROR':
     case 'FINISHED':
