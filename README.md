@@ -21,9 +21,9 @@
 
     2) Make sure docker is installed on your device.
 
-    3) Run command `docker build -t streamsetui -f Dockerfile .`
+    3) Run command `docker build -t streamsetui -f Dockerfile .`. This will create a docker image, which when spinned up will run a node server for UI at 8081 port. It needs environment variable STREAMSETS_BACKEND_URL with url for streamsets_backend service.
 
-    4) Once image is built, start the docker image using command `docker run streamsetui -p: 8080:8081"
+    4) Refer to docker-compose of Streamsets_Orichestrator_backend repostitory, which will help you run all the components of project "Still-Deciding Streamsets Orchestrator" together.
       
   Provides:
   
