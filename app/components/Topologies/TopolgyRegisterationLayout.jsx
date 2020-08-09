@@ -149,7 +149,7 @@ export default function TopolgyRegisterationLayout ({
       console.log('This is sent to backend: ', finalTreeData)
 
       createTopology({ finalTreeData })
-        .then(res => { enqueueSnackbar('Topology created succesfully', { variant: 'success' }) })
+        .then(() => { enqueueSnackbar('Topology created succesfully', { variant: 'success' }) })
         .catch(() => { enqueueSnackbar('Error while creating topology, please refresh and retry.', { variant: 'error' }) })
     }
   }

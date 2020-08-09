@@ -21,6 +21,8 @@ import { useSnackbar } from 'notistack'
 import { IconButton } from '@material-ui/core'
 import nodeSchedule from 'node-schedule'
 
+const cronValidator = require('cron-validator')
+
 export default function TopologiesLayout () {
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
@@ -249,18 +251,20 @@ const getTopologyItems = (topology, instanceIdsWithColor) => {
 }
 
 function getNextInvocation (topology) {
-  const defaultTime = <span style={{ color: HEX_CODES.blue }}>No next schedule</span>
+  const { schedulerConfig } = topology
+  const defaultTime = <span style={{ color: HEX_CODES.blue }}>Not scheduled</span>
   try {
-    if (!topology.cronConfig) return <span>Open Scheduler to view next schedule...</span>
-    else if (topology.toRun !== undefined && topology.toRun.toString() === 'false') {
+    if (!schedulerConfig) return defaultTime
+    else if (schedulerConfig.toRun !== undefined && schedulerConfig.toRun.toString() === 'false') {
       return <span style={{ color: HEX_CODES.blue }}>Topology automatic schedule paused.</span>
-    }
-
-    const job = nodeSchedule.scheduleJob(topology.cronConfig || '* * * * *', () => {})
-    const nextInvocation = job.nextInvocation()
-    job.cancel()
-    return <span style={{ color: HEX_CODES.green }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
+    } else if (cronValidator.isValidCron(schedulerConfig.cronConfig)) {
+      const job = nodeSchedule.scheduleJob(schedulerConfig.cronConfig || '* * * * *', () => {})
+      const nextInvocation = job.nextInvocation()
+      job.cancel()
+      return <span style={{ color: HEX_CODES.green }}>Next scheduled at: {getViewableDateTime(nextInvocation._date._d)}</span> || defaultTime
+    } else return defaultTime
   } catch (error) {
+    console.log('getNextInvocation -> error', error, topology)
     return defaultTime
   }
 }

@@ -53,7 +53,7 @@ export default function ConfigureTopologySchedule ({
     }
     open && getSchedule()
     if (!open && !isEmpty(topology)) {
-      const properties = { cronConfig, toRun }
+      const properties = { schedulerConfig: { cronConfig, toRun } }
       updateTopologyProperties && updateTopologyProperties(topology.topologyId, properties)
     }
   }, [open])

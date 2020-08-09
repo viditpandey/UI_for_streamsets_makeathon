@@ -16,19 +16,17 @@ export const createTopology = async (formData) => {
   console.log('createTopology, formdata:', formData)
   try {
     const topologyFields = formData.finalTreeData
-    const response = await axios({
+    axios({
       method: 'post',
       url: CREATE_TOPOLOGY,
-      data: {
-        topologyFields
-      }
-    }
-    ).then(response => {
-      window.location = '/topologies'
+      data: { topologyFields }
     })
+      .then(response => {
+        console.log(`create topology attempted for topologyId ${formData.topologyId}, response received: ${JSON.stringify(response)}`)
+        window.location = '/topologies'
+        // return response
+      })
       .catch(e => { throw e })
-    console.log(`create topology attempted for topologyId ${formData.topologyId}, response received: ${JSON.stringify(response)}`)
-    return response
   } catch (e) {
     console.error('[TopologyActions.createTopology] error:', e)
     throw e
