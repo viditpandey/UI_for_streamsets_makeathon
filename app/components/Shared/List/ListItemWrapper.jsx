@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ListItemWrapper ({
   items, itemClick,
   collapsedText, secondaryText, secondaryActionButton,
-  getPrimaryText, getKey, listId
+  getPrimaryText, getKey, listId, collapsedTextPrimary = () => {}
 }) {
   const classes = useStyles()
 
@@ -46,6 +46,7 @@ export default function ListItemWrapper ({
                 classes={classes}
                 getKey={getKey}
                 collapsedText={collapsedText(item)}
+                collapsedTextPrimary={collapsedTextPrimary(item)}
                 getPrimaryText={getPrimaryText}
                 secondaryActionButton={secondaryActionButton(item)}
                 listId={listId}
@@ -59,7 +60,11 @@ export default function ListItemWrapper ({
   )
 }
 
-const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, secondaryText, classes, secondaryActionButton, getKey, listId }) => {
+const ListItemRenderer = ({
+  item, getPrimaryText, itemClick,
+  collapsedText, collapsedTextPrimary, secondaryText,
+  classes, secondaryActionButton, getKey, listId
+}) => {
   const [open, setOpen] = useState(false)
   return (
     <Paper className='clickable' id={listId}>
@@ -84,6 +89,7 @@ const ListItemRenderer = ({ item, getPrimaryText, itemClick, collapsedText, seco
             <ListItemText
               id={getKey(item)}
               secondary={collapsedText}
+              primary={collapsedTextPrimary}
             />
           </ListItem>
         </Collapse>}

@@ -1,9 +1,7 @@
 import AccordianWrapper from '../Shared/ExpandCollapse/AccordianWrapper'
 import AddPipelines from './AddPipelineToTopology'
 import Chip from '@material-ui/core/Chip'
-import SettingsIcon from '@material-ui/icons/Settings'
 import Grid from '@material-ui/core/Grid'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import Paper from '@material-ui/core/Paper'
 import React, { useState, useEffect, useContext } from 'react'
 import RenderPipelineConfigs from './RenderPipelineConfigs'
@@ -19,80 +17,10 @@ import {
   pauseTopology, resetTopology
 } from '../../actions/TopologyActions'
 import { getAvailablePipelines } from '../../actions/PipelineActions'
-import { HEX_CODES, getStyleByPipelineStatus } from '../../configs/constants'
-import { listToTree } from '../../helper/tree_util_functions'
-import { withStyles } from '@material-ui/core/styles'
+import { listToTree, getTreeCompatibleData } from '../../helper/tree_util_functions'
 import { useSnackbar } from 'notistack'
 
 import 'react-sortable-tree/style.css'
-import { Tooltip } from '@material-ui/core'
-
-const BorderLinearProgress = ({ loaderBackground, backgroundColor }) => withStyles((theme) => ({
-  root: {
-    borderRadius: 10
-  },
-  colorPrimary: {
-    backgroundColor: loaderBackground
-  },
-  bar: {
-    borderRadius: 5,
-    backgroundColor: backgroundColor || HEX_CODES.grey
-  }
-}))(LinearProgress)
-
-// const PIPELINE_STATUS = ['STARTING', 'RETRY', , 'RUNNING', 'FINISHED', 'EDITED', 'STOPPED']
-
-const loaderColorByPipelineStatus = {
-  STARTING: { background: HEX_CODES.blueVariant1 },
-  RUNNING: { background: HEX_CODES.greenVariant1 },
-  VALIDATING: { background: HEX_CODES.blueVariant1 }
-}
-
-const PIPELINES_IN_PROGRESS = ['STARTING', 'RUNNING', 'VALIDATING', 'PAUSING']
-
-const renderNode = ({ p, topologyStatus, handlePipelineClick }) => {
-  const title = p.title || p.pipelineTitle || p.pipelineId
-  const errorCount = p.errorCount ? `(error count: ${p.errorCount})` : ''
-  let statusLabel = p.pipelineStatus || 'TO_START'
-  if (topologyStatus === 'PAUSED') statusLabel = 'PAUSED'
-  const CustomProgressBar = PIPELINES_IN_PROGRESS.indexOf(statusLabel) !== -1 ? BorderLinearProgress({
-    loaderBackground: loaderColorByPipelineStatus[statusLabel].background,
-    backgroundColor: getStyleByPipelineStatus[statusLabel].background
-  }) : () => null
-  const chipLabel = (
-
-    <div>{title} (instance of {p.instanceId}) ({statusLabel}) {errorCount}
-      <div style={{ margin: '0 10px' }}>
-        {<CustomProgressBar />}
-      </div>
-    </div>)
-
-  return (
-    <Tooltip title={`Runs at ${p.processAfter || 'stop'} of parent pipeline. Retry Count: ${p.threshold || 0}. Wait Time: ${p.waitTime || 0}s.`}>
-      <Chip
-        id={p.pipelineId}
-        style={getStyleByPipelineStatus[statusLabel]}
-        deleteIcon={<SettingsIcon />}
-        size='medium'
-        label={chipLabel}
-        onDelete={(e) => handlePipelineClick(true, p)}
-        onClick={(e) => handlePipelineClick(true, p)}
-      />
-    </Tooltip>
-  )
-}
-
-const getTreeCompatibleData = ({ list, topologyStatus, handlePipelineClick }) => {
-  return list.map(p => {
-    return {
-      ...cloneDeep(p),
-      title: renderNode({ p, topologyStatus, handlePipelineClick }),
-      pipelineId: p.pipelineId,
-      expanded: true,
-      children: []
-    }
-  })
-}
 
 export default function TopolgyRegisterationLayout ({
   propsTopologyData = {}, propsName = '',

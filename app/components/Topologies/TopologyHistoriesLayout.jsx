@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import ListItemWrapper from '../Shared/List/ListItemWrapper'
+import SortableTree from 'react-sortable-tree'
 import TopologyHistoryLayout from './TopologyHistoryLayout'
 
 import { AppBarContext } from '../Base/Home'
@@ -7,6 +8,7 @@ import { CircularProgress, Typography } from '@material-ui/core'
 import { getTopologyHistory } from '../../actions/TopologyActions'
 import { getViewableDateTime } from '../../helper/commonHelper'
 import { isEmpty, sortBy, reverse } from 'lodash'
+import { listToTree, getTreeCompatibleData } from '../../helper/tree_util_functions'
 import { useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
@@ -51,6 +53,7 @@ export default function TopologyHistoriesLayout () {
             getKey={item => item.historyId}
             secondaryText={getSecondaryText}
             collapsedText={collapsedText}
+            collapsedTextPrimary={collapsedTextPrimary}
             secondaryActionButton={item => {}}
           />
         )}
@@ -71,3 +74,20 @@ const collapsedText = historyItem => (
     {`end time: ${getViewableDateTime(historyItem.topologyEndTime)}`} <br />
   </>
 )
+
+const collapsedTextPrimary = historyItem => {
+  const { topologyHistoryItems } = historyItem
+  const test = getTreeCompatibleData({ list: topologyHistoryItems, topologyStatus: historyItem.topologyStatus, handlePipelineClick: () => {} })
+  const treeData = listToTree(test)
+  const height = (topologyHistoryItems.length * 70) || 100
+  return (
+    <div className='graph-area-style padding-top-30' style={{ height: height }}>
+      <Typography>Quick View of pipeline structure</Typography>
+      <SortableTree
+        treeData={treeData}
+        getNodeKey={({ node }) => { return `${node.pipelineId}_${node.instanceId}` }}
+        onChange={() => {}}
+      />
+    </div>
+  )
+}
