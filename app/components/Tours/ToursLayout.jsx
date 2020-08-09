@@ -9,6 +9,7 @@ export default function ToursLayout (props) {
     <Tour
       steps={Steps[tourPage] || defaultSteps}
       isOpen={!!isTourOpen}
+      startAt={0}
       onRequestClose={closeTour}
     />
   )

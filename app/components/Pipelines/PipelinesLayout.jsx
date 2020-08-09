@@ -43,8 +43,8 @@ export default function PipelinesLayout () {
       const res = await axiosHandler({ method: getPipelines, errorMessage: 'pipelines fetch failed', infoMessage: 'pipelines fetched succesfully' })
       const pipelinesLength = !isEmpty(res) ? `(${res.length})` : ''
       setAppTitle({ text: `PIPELINES ${pipelinesLength}`, currentPage: 'PipelinesLayout' })
-      const allInstanceIds = uniq(res.map(i => i.instanceId))
-      setInstanceIds(generateRandomColorByStrings(allInstanceIds))
+      const allInstanceIds = !isEmpty(res) && uniq(res.map(i => i.instanceId))
+      setInstanceIds(generateRandomColorByStrings(allInstanceIds || []))
       res && setPipelines(res) // after this set status of checked pipelines to on, i.e, insert their pipelineId in checked var
     }
     fetchPipelines()

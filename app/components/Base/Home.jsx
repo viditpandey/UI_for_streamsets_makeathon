@@ -33,7 +33,7 @@ const Home = (props) => {
     <div>
       <div className='app-bar'>
         <AppTitleBar
-          becomeAGuide={(isTourOpen) => becomeAGuide(isTourOpen)}
+          becomeAGuide={() => becomeAGuide(!isTourOpen)}
           text={appBar.text}
           button={appBar.button}
         />
