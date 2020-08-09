@@ -11,7 +11,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import { AppBarContext } from '../Base/Home'
-import { generateRandomColor } from '../../helper/PipelineHelpers'
+import { generateRandomColorByStrings } from '../../helper/PipelineHelpers'
 import { getTopologies, deleteTopology, toggleTopologyAlert } from '../../actions/TopologyActions'
 import { getViewableDateTime } from '../../helper/commonHelper'
 import { HEX_CODES } from '../../configs/constants'
@@ -76,7 +76,7 @@ export default function TopologiesLayout () {
           if (isEmpty(topology.topologyItems)) return
           const ids = topology.topologyItems.map(i => i.instanceId)
           allInstanceIds.push(ids)
-          setInstanceIds(generateRandomColor(uniq(flatten(allInstanceIds))))
+          setInstanceIds(generateRandomColorByStrings(uniq(flatten(allInstanceIds))))
         })
       }
       setAppTitle({

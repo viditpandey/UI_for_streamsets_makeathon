@@ -9,7 +9,7 @@ import React from 'react'
 import Slide from '@material-ui/core/Slide'
 
 import { concat } from 'lodash'
-import { generateRandomColor } from '../../helper/PipelineHelpers'
+import { generateRandomColorByStrings } from '../../helper/PipelineHelpers'
 
 export const Transition = React.forwardRef(function Transition (props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
@@ -21,7 +21,7 @@ const AddPipelines = ({ left, setLeft, right, setRight, open, setOpen, disabled,
   React.useEffect(() => {
     if (open) {
       const allInstanceIds = concat(left, right).map(i => i.instanceId)
-      setInstanceIds(generateRandomColor(allInstanceIds))
+      setInstanceIds(generateRandomColorByStrings(allInstanceIds))
     }
   }, [open])
 
